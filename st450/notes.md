@@ -56,4 +56,53 @@ prior to this will not be tested, but will have homework
 	- Range
 		- notebook-6
 	- Variance
-		- 
+		- Population Variance
+			- notebook-11
+		- Sample Variance
+			- notebook-12
+	- Population Standard Deviation
+		- take square root of pop. variance
+	- Sample Standard Deviation
+		- take square root of sample variance
+	- One typical use of standard deviations is to report intervals (notebook-13)
+
+- pth percentile is the number such that p% of the measurements fall below that number.
+- Lower quartile == 25th percentile
+- Upper quartile == 75th percentile
+- notebook-14 for notation
+
+- Boxplots
+	- notebook-15
+- How find Q1 and Q3?
+	- Q1 = ((n + 1) / 4)th value
+	- Q3 = (3(n + 1) / 4)th value
+	- Remeber, Q2 is the median
+	- Example:
+		- data: 3, 4, 5, 6, 7, 10, 12
+		- Q1: n+1/4 = 7+1/4 = 2, so Q1 = 4
+		- Q3: 3(n+1)/4 = 3(7+1)/4 = 6, so Q3 = 10
+
+- Scatterplot
+	- Used to represent bi-varied relationships.
+	- notebook-16
+
+##### Probability Theory
+
+- Example:
+	- Experiment - Toss a coin three times
+	- Sample Space is the collection of all possible outcomes in an experiment.
+	- And Event is a sub-collection of the sample space.
+	- sub-example:
+		- Event A: First toss is Tails. = {THH, THT, TTH, TTT}
+		- Event B: At least two heads in a row. = {HHH, HHT, THH}
+- Some additional TERMinology
+	- Union
+	- Intersection
+	- Compliment (denoted by A^c)
+	- Empty Set
+
+- Probability is a real-valued function that assigns chances to events.
+	- notation: P(A), where P stands for "probability" and A is an event.
+	- Probability is always between 0 and 1
+- Disjoint Events (mutually exclusive events)
+	- events such that A intersection B = Empty Set

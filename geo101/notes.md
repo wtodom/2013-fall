@@ -1,0 +1,4 @@
+- remember these periods:
+	- paleozoic (ancient life)
+	- mezozoic (middle life)
+	-  cenozoic (recent life).

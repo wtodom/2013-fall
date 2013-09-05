@@ -106,3 +106,21 @@ prior to this will not be tested, but will have homework
 	- Probability is always between 0 and 1
 - Disjoint Events (mutually exclusive events)
 	- events such that A intersection B = Empty Set
+	- With disjoint events, the probability of the union of the events is equal to the sum of the probability of the individual events.
+- (Maybe learn some basic probability rules)
+
+## 3 September 2013 - Permutations, Combinatorics, etc.
+- If some complex action can be decomposed into K component actions such that the first action can be done in N1 ways, then the second action can be done in N2 ways, … , then the Kth action can be done in Nk ways, then there are N1 * N2 * … * Nk ways to do the complex action.
+- The number of permutations of the N different elements taken n at a time is N! / (N - n)!
+- In permutations order matters, in combinations order does not matter.
+- The number of combinations of the N different elements taken n at a time is N! / n! * (N - n)!
+- The probability of some event A is equal to the number of outcomes in A divided by the number of outcomes in the sample space. (assumes all outcomes equally likely).
+- Example:
+  	- 10 people buy tickets together at a movie theater. They are distributed randomly. What is the probability that persons A and B sit next to each other (among their group of 10 seats)?
+  	- 10! possible seating arrangements (sample space)
+  	- 9 * 2 * 8! possible ways to seat everyone fitting criteria (9 pairs, either could be on left, 8! for other people)
+  	- (9 * 2 * 8!) / 10! =  0.2
+- (Example: What's the chance that at least two people have same birthday?)
+- Example:
+	- Player takes 5 cards at random
+	- 

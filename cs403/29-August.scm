@@ -40,11 +40,49 @@
 ; function lex()
 ; {
 ; 	skipWhitespace(); // also skip comments
-; 	ch = readChar(); // first check "push back stack", if not empty read from tehre, else read next actual character
+; 	ch = readChar(); // first check "push back stack", if not empty read from there, else read next actual character
 ; 	if (ch == ';') 
 ; 	{
 ; 		return new Lexeme(SEMICOLON);
 ; 	}
 ; 	else if (check other punctuation, keywords, etc)
-; 	else (check helper function that could be for keyword or variable)
+; 	else //(check helper function that could be for keyword, 
+;		variable, number, or string)
+	; {
+	; 	if (isalpha(ch))
+	; 		return lexVariable(ch);
+	; }
+; }
+
+; function lexVariable(ch)
+; {
+; 	buffer = allocate(50);
+; 	buffer[0] = ch;
+; 	buffer[1] = "\0"; // C style
+; 	index = 1;
+; 	ch = readChar();
+; 	while (isalpha(ch) || (isdigit(ch)))
+; 	{
+; 		if (index <= length(buffer) -1)
+; 		{
+; 			buffer[index] = ch; 
+; 			buffer[index + 1] = "\0";
+; 			index = index + 1;
+; 		}
+; 		else
+; 		{
+; 			// throw exception
+; 		}
+		; ch = readChar();
+; 	}
+	; pushBack(ch);
+	; if (string = (buffer, "return"))
+	; {
+	; 	return new Lexeme(RETURN);
+	; }
+	; // do rest of keywords
+	; else
+	; {
+	; 	return new Lexeme(IDENTIFIER, buffer);
+	; }
 ; }

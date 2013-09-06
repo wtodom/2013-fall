@@ -3,8 +3,6 @@ CS 475 - Programming Languages
 
 ## Regular Expressions - 28 August 2013
 
-# !!! Quiz Friday on FSMs!!!
-
 - TERM: Regular Expression = 
 - TERM: Operators (in order of increasing precedence)
 	- Union = or
@@ -51,8 +49,8 @@ CS 475 - Programming Languages
 
 ##### more regex shorthands
 
-	- ? means optional. Ex: [0-9]? means a digit is optional
-	- Epsilon represents the empty string
+- ? means optional. Ex: [0-9]? means a digit is optional
+- Epsilon represents the empty string
 
 ##### Regex Properties
 
@@ -69,3 +67,16 @@ CS 475 - Programming Languages
 		- Remember, concatenation has higher precedence than union.
 	- (R|S)T = RT|ST
 
+## Regular Expressions (cont.) - 6 September 2013
+
+- notebook-22
+
+##### Converting FSM to RegExpr
+
+- notebook-23
+- Algorithm:
+	- If either we have 2 or more final states OR the start state is a final state, create a new version of the FSM with the final states removed, then add an additional state that is final, along with epsilon edges/transitions leading to it from all of the original final states.
+- general example: notebook-24
+	- Once you're down to 2 states you can easily create regex.
+
+- pseudocode for elimination process: notebook-25

@@ -30,6 +30,7 @@
 (inspect (ramanujan 5))
 (inspect (ramanujan 10))
 (inspect (ramanujan 100))
+(inspect (ramanujan 1000))
 
 (newline)
 
@@ -41,3 +42,4 @@
 (inspect (iRamanujan 5))
 (inspect (iRamanujan 10))
 (inspect (iRamanujan 100))
+(inspect (iRamanujan 1000))

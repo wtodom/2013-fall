@@ -121,6 +121,47 @@ prior to this will not be tested, but will have homework
   	- 9 * 2 * 8! possible ways to seat everyone fitting criteria (9 pairs, either could be on left, 8! for other people)
   	- (9 * 2 * 8!) / 10! =  0.2
 - (Example: What's the chance that at least two people have same birthday?)
+
+## 5 September 2013 - Permutations and Combinations (cont.)
+
 - Example:
 	- Player takes 5 cards at random
-	- 
+	- What is the chance that the player gets a full house?
+		- P(A) = num(A)/num(S)
+		- num(S) = 52choose5 = 52!/(5!*(51-5)!).
+		- num(A) = 13\*4choose3\*12\*4choose2
+		- P(A) = .0014
+
+##### Conditional probability and Independence
+
+- Conditional probability that event A occurs given that event B occurs: P(A|B) = (P(A and B))/P(B)
+- Example
+	- A = "rain tomorrow"
+	- B = "rain today"
+	- P(B) = .8
+	- P(A|B) = .9
+	- P(A and B) = P(B)*P(A|B) = .8*.9 = .72
+
+- *** Important *** Example: Medical Test problem *** Important ***
+	- Some medical test detects a disease correctly in 90% of cases. It detects incorrectly in 5% of cases.
+	- Assume .1% of all people are infected.
+	- What is the chance that a person is sick if the test result is positive?
+	- A = "test result is positive"
+	- B = "disease present"
+	- P(A|B) = .9
+	- P(A|~B) = .05
+	- P(B) = .001
+	- P(~A|B) = .1
+	- P(~A|~B) = 1-P(A|~B) = .95
+	- P(~B) = 1-.001 = .999
+	- notebook-19
+	- So, P(B|A) = P(AandB)/P(A) = P(AandB)/(P(Aand~B) + P(AandB)) = 1.77%
+
+##### Independence
+
+- Events A and B are independent if P(A|B) = P(A)
+- Original formula: P(AandB) = P(A)*P(B|A)
+- However, iff A and B are independent, P(AandB) = P(A)*P(B)
+- Independent != Disjoint
+- If events A1, A2, ..., Ak are independent, then (notebook-20)
+- *** BAYES RULE *** (notebook-21)

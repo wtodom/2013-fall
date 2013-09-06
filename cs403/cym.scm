@@ -21,13 +21,13 @@
 (define (cym value)
 
 	(define (cyan) ;; done
-		(int (* (sin (+ (* (/ value 100.0) (/ pi 2)) (/ pi 2))) 255))
+		(int (string(* (sin (+ (* (/ value 100.0) (/ pi 2)) (/ pi 2))) 255)))
 		)
 	(define (yellow) ;; done
-		(int (* (+ (* -1 (sin (* (/ value 100.0) pi))) 1) 255))
+		(int (string(* (+ (* -1 (sin (* (/ value 100.0) pi))) 1) 255)))
 		)
 	(define (magenta)
-		(int (/ (* (+ (sin (+ (* (/ (* 3 pi) 2) (/ value 100.0)) (/ pi 2))) 1) 255) 2))
+		(int (string(/ (* (+ (sin (+ (* (/ (* 3 pi) 2) (/ value 100.0)) (/ pi 2))) 1) 255) 2)))
 		)
 
 	(buildHexString (cyan) (yellow) (magenta))

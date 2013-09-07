@@ -45,5 +45,5 @@
 	(pascalIter 0)
 	)
 
-(pascal2 15)
+(pascal2 25)
 ; (inspect (choose 3 2))

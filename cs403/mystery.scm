@@ -7,44 +7,74 @@
 		)
 	)
 
-; (define (mystery depth)
+(define (iFirstDigitAt depth)
+	(cond
+		((= depth 0) 1)
+		(else
+			(+ 1 (* 4 (- depth 1)))
+			)
+		)
+	)
+
+; (define (notZero num)
 ; 	(cond
-; 		((= depth 0) 1)
+; 		((= num 0) 1)
 ; 		(else
-; 			(+ (/ 1 (+ (firstDigitAt depth) .5)) (mystery (- depth 1)))
+; 			num
 ; 			)
 ; 		)
 ; 	)
 
-(define (iMystery depth)
-	(define (innerMystery i total)
-		(cond
-			((= i 0) (+ total 1))
-			(else
-				(innerMystery (- i 1) (+ total (/ 1 (+ (firstDigitAt i) .5))))
-				)
-			)
-		)
-	(innerMystery depth 0)
-	)
+; (define (oneOrZero i)
+; 	(cond
+; 		((= 0 i) 0)
+; 		(else
+; 			1
+; 			)
+; 		)
+; 	)
 
-(define (square x)
-	(* x x)
-	)
+; (define (imystery depth)
+; 	(define (innerMystery i total)
+; 		(cond
+; 			((= i 0) (+ 1 (/ 1 total)))
+; 			(else
+; 				(innerMystery (- i 1) (+ (iFirstDigitAt i) (/ 1.0 (+ 1 (/ 1.0 (+ 1 (/ 1.0 (notZero total))))))))
+; 				)
+; 			)
+; 		)
+; 	(innerMystery depth 1)
+; 	)
 
 (define (mystery depth)
-	(define (innerMystery i)
+	(define (innerMystery curr)
 		(cond
-			((>= i depth) 1)
-			(else ; not quite the right recursion, or maybe not right recombination
-				(+ 1 (/ 1.0 (+ (firstDigitAt i) (/ 1.0 (+ 1 (/ 1.0 (innerMystery (+ i 1))))))))
+			((>= curr depth) 1)
+			(else
+				(+ 1 (/ 1.0 (+ (firstDigitAt curr) (/ 1.0 (+ 1 (/ 1.0 (innerMystery (+ curr 1))))))))
 				)
 			)
 		)
 	(innerMystery 0)
 	)
 
+(define (imystery depth)
+	(define (innerMystery curr total)
+		(cond
+			((= curr 0) total)
+			(else
+				(innerMystery (- curr 1) (+ 1 (/ 1.0 (+ (iFirstDigitAt curr) (/ 1.0 (+ 1 (/ 1.0 total)))))))
+				)
+			)
+		)
+	(innerMystery depth 1)
+	)
+
+(inspect (imystery 0))
 (inspect (mystery 0))
+(inspect (imystery 1))
 (inspect (mystery 1))
+(inspect (imystery 2))
 (inspect (mystery 2))
+(inspect (imystery 175))
 (inspect (mystery 175))

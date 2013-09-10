@@ -59,17 +59,13 @@
 ;4
 ; helpers
 (define e .0000001)
-(define (power11 x)
-	(* x x x x x x x x x x x)
-	)
-(define (power12 x)
-	(* x x x x x x x x x x x x)
-	)
+
 (define (improve12 guess x)
-	(/ (+ (* 11 guess) (/ x (power11 guess))) 12)
+	(/ (+ (* 11 guess) (/ x (expt guess 11))) 12)
 	)
+
 (define (good-enough12? guess x)
-	(< (abs (- (power12 guess) x)) e)
+	(< (abs (- (expt guess 12) x)) e)
 	)
 
 ; main function
@@ -355,7 +351,8 @@ http://www.owlnet.rice.edu/~comp210/96spring/Labs/lab09.html")
 	(inspect ((((curry curryAdd) 3) 24) 1))
 	)
 
-(define (run7)
+(define (run7) ;;; write better test cases ;;;
+	(inspect (zorp 3 square))
 	)
 
 (define (run8) ;;; DONE ;;;
@@ -363,9 +360,17 @@ http://www.owlnet.rice.edu/~comp210/96spring/Labs/lab09.html")
 	(inspect (babyl* 3 4))
 	(inspect (babyl* 5 12))
 	(inspect (babyl* 10 62))
+	(inspect (halve 0))
+	(inspect (halve 4))
+	(inspect (halve 12))
+	(inspect (halve 62))
+	(inspect (square 0))
+	(inspect (square 4))
+	(inspect (square 12))
+	(inspect (square 62))
 	)
 
-(define (run9)
+(define (run9) ;;; DONE ;;;
 	(inspect (imystery 175))
 	(inspect (mystery 175))
 	(println "The equation converges to the square root of the mathematical constant e.")

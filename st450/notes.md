@@ -159,9 +159,17 @@ prior to this will not be tested, but will have homework
 
 ##### Independence
 
-- Events A and B are independent if P(A|B) = P(A)
+- Events A and B are independent if P(A given B) = P(A)
 - Original formula: P(AandB) = P(A)*P(B|A)
 - However, iff A and B are independent, P(AandB) = P(A)*P(B)
 - Independent != Disjoint
 - If events A1, A2, ..., Ak are independent, then (notebook-20)
 - *** BAYES RULE *** (notebook-21)
+
+## 10 September 2013 - Random Variables
+
+- A random cariable assumes numerical values associated with outcomes.
+- Only one numerical value is assigned to each outcome.
+- Discrete random variables are associated with counts.
+- Continuous random variables are associated with intervals.
+- Random variable are always denoted by a capital letter.

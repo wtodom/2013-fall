@@ -1,19 +1,17 @@
-(define (plusOne a)
-	(+ a 1)
+(define (square x)
+	(* x x)
 	)
 
-(define (zorp i f)
-	(define (zorpIter total currentI)
+(define (izorp i f)
+	(define (innerZorp threeBack twoBack oneBack curr)
 		(cond
-			((< i 2) (+ total (f i)))
+			((= curr i) threeBack)
 			(else
-				())
+				(innerZorp twoBack oneBack (+ oneBack (/ (square (- oneBack twoBack)) (+ (- threeBack (* 2 twoBack)) oneBack))) (+ curr 1))
+				)
 			)
 		)
-	(zorpIter 0 0)
+	(innerZorp (f 0) (f 1) (f 2) 0)
 	)
 
-(inspect (zorp 7 plusOne))
-
-
-(/ (- (zorp (- i 1) f) (square (zorp (- i 2) f))) (+ (- (zorp (- i 3) f) (* 2 (zorp (- i 2) f))) (zorp (- i 1) f)))
+(inspect (izorp 3 square))

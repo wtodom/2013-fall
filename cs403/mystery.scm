@@ -16,36 +16,6 @@
 		)
 	)
 
-; (define (notZero num)
-; 	(cond
-; 		((= num 0) 1)
-; 		(else
-; 			num
-; 			)
-; 		)
-; 	)
-
-; (define (oneOrZero i)
-; 	(cond
-; 		((= 0 i) 0)
-; 		(else
-; 			1
-; 			)
-; 		)
-; 	)
-
-; (define (imystery depth)
-; 	(define (innerMystery i total)
-; 		(cond
-; 			((= i 0) (+ 1 (/ 1 total)))
-; 			(else
-; 				(innerMystery (- i 1) (+ (iFirstDigitAt i) (/ 1.0 (+ 1 (/ 1.0 (+ 1 (/ 1.0 (notZero total))))))))
-; 				)
-; 			)
-; 		)
-; 	(innerMystery depth 1)
-; 	)
-
 (define (mystery depth)
 	(define (innerMystery curr)
 		(cond
@@ -76,5 +46,5 @@
 (inspect (mystery 1))
 (inspect (imystery 2))
 (inspect (mystery 2))
-(inspect (imystery 175))
-(inspect (mystery 175))
+(inspect (imystery 1000))
+(inspect (mystery 500))

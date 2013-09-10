@@ -13,9 +13,9 @@
 ;main function
 (define (zeno_cost d c f)
 	(cond
-		((<= (* c f) hemiobol) 0)
-		((and (> (* c f) hemiobol) (<= d dactylos)) 5)
-		(else (+ c (zeno_cost (/ d (real 2)) (* c f) f)))
+		((<= c hemiobol) 0)
+		((and (> c hemiobol) (<= d dactylos)) 5)
+		(else (+ c (zeno_cost (/ d 2.0) (* c f) f)))
 		)
 	)
 
@@ -43,13 +43,13 @@
 (define (cym value)
 
 	(define (cyan) ;; done
-		(int (string(* (sin (+ (* (/ value 100.0) (/ pi 2)) (/ pi 2))) 255)))
+		(int (string (* (sin (+ (* (/ value 100.0) (/ pi 2)) (/ pi 2))) 255)))
 		)
 	(define (yellow) ;; done
-		(int (string(* (+ (* -1 (sin (* (/ value 100.0) pi))) 1) 255)))
+		(int (string (* (+ (* -1 (sin (* (/ value 100.0) pi))) 1) 255)))
 		)
 	(define (magenta)
-		(int (string(/ (* (+ (sin (+ (* (/ (* 3 pi) 2) (/ value 100.0)) (/ pi 2))) 1) 255) 2)))
+		(int (string (/ (* (+ (sin (+ (* (/ (* 3 pi) 2) (/ value 100.0)) (/ pi 2))) 1) 255) 2)))
 		)
 
 	(buildHexString (cyan) (yellow) (magenta))
@@ -142,7 +142,19 @@
 			(lambda (c)
 				(f a b c))))
 	)
+
 ;7
+(define (zorp i f)
+	(define (innerZorp threeBack twoBack oneBack curr)
+		(cond
+			((= curr i) threeBack)
+			(else
+				(innerZorp twoBack oneBack (+ oneBack (/ (square (- oneBack twoBack)) (+ (- threeBack (* 2 twoBack)) oneBack))) (+ curr 1))
+				)
+			)
+		)
+	(innerZorp (f 0) (f 1) (f 2) 0)
+	)
 
 ;8
 (define (square num)
@@ -174,7 +186,47 @@
 	)
 
 ;9
+(define (firstDigitAt depth)
+	(cond
+		((= depth 0) 1)
+		(else
+			(+ 1 (* 4 depth))
+			)
+		)
+	)
 
+(define (iFirstDigitAt depth)
+	(cond
+		((= depth 0) 1)
+		(else
+			(+ 1 (* 4 (- depth 1)))
+			)
+		)
+	)
+
+(define (mystery depth)
+	(define (innerMystery curr)
+		(cond
+			((>= curr depth) 1)
+			(else
+				(+ 1 (/ 1.0 (+ (firstDigitAt curr) (/ 1.0 (+ 1 (/ 1.0 (innerMystery (+ curr 1))))))))
+				)
+			)
+		)
+	(innerMystery 0)
+	)
+
+(define (imystery depth)
+	(define (innerMystery curr total)
+		(cond
+			((= curr 0) total)
+			(else
+				(innerMystery (- curr 1) (+ 1 (/ 1.0 (+ (iFirstDigitAt curr) (/ 1.0 (+ 1 (/ 1.0 total)))))))
+				)
+			)
+		)
+	(innerMystery depth 1)
+	)
 
 ;10
 (define (ramanujan depth)
@@ -189,16 +241,16 @@
 	(innerRamanujan 0)
 	)
 
-(define (iRamanujan depth)
-	(define (iRamanujanIter total curr)
+(define (iramanujan depth)
+	(define (iramanujanIter total curr)
 		(cond
 			((= curr 0) total)
 			(else
-				(iRamanujanIter (sqrt (+ 1 (* (+ 1 curr) total))) (- curr 1))
+				(iramanujanIter (sqrt (+ 1 (* (+ 1 curr) total))) (- curr 1))
 				)
 			)
 		)
-	(iRamanujanIter 1 depth)
+	(iramanujanIter 1 depth)
 	)
 
 
@@ -244,6 +296,16 @@ in malfunctioning code.
 Below is the output of the two statements. Notice that for 
 the original 'if' only one statement prints, whereas for 
 'my-if' both statements print.")
+
+(println "NOTE: 
+The problem is that functions (such as if-fn) always evaluate 
+all their arguments, while special forms (such as if and cond) 
+may only evaluate some of their arguments, leaving others as 
+expressions rather than values. We can't use the ordinary part 
+of Scheme to write new special forms, only new functions.
+
+Source:
+http://www.owlnet.rice.edu/~comp210/96spring/Labs/lab09.html")
 
 (newline)
 
@@ -296,7 +358,7 @@ the original 'if' only one statement prints, whereas for
 (define (run7)
 	)
 
-(define (run8)
+(define (run8) ;;; DONE ;;;
 	(inspect (babyl* 1 0))
 	(inspect (babyl* 3 4))
 	(inspect (babyl* 5 12))
@@ -304,10 +366,13 @@ the original 'if' only one statement prints, whereas for
 	)
 
 (define (run9)
+	(inspect (imystery 175))
+	(inspect (mystery 175))
+	(println "The equation converges to the square root of the mathematical constant e.")
 	)
 
 (define (run10) ;;; DONE ;;;
-	(inspect (iRamanujan 100))
+	(inspect (iramanujan 100))
 	(inspect (ramanujan 100))
 	(println "They converge to 3.")
 	)

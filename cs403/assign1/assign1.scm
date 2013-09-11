@@ -293,16 +293,6 @@ Below is the output of the two statements. Notice that for
 the original 'if' only one statement prints, whereas for 
 'my-if' both statements print.")
 
-(println "NOTE: 
-The problem is that functions (such as if-fn) always evaluate 
-all their arguments, while special forms (such as if and cond) 
-may only evaluate some of their arguments, leaving others as 
-expressions rather than values. We can't use the ordinary part 
-of Scheme to write new special forms, only new functions.
-
-Source:
-http://www.owlnet.rice.edu/~comp210/96spring/Labs/lab09.html")
-
 (newline)
 
 	(if #t 
@@ -318,18 +308,35 @@ http://www.owlnet.rice.edu/~comp210/96spring/Labs/lab09.html")
 
 (define (run2) ;;; DONE ;;;
 	(inspect (zeno_cost 20 33 2))
+	(println "[It should be 8650724...I think.]")
+	(newline)
+
 	(inspect (zeno_cost 40 3 0.3))
+	(println "[It should be 4.17]")
 	)
 
 (define (run3) ;;; DONE ;;;
 	(inspect (cym 0))
+	(println "[It should be #FFFFFF]")
+	(newline)
+
 	(inspect (cym 50))
+	(println "[It should be #B40025]")
+	(newline)
+
 	(inspect (cym 100))
+	(println "[It should be #00FF7F]")
+	(newline)
 	)
 
 (define (run4) ;;; DONE ;;;
 	(inspect (root12 15))
+	(println "[It should be 1.253163]")
+	
+	(newline)
+
 	(inspect (root12 91234523))
+	(println "[It should be 4.606240]")
 	)
 
 (define (run5) ;;; DONE ;;;
@@ -351,67 +358,135 @@ http://www.owlnet.rice.edu/~comp210/96spring/Labs/lab09.html")
 	(inspect ((((curry curryAdd) 3) 24) 1))
 	)
 
-(define (run7) ;;; write better test cases ;;;
+(define (run7) ;;; DONE ;;;
+	(inspect square)
+
+	(inspect (zorp 0 square))
+	(println "[It should be 0]")
+	(newline)
+
+	(inspect (zorp 2 square))
+	(println "[It should be 4]")
+	(newline)
+
 	(inspect (zorp 3 square))
+	(println "[It should be 5]")
+	(newline)
+
+	(inspect (zorp 4 square))
+	(println "[It should be 24]")
+	(newline)
+
+	(inspect (zorp 5 square))
+	(println "[It should be 45]")
+	(newline)
 	)
 
 (define (run8) ;;; DONE ;;;
 	(inspect (babyl* 1 0))
+	(println "[It should be 0]")
+	(newline)
+
 	(inspect (babyl* 3 4))
+	(println "[It should be 12]")
+	(newline)
+
 	(inspect (babyl* 5 12))
+	(println "[It should be 60]")
+	(newline)
+
 	(inspect (babyl* 10 62))
+	(println "[It should be 620]")
+	(newline)
+
+
+	(newline)
+
 	(inspect (halve 0))
+	(println "[It should be 0]")
+	(newline)
+
 	(inspect (halve 4))
+	(println "[It should be 2]")
+	(newline)
+
 	(inspect (halve 12))
+	(println "[It should be 6]")
+	(newline)
+
 	(inspect (halve 62))
+	(println "[It should be 31]")
+	(newline)
+
+
+	(newline)
+	
 	(inspect (square 0))
+	(println "[It should be 0]")
+	(newline)
+
 	(inspect (square 4))
+	(println "[It should be 16]")
+	(newline)
+
 	(inspect (square 12))
+	(println "[It should be 144]")
+	(newline)
+
 	(inspect (square 62))
+	(println "[It should be 3844]")
+	(newline)
+
 	)
 
 (define (run9) ;;; DONE ;;;
-	(inspect (imystery 175))
-	(inspect (mystery 175))
+	(inspect (imystery 100))
+	(inspect (mystery 100))
+	(println "[They should be 1.648721]")
+	(newline)
+	(println "100 iterations easily reaches scam's floating point precision limit.")
 	(println "The equation converges to the square root of the mathematical constant e.")
 	)
 
 (define (run10) ;;; DONE ;;;
 	(inspect (iramanujan 100))
 	(inspect (ramanujan 100))
-	(println "They converge to 3.")
+	(println "[They should be 3]")
+	(newline)
+	(println "Again, 100 iterations easily reaches scam's floating point precision limit.")
+	(println "The answer to Ramanujan's questions is that the value converges to 3.")
 	)
 
-(newline)
-(println "1.")
-(run1)
-(newline)
-(println "2.")
-(run2)
-(newline)
-(println "3.")
-(run3)
-(newline)
-(println "4.")
-(run4)
-(newline)
-(println "5.")
-(run5)
-(newline)
-(println "6.")
-(run6)
-(newline)
-(println "7.")
-(run7)
-(newline)
-(println "8.")
-(run8)
-(newline)
-(println "9.")
-(run9)
-(newline)
-(println "10.")
-(run10)
-(newline)
+; (newline)
+; (println "1.")
+; (run1)
+; (newline)
+; (println "2.")
+; (run2)
+; (newline)
+; (println "3.")
+; (run3)
+; (newline)
+; (println "4.")
+; (run4)
+; (newline)
+; (println "5.")
+; (run5)
+; (newline)
+; (println "6.")
+; (run6)
+; (newline)
+; (println "7.")
+; (run7)
+; (newline)
+; (println "8.")
+; (run8)
+; (newline)
+; (println "9.")
+; (run9)
+; (newline)
+; (println "10.")
+; (run10)
+; (newline)
 
 (println "assignment 1 loaded!")

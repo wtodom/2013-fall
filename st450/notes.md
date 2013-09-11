@@ -173,3 +173,10 @@ prior to this will not be tested, but will have homework
 - Discrete random variables are associated with counts.
 - Continuous random variables are associated with intervals.
 - Random variable are always denoted by a capital letter.
+- Probability Mass Function: notebook-29
+
+- Expected value and variance: notebook-30
+- Expected value can be thought of as "long run average"
+
+- Properties of E() and Var()
+	- notebook-31

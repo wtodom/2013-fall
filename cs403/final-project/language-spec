@@ -13,3 +13,5 @@ conditionals:
 	while [WHATEVER] is [WHATEVER2],
 	until [WHATEVER] is [WHATEVER2], // optional, aditional feature
 
+for loop:
+	

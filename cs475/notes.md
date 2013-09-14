@@ -111,3 +111,5 @@ CS 475 - Programming Languages
 			- By the second condition of the theorem, j >= 1.
 			- Now, the contradiction. Choose any k to use in the third condition.
 				- notebook-28
+
+- Another example like above: notebook-32, notebook-33, notebook-34

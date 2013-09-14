@@ -13,7 +13,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Implementing a Programming Lnaguage ;;;
+;;; Implementing a Programming Language ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; first stage is to identify the "words" and their "part of speech"
@@ -24,7 +24,6 @@
 ; 	- integers (we only have to have ints, not reals)
 ; 	- strings
 ; 	- punctuation ((),;{}[]""'' etc)
-; 	- 
 
 ; First module is lexer
 ; 	- has a main function and some helpers.

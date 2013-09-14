@@ -180,3 +180,38 @@ prior to this will not be tested, but will have homework
 
 - Properties of E() and Var()
 	- notebook-31
+
+## 12 September 2013 - Distrobutions
+
+##### Bernoulli Distrobution
+
+- One attempt with two possible outcomes.
+- Example:
+	- A basketball player scores with probability P in one trial.
+	- There are two possible outcomes for a trial:
+		- Success (score)
+		- Failure (miss)
+	- p = P(success)
+	- 1-p = P(failure)
+- notation: notebook-35
+- Example using notation
+	- A basketball player scores with probability 0.2 on each attempt.
+	- notebook-36
+
+##### Binomial Distrobution
+
+- Assume n independent identical Bernoulli trials
+- Example: Toss a coin 3 times.
+- notation: notebook-37
+- Example using notation
+	- n = 5
+	- p = 0.2
+	- What is the probabilit that the player scores exactly two times?
+	- notebook-38
+
+##### Hypergeometric Distrobution
+
+- Example
+	- A box contains 10 balls: 6 red, 4 black. We take 5 balls at random without replacement.
+	- What's the probability that we see exactly 3 red balls?
+	- notebook-39 (example and notation)

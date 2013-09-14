@@ -1,0 +1,28 @@
+ifStatement: IF primary IS primary COMMA block optOtherwise
+
+whileStatement: WHILE primary IS primary COMMA block
+
+optOtherwise:  OTHERWISE block
+			 | OTHERWISE ifStatement
+			 | Epsilon
+
+block: optStatements PERIOD
+
+optStatements: 	statements
+			  | Epsilon
+
+statements: statement optStatements
+
+statement: 	expr SEMICOLON
+		  | ifStatement
+		  | whileStatement
+		  | TODO
+
+expr: //todo
+
+primary:  INTEGER
+		| STRING
+		| TRUE
+		| FALSE
+		| NULL // maybe make this UNASSIGNED or UNDEFINED
+		| expr // not sure about this part

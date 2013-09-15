@@ -3,8 +3,8 @@ class Lexer:
 
 	def __init__(self, source):
 		self.f = self.openFile(source)	
-		self.currentChar = None
 		self.pushbackStack = []
+		self.currentChar = self.readChar()
 
 	def openFile(self, source):
 		return open(source, "r")
@@ -28,6 +28,7 @@ class Lexer:
 
 	def lex(self):
 		self.skipWhitespace()
+
 		if self.currentChar == ",":
 			# return Lexeme(COMMA)
 			print("COMMA")
@@ -65,27 +66,43 @@ class Lexer:
 			# return Lexeme(MULTIPLY)
 			print("MULTIPLY")
 		else:
-			# return self.lexVariable()
-			print(self.currentChar)
+			self.lexVariable()
+			# print(self.currentChar)
 
 		self.readChar()
 
 	def lexVariable(self):
+		if self.currentChar == None:
+			return
 		if self.currentChar.isalpha():
-			self.pushback()
-			return self.getVariable()
+			self.getVariable()
 		elif self.currentChar.isdigit():
-			self.pushback()
-			return self.getNumber()
+			self.getNumber()
 		elif self.currentChar == "\"":
-			self.pushback()
-			return self.getString()
+			self.getString()
 
 	def getVariable(self): # and keywords
-		pass
+		var = ""
+		while self.currentChar.isalpha():
+			var += self.currentChar
+			self.readChar()
+
+		print(var)
+		# todo: check for keywords
+		# todo: check for inequality symbols
 
 	def getNumber(self):
-		pass
+		num = ""
+		while self.currentChar.isdigit():
+			num += self.currentChar
+			self.readChar()
+		# return Lexeme(NUMBER, int(num))
+		print(int(num))
 
 	def getString(self):
-		pass
+		string = ""
+		while self.currentChar != "\"":
+			string += self.currentChar
+			self.readChar()
+		# return Lexeme(STRING, string[1:])
+		print(string)

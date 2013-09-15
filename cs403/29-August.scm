@@ -32,7 +32,7 @@
 ; 	- two properties:
 ; 		- type (the part of speech)
 ; 		- value
-; 			- can have an umber of different values to hold various types of things
+; 			- can have a number of different values to hold various types of things
 ; 			- e.g. ival, sval, rval, etc
 ; every function I write will return a lexeme
 

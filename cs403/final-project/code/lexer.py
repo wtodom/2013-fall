@@ -1,108 +1,101 @@
+from lexeme import Lexeme
+
 class Lexer:
 	"""Scans files and returns a Lexeme object for each token discovered."""
 
 	def __init__(self, source):
-		self.f = self.openFile(source)	
+		self.f = self.open_file(source)	
 		self.pushbackStack = []
-		self.currentChar = self.readChar()
+		self.currentChar = None
+		self.keywords = ["set", "to", "is", "return", "true", "false"]
 
-	def openFile(self, source):
+	def open_file(self, source):
 		return open(source, "r")
 
-	def closeFile(self):
+	def close_file(self):
 		self.f.close()
 
-	def readChar(self):
+	def read_char(self):
 		if len(self.pushbackStack) != 0:
 			self.currentChar = self.pushbackStack.pop()
 		else:
 			self.currentChar = self.f.read(1).lower()
 
-	def skipWhitespace(self):
+	def skip_whitespace(self):
 		while self.currentChar in [" ", "\n", "\t", "\r"]:
-			print(" ")
-			self.readChar()
+			self.read_char()
 
 	def pushback(self):
 		self.pushbackStack.append(self.currentChar)
 
 	def lex(self):
-		self.skipWhitespace()
+		self.read_char()
+		self.skip_whitespace()
 
 		if self.currentChar == ",":
-			# return Lexeme(COMMA)
-			print("COMMA")
+			return Lexeme(tokenType="COMMA")
 		elif self.currentChar == ":":
-			# return Lexeme(COLON)
-			print("COLON")
+			return Lexeme(tokenType="COLON")
 		elif self.currentChar == ";":
-			# return Lexeme(SEMICOLON)
-			print("SEMICOLON")
+			return Lexeme(tokenType="SEMICOLON")
 		elif self.currentChar == ".":
-			# return Lexeme(PERIOD)
-			print("PERIOD")
+			return Lexeme(tokenType="PERIOD")
 		elif self.currentChar == "(":
-			# return Lexeme(OPEN_PAREN)
-			print("OPEN_PAREN")
+			return Lexeme(tokenType="OPEN_PAREN")
 		elif self.currentChar == ")":
-			# return Lexeme(CLOSE_PAREN)
-			print("CLOSE_PAREN")
+			return Lexeme(tokenType="CLOSE_PAREN")
 		elif self.currentChar == "[":
-			# return Lexeme(OPEN_BRACKET)
-			print("OPEN_BRACKET")
+			return Lexeme(tokenType="OPEN_BRACKET")
 		elif self.currentChar == "]":
-			# return Lexeme(CLOSE_BRACKET)
-			print("CLOSE_BRACKET")
+			return Lexeme(tokenType="CLOSE_BRACKET")
 		elif self.currentChar == "+":
-			# return Lexeme(PLUS)
-			print("PLUS")
+			return Lexeme(tokenType="PLUS")
 		elif self.currentChar == "-":
-			# return Lexeme(MINUS)
-			print("MINUS")
+			return Lexeme(tokenType="MINUS")
 		elif self.currentChar == "/":
-			# return Lexeme(DIVIDE)
-			print("DIVIDE")
+			return Lexeme(tokenType="DIVIDE")
 		elif self.currentChar == "*":
-			# return Lexeme(MULTIPLY)
-			print("MULTIPLY")
+			return Lexeme(tokenType="MULTIPLY")
 		else:
-			self.lexVariable()
-			# print(self.currentChar)
+			return self.lex_variable()
 
-		self.readChar()
-
-	def lexVariable(self):
+	def lex_variable(self):
 		if self.currentChar == None:
 			return
 		if self.currentChar.isalpha():
-			self.getVariable()
+			return self.get_variable()
 		elif self.currentChar.isdigit():
-			self.getNumber()
+			return self.get_number()
 		elif self.currentChar == "\"":
-			self.getString()
+			return self.get_string()
 
-	def getVariable(self): # and keywords
+	def get_variable(self): # and keywords
 		var = ""
 		while self.currentChar.isalpha():
 			var += self.currentChar
-			self.readChar()
+			self.read_char()
 
-		print(var)
+		self.pushback()
+
+		return Lexeme(tokenType="Variable", value=var)
 		# todo: check for keywords
 		# todo: check for inequality symbols
 
-	def getNumber(self):
+	def get_number(self):
 		num = ""
 		while self.currentChar.isdigit():
 			num += self.currentChar
-			self.readChar()
-		# return Lexeme(NUMBER, int(num))
-		print(int(num))
+			self.read_char()
 
-	def getString(self):
+		self.pushback()
+
+		return Lexeme(tokenType="Number", value=num)
+
+	def get_string(self):
+		self.read_char()
 		string = ""
 		while self.currentChar != "\"":
 			string += self.currentChar
-			self.readChar()
-		# return Lexeme(STRING, string[1:])
-		print(string)
+			self.read_char()
+
+		return Lexeme(tokenType="STRING", value=string)

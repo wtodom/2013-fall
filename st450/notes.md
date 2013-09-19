@@ -215,3 +215,33 @@ prior to this will not be tested, but will have homework
 	- A box contains 10 balls: 6 red, 4 black. We take 5 balls at random without replacement.
 	- What's the probability that we see exactly 3 red balls?
 	- notebook-39 (example and notation)
+
+## 17 September 2013 - Continuous Random Variables
+
+- the function representing the curve of a histogram is called the probability density funtionc
+	- fx(x) >= 0 for any x
+	- The area under the curve = 1
+	- P(a < x < b) is the area under the curve between a and b.
+	- P(x = a) = 0, for any continuous random variable X.
+	- P(a < x < b) = P(a <= x < b) = P(a < x <= b) = P(a <= x <= b)
+
+#### Distrobutions
+
+##### Uniform Distrobution
+
+- Every outcome is equally likely.
+- pdf: 1 / (d - c) for c < x < d, 0 otherwise
+- notation: X~Uniform(c, d)
+- E(X) = c + (d - c)/2
+- Var(X) = ((d - c)^2)/12
+- Example
+	- notebook-44
+	- image @ 4:02
+
+##### Normal Distrobution
+
+- Example: Height of females
+- notation: notebook-45
+- It is difficult to calculate the area under the normal curve. Tables are available. Since probabilities depend on particular values of Mu and Sigma^2, we would like to standardize them.
+- notebook-46 (graphical representation of the standardization shift)
+- notebook-47

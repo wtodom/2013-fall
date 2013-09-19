@@ -113,3 +113,84 @@ CS 475 - Programming Languages
 				- notebook-28
 
 - Another example like above: notebook-32, notebook-33, notebook-34
+
+## More Properties of Regular Languages
+
+- Let R1 and R2 be any regular languages. Then these languages are also regular:
+	1. R1 Union R2
+		- Can use DeMorgan's Law on this (using style from compliment in below section):
+			- not(not(R1) U not (R2))
+	2. R1R2 (concatenation of them)
+	3. R1\* (or R2\*)
+- The above three rules follow from regex operators (union, concat, *)
+
+- These languages are also regular:
+	1. R1 Intersection R2 (notebook-40)
+		- The number of states in the new machine will be num(R1) * num(R2), and the same goes for the number of final states.
+	2. Compliment of R1 (or R2)
+		- Simply swap final and non-final states
+		- Note that you have to be careful of machines that let rejected strings go to a dead state (you have to actually add the dead state and make it final).
+	3. Substitution or Homomorphism
+		- notebook-42 for example
+	4. Inverse Substitution or Inverse Homomorphism
+		- notebook-43 for example
+		- Image @ 1:53
+
+- notebook-41 (example using above)
+
+- Closure Properties
+	- Regular languages are closed ("preserved") over:
+		- Union
+		- Concatenation
+		- *
+		- Intersection
+		- Complement
+		- Reverse
+
+## 18 September 2013 - Regular or Not?
+
+- Regular or not?
+	- L1 = {a^n b^n}
+		- Not regular by the pumping theorem (previous class)
+	- L2 = {strings over {a,b} with #a's = #b's}
+		- L1 = L2 Intersection a\*b\*
+		- Assume L2 is regular.
+		- a\*b\* is regular (since that's the regex for it)
+		- The intersection of two languages must be regular, but since we know that L1 is irregular, we have a contradiction. Thus, L2 is irregular (since it was our only assumption).
+	- L3 = {strings over {a^n b^n} with #a's != #b's}
+		- L3 = Compliment(L2)
+		- Assume L3 is regular.
+		- Thus, the compliment must be regular (by the closure property).
+		- However, L2 is irregular, so our assumption is wrong and :3 is irregular.
+	- L4 = {a^m b^n | m != n}
+		- Suppose L4 is regular.
+		- L1 = Compliment(L4) Union a\*b\+a(a Union b)\*
+			- a\*b\+a(a Union b)\* = Compliment(a\*b\*)
+		- The right side is regular, and so if L4 is regular then L1 must be also.
+		- L1 is not regular, so our assumption is wrong, and L4 is not regular.
+
+
+##### Reducing a FSM to a minimum number of states
+
+- L = {strings over {a, b} such that either the string begins with a and has odd length, or begins with b and has even length}
+	- notebook-48
+
+- Uses a table of distinguishabilities (tells which states are equivalent or non-equivalent)
+	- notebook-49 (filled in using below algorithm)
+
+##### Minimization algorithm
+	- for each final state q:
+		- for each non-final state p:
+			- mark square (p, q) with an "X"
+	- while changes in the table are occuring:
+		- for each pair of states p and q that are not yet marked with and "X":
+			- for each character c in the alphabet:
+				- if the square corresponding to the pair (delta(p, c), delta(q, c)) (that is the transition function evaluated at a certain state with some particular input) is marked, mark (p, q)
+- Gives a DFSM with the fewest possible states.
+
+##### Algorithms related to regular languages
+
+- Given regular language L, does L = the empty set?
+	- Suppose L has a FSM M.
+	- Do a breadth or depth first search from the start state.
+	- If we don't readh any final state then L = the empty set.

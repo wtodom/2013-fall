@@ -1,0 +1,1 @@
+(inspect (string-compare "b" (car "bfdsf")))

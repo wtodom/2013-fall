@@ -2,27 +2,42 @@ ifStatement: IF primary IS primary COMMA block optOtherwise
 
 whileStatement: WHILE primary IS primary COMMA block
 
-optOtherwise:  OTHERWISE block
-			 | OTHERWISE ifStatement
-			 | Epsilon
-
 block: optStatements PERIOD
 
-optStatements: 	statements
-			  | Epsilon
+optOtherwise: OTHERWISE block
+			| OTHERWISE ifStatement
+			| *empty*
+
+optStatements: statements
+			 | *empty*
 
 statements: statement optStatements
 
-statement: 	expr SEMICOLON
-		  | ifStatement
-		  | whileStatement
-		  | TODO
+statement: expr SEMICOLON
+		 | ifStatement
+		 | whileStatement
+		 | TODO
 
 expr: //todo
 
-primary:  INTEGER
-		| STRING
-		| TRUE
-		| FALSE
-		| NULL // maybe make this UNASSIGNED or UNDEFINED
-		| expr // not sure about this part
+primary: VARIABLE
+	   | INTEGER
+	   | STRING
+	   | TRUE
+	   | FALSE
+	   | NOTHING (NULL)
+	   | expr // not sure about this part
+
+***** BETA *****
+
+optList: list
+	   | *empty*
+
+list: primary
+	| primary AND primary
+	| primary commaChain COMMA AND primary
+
+commaChain: COMMA primary commaChain
+		  | *empty*
+
+functionDef: TO VARIABLE optList COLON

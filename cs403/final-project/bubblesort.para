@@ -12,4 +12,5 @@ to bubbleSort numbers:
                 set loopindex to loopindex - 1;
                 .
             .
-    return Nothing.
+    return Nothing;
+    .

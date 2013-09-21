@@ -1,10 +1,12 @@
 (include "random.lib")
 (randomSeed (int (time)))
-(define WORD_COUNT (- 210680 1))
+(define WORD_COUNT (- 210680 1)) ; offset by 1 to allow it's use as an index
+
+(define oldMinus -)
 
 (define (abs x) ;;; DONE ;;;
 	(if (< x 0)
-		(- x)
+		(- 0 x)
 	;else
 		x
 		)
@@ -61,7 +63,7 @@
 ; (inspect (diff "love" "hate"))
 
 (define (kthWord k) ;;; DONE ;;;
-	(define p (open "words" 'read))   ; p points to a port
+	(define p (open "words" 'read)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
 
     (define (readIter word i)
@@ -72,10 +74,11 @@
     			)
     		)
     	)
-    (define w (readIter (readLine) 0))
+    (define w (readIter (readLine) 0)) ; save w to return after closing file
 
 	(setPort oldInput)
 	(close p)
+
 	w
 	)
 
@@ -87,17 +90,36 @@
 
 ; (inspect (randomWord))
 
-(inspect (diff (randomWord) (randomWord)))
+; (inspect (diff (randomWord) (randomWord)))
 
 ;;; TODO ;;;
 (define (getMatch value)
 	(define p (open "words" 'read))   ; p points to a port
     (define oldInput (setPort p))
 	
-    ; find the word
+    ; find the word here
 
 	(setPort oldInput)
 	(close p)
 
-	; return the word
+	; return the word here
 	)
+
+(define (- a b)
+	(cond
+		((and (eq? (type a) 'STRING) (eq? (type b) 'STRING)) (diff a b))
+		((eq? (type a) 'STRING) (oldMinus (word2int a) b))
+		((eq? (type b) 'STRING) (oldMinus a (word2int b)))
+		(else
+			(oldMinus a b)
+			)
+		)
+	)
+
+
+(inspect (- 3 1))
+(inspect (- "aaa" "a"))
+(inspect (- 3 "a"))
+(inspect (- "aaa" 1))
+(inspect (- "aaa" 1.3))
+(inspect (- 3.5 "aa"))

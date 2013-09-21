@@ -164,7 +164,7 @@ CS 475 - Programming Languages
 		- However, L2 is irregular, so our assumption is wrong and :3 is irregular.
 	- L4 = {a^m b^n | m != n}
 		- Suppose L4 is regular.
-		- L1 = Compliment(L4) Union a\*b\+a(a Union b)\*
+		- L1 = Compliment(L4 Union a\*b\+a(a Union b)\*)
 			- a\*b\+a(a Union b)\* = Compliment(a\*b\*)
 		- The right side is regular, and so if L4 is regular then L1 must be also.
 		- L1 is not regular, so our assumption is wrong, and L4 is not regular.
@@ -194,3 +194,64 @@ CS 475 - Programming Languages
 	- Suppose L has a FSM M.
 	- Do a breadth or depth first search from the start state.
 	- If we don't readh any final state then L = the empty set.
+
+## 20 September 2013 - Regular Languages (cont.) and Context-free Grammars
+
+- Given a regular language L, is L = Empty Set?
+	- Algorithm:
+		- Construct the FSM.
+		- Search for a path from the start state to any final state.
+		- If a path exists, L != Empty Set.
+
+- Given string S, is S in L?
+	- Algorithm:
+		- Build DFSM.
+		- Trace DFSM to follow path from start state.
+		- If you end in a final state, S is in L.
+
+- Is L = Sigma* (That is, every string over Sigma - all possible strings).
+	- Algorithm:
+		- Use closure property (complement(L) is regular if L is regular.)
+		- Since L = Empty Set is regular, this one is regular too.
+
+- Given regular languages L1 and L2, Does L1 = L2?
+	- Algorithm:
+		- Check if L1 Intersection Complement(L2) = Empty Set
+		- Check if L2 Intersection Complement(L1) = Empty Set.
+		- If either is non-empty, the languages are not equivalent.
+
+##### Context-free Grammars (henceforth, "grammars"/"grammar")
+
+- Still have concatenation and union, but they are restricted.
+- Also have recursion.
+
+- Example:
+	- L = {a^n b^n}
+		- accepts: Empty String, ab, aabb, aaabbb, ...
+	- Replacement Rules: ("->" means "can be replaced by")
+		- (1) S -> Empty String
+		- (2) S -> aSb
+		- the above two rules can be replaced by:
+			- (1) S -> Empty String | aSb
+	- Parse Tree
+		- notebook-51
+	- Derivation
+		- Derivations go from the bottom of the parse tree towards the top.
+		- built aaabbb by following rules: 2, 2, 2, 1
+
+- Example:
+	- L = {palindromes over {a, b}}
+	- rules:
+		- S -> Empty String
+		- S -> aSa
+		- S -> bSb
+		- S -> a
+		- S -> b
+
+- Example:
+	- L = {strings over {a. b} with #a's = #b's}
+	- rules:
+		- S -> Empty String
+		- S -> aSb
+		- S -> bSa
+		- S -> SS

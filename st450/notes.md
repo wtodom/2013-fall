@@ -245,3 +245,6 @@ prior to this will not be tested, but will have homework
 - It is difficult to calculate the area under the normal curve. Tables are available. Since probabilities depend on particular values of Mu and Sigma^2, we would like to standardize them.
 - notebook-46 (graphical representation of the standardization shift)
 - notebook-47
+
+## 19 September 2013
+

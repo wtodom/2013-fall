@@ -12,6 +12,7 @@
 		)
 	)
 
+; Given a collection of strings and an element, return the indexo f the element if found, otherwise -1
 (define (index element collection) ;;; DONE ;;;
 	(define (indexIter count tail)
 		(cond
@@ -25,8 +26,9 @@
 	(indexIter 0 collection)
 	)
 
-; (inspect (index 5 (list 1 2 3 4 5 6 7)))
+; (inspect (index "q" (list "a" "b" "c" "d" "e" "f")))
 
+; Given a letter, returns the one-based alphabetic index of the letter.
 (define (ascii letter) ;;; DONE ;;;
 	(define letters "abcdefghijklmnopqrstuvwxyz")
 	(+ (index letter letters) 1)
@@ -34,6 +36,7 @@
 
 ; (inspect (ascii "b"))
 
+; Given a word, returns the sum of the one-based alphabetic indexes of its letters.
 (define (word2int word) ;;; DONE ;;;
 	(define (converterator restOfWord sum)
 		(cond
@@ -47,16 +50,6 @@
 	)
 
 ; (inspect (word2int "ab"))
-
-(define (diff word1 word2) ;;; DONE ;;;
-	(define value (abs (- (word2int word1) (word2int word2))))
-	(cond
-		((= value 0) "there is no difference")
-		(getMatch value)
-		)
-	)
-
-; (inspect (diff "love" "hate"))
 
 (define (kthWord k) ;;; DONE ;;;
 	(define p (open "words" 'read)) ; p points to a port (in this case the file pointer)
@@ -108,10 +101,10 @@
 	w
 	)
 
-; (inspect (firstMatch 160))
+; (inspect (firstMatch 16))
 
 (define (wordsWithValue value) ;;; WORKS, BUT TAKES FOREVER
-	(define p (open "words" 'read))
+	(define p (open "words2" 'read))
     (define oldInput (setPort p))
 
 	(define (listIter wordList word)
@@ -136,10 +129,14 @@
 (define (getMatch value)
 	(define wordList (wordsWithValue value))
 	(define len (length wordList))
-	(getElement wordList (randomRange 0 len))
+	(cond
+		((= len 0) "the difference is unknown to us")
+		(else
+			(getElement wordList (randomRange 0 len)))
+		)
 	)
 
-; (inspect (getMatch 22))
+(inspect (getMatch 132))
 
 (define (- a b)
 	(cond
@@ -151,6 +148,19 @@
 			)
 		)
 	)
+
+; Given two strings, returns the difference in their word values (the 
+; sum of their letters' one-based alphabetic indexes.
+(define (diff word1 word2) ;;; DONE ;;;
+	(define value (abs (- (word2int word1) (word2int word2))))
+	(cond
+		((= value 0) "there is no difference")
+		(else
+			(getMatch value))
+		)
+	)
+
+(inspect (diff "c" "a"))
 
 ; (inspect (- 3 1))
 ; (inspect (- "aaa" "a"))

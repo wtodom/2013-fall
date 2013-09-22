@@ -1,6 +1,6 @@
 (include "random.lib")
-(randomSeed (int (time)))
-(define WORD_COUNT (- 210680 1)) ; offset by 1 to allow it's use as an index
+(randomSeed (int (time))) ; TODO: CHANGE TO A UNIQUE SEED RATHER THAN (TIME)
+(define WORD_COUNT 210680) ; offset by 1 to allow it's use as an index
 
 (define oldMinus -)
 
@@ -49,15 +49,11 @@
 ; (inspect (word2int "ab"))
 
 (define (diff word1 word2) ;;; DONE ;;;
-	(define p (open "words" 'read))   ; p points to a port
-    (define oldInput (setPort p))
-	
 	(define value (abs (- (word2int word1) (word2int word2))))
-
-	(setPort oldInput)
-	(close p)
-
-	value
+	(cond
+		((= value 0) "there is no difference")
+		(getMatch value)
+		)
 	)
 
 ; (inspect (diff "love" "hate"))
@@ -92,18 +88,58 @@
 
 ; (inspect (diff (randomWord) (randomWord)))
 
-;;; TODO ;;;
-(define (getMatch value)
-	(define p (open "words" 'read))   ; p points to a port
+(define (firstMatch value) ;;; DONE ;;;
+	(define p (open "words" 'read)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
-	
-    ; find the word here
+
+    (define (readIter word)
+    	(cond
+    		((= value (word2int word)) word)
+    		(else
+    			(readIter (readLine))
+    			)
+    		)
+    	)
+    (define w (readIter (readLine))) ; save w to return after closing file
 
 	(setPort oldInput)
 	(close p)
 
-	; return the word here
+	w
 	)
+
+; (inspect (firstMatch 160))
+
+(define (wordsWithValue value) ;;; WORKS, BUT TAKES FOREVER
+	(define p (open "words" 'read))
+    (define oldInput (setPort p))
+
+	(define (listIter wordList word)
+		(cond
+			((eq? word 'EOF) wordList)
+			((= (word2int word) value) (listIter (cons word wordList) (readLine)))
+			(else
+				(listIter wordList (readLine))
+				)
+			)
+		)
+	(define l (listIter () (readLine)))
+
+	(setPort oldInput)
+	(close p)
+	l
+	)
+
+; (inspect (wordsWithValue 3))
+
+
+(define (getMatch value)
+	(define wordList (wordsWithValue value))
+	(define len (length wordList))
+	(getElement wordList (randomRange 0 len))
+	)
+
+; (inspect (getMatch 22))
 
 (define (- a b)
 	(cond
@@ -116,10 +152,9 @@
 		)
 	)
 
-
-(inspect (- 3 1))
-(inspect (- "aaa" "a"))
-(inspect (- 3 "a"))
-(inspect (- "aaa" 1))
-(inspect (- "aaa" 1.3))
-(inspect (- 3.5 "aa"))
+; (inspect (- 3 1))
+; (inspect (- "aaa" "a"))
+; (inspect (- 3 "a"))
+; (inspect (- "aaa" 1))
+; (inspect (- "aaa" 1.3))
+; (inspect (- 3.5 "aa"))

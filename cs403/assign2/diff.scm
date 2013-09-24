@@ -52,7 +52,7 @@
 ; (inspect (word2int "ab"))
 
 (define (kthWord k) ;;; DONE ;;;
-	(define p (open "words" 'read)) ; p points to a port (in this case the file pointer)
+	(define p (open "words5000" 'read)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
 
     (define (readIter word i)
@@ -82,7 +82,7 @@
 ; (inspect (diff (randomWord) (randomWord)))
 
 (define (firstMatch value) ;;; DONE ;;;
-	(define p (open "words" 'read)) ; p points to a port (in this case the file pointer)
+	(define p (open "words5000" 'read)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
 
     (define (readIter word)
@@ -104,7 +104,7 @@
 ; (inspect (firstMatch 16))
 
 (define (wordsWithValue value) ;;; WORKS, BUT TAKES FOREVER
-	(define p (open "words2" 'read))
+	(define p (open "words5000" 'read))
     (define oldInput (setPort p))
 
 	(define (listIter wordList word)
@@ -125,7 +125,6 @@
 
 ; (inspect (wordsWithValue 3))
 
-
 (define (getMatch value)
 	(define wordList (wordsWithValue value))
 	(define len (length wordList))
@@ -136,7 +135,7 @@
 		)
 	)
 
-(inspect (getMatch 132))
+; (inspect (getMatch 132))
 
 (define (- a b)
 	(cond
@@ -160,7 +159,7 @@
 		)
 	)
 
-(inspect (diff "c" "a"))
+(inspect (diff "love" "hate"))
 
 ; (inspect (- 3 1))
 ; (inspect (- "aaa" "a"))

@@ -255,3 +255,14 @@ CS 475 - Programming Languages
 		- S -> aSb
 		- S -> bSa
 		- S -> SS
+
+## 23 September 2013
+
+- Example: Table of Distinguishabilities - image @ 1:16
+	- correction: 4 is still a final state in the reduced version
+
+- Every regular language has a context free grammar
+	- Converstion Example: notebook-52 (using outgoing edges) (aka right linear)
+	- Another conversion: notebook-53 (using incoming edges) (aka left linear)
+- Linear Grammar
+	- Every right side of production (right of the ->) has at most one rule.

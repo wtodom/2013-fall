@@ -18,17 +18,13 @@ statement: expr SEMICOLON
 		 | whileStatement
 		 | TODO
 
-expr: //todo
-
 primary: VARIABLE
 	   | INTEGER
 	   | STRING
 	   | TRUE
 	   | FALSE
 	   | NOTHING (NULL)
-	   | expr // not sure about this part
-
-***** BETA *****
+	   | expr
 
 optList: list
 	   | *empty*
@@ -41,3 +37,18 @@ commaChain: COMMA primary commaChain
 		  | *empty*
 
 functionDef: TO VARIABLE optList COLON
+
+expr: OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
+
+operator: PLUS
+		| MINUS
+		| DIVIDE
+		| MULTIPLY
+		| DOUBLE_EQUALS
+		| NOT_EQUAL
+		| LESS_THAN
+		| GREATER_THAN
+		| LESS_THAN_EQUAL
+		| GREATER_THAN_EQUAL
+
+functionCall: IDENTIFIER OPEN_PARENTHESIS optList CLOSE_PARENTHESIS

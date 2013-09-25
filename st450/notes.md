@@ -248,3 +248,9 @@ prior to this will not be tested, but will have homework
 
 ## 19 September 2013
 
+- maybe notebook...
+
+## 24 September 2013
+
+- just r stuff.
+

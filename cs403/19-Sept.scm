@@ -73,6 +73,7 @@
 ; 	for j = i to n
 ; 		print(i, j)
 
+; continued 24 sept
 (define (pairs start end)
 	(cond
 		((= start end) nil)

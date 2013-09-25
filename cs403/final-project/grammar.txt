@@ -26,6 +26,8 @@ primary: VARIABLE
 	   | NOTHING (NULL)
 	   | expr
 
+functionCall: IDENTIFIER OPEN_PARENTHESIS optList CLOSE_PARENTHESIS
+
 optList: list
 	   | *empty*
 
@@ -39,6 +41,7 @@ commaChain: COMMA primary commaChain
 functionDef: TO VARIABLE optList COLON
 
 expr: OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
+	| functionCall
 
 operator: PLUS
 		| MINUS
@@ -50,5 +53,3 @@ operator: PLUS
 		| GREATER_THAN
 		| LESS_THAN_EQUAL
 		| GREATER_THAN_EQUAL
-
-functionCall: IDENTIFIER OPEN_PARENTHESIS optList CLOSE_PARENTHESIS

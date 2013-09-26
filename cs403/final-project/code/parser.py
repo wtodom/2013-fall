@@ -1,133 +1,192 @@
-def ifStatement():
-	match(IF)
-	primary()
-	match(IS)
-	primary()
-	match(COMMA)
-	block()
-	optOtherwise()
+from exceptions import ParseException
+from lexer import Lexer
+import sys
 
-def whileStatement():
-	match(WHILE)
-	primary()
-	match(IS)
-	primary()
-	match(COMMA)
-	block()
-	optOtherwise()
+class Parser:
 
-def block():
-	optStatements()
-	match(PERIOD)
+	def __init__(self):
+		self.current = None
+		self.old = None
+		self.l = self.setup()
 
-def optOtherwise():
-	if check(OTHERWISE):
-		match(OTHERWISE)
-		if blockPending():
-			block()
+	def setup(self):
+		if len(sys.argv) != 2:
+			sys.exit("Usage: python3 parser.py sourceFile")
+		return Lexer(sys.argv[1])
+
+	def parse(self):
+		self.current = self.l.lex()
+		self.program()
+		self.match("END_OF_FILE")
+
+	def check(self, tokenType):
+		return self.current.tokenType == tokenType
+
+	def match(self, tokenType):
+		if self.check(tokenType) == False:
+			raise ParseException(tokenType)
+		self.old = self.current
+		self.current = self.l.lex()
+		return self.old
+
+	def blockPending(self):
+		# todo
+		pass
+
+	def statementsPending(self):
+		# todo
+		pass
+
+	def ifStatementPending(self):
+		# todo
+		pass
+
+	def whileStatementPending(self):
+		# todo
+		pass
+
+	def expressionPending(self):
+		# todo
+		pass
+
+	def sequencePending(self):
+		# todo
+		pass
+
+	def program(self):
+		# todo
+		pass
+
+	def ifStatement(self):
+		self.match("IF")
+		self.primary()
+		self.match("IS")
+		self.primary()
+		self.match("COMMA")
+		self.block()
+		self.optOtherwise()
+
+	def whileStatement(self):
+		self.match("WHILE")
+		self.primary()
+		self.match("IS")
+		self.primary()
+		self.match("COMMA")
+		self.block()
+		self.optOtherwise()
+
+	def block(self):
+		self.optStatements()
+		self.match("PERIOD")
+
+	def optOtherwise(self):
+		if self.check("OTHERWISE"):
+			self.match("OTHERWISE")
+			if self.blockPending():
+				self.block()
+			else:
+				self.ifStatement()
 		else:
-			ifStatement()
-	else:
-		pass
+			pass
 
-def optStatements():
-	if statementsPending():
-		statements()
-	else:
-		pass
+	def optStatements(self):
+		if self.statementsPending():
+			self.statements()
+		else:
+			pass
 
-def statements():
-	statement()
-	optStatements()
+	def statements(self):
+		self.statement()
+		self.optStatements()
 
-def statement():
-	if expressionPending():
-		expression()
-		match(SEMICOLON)
-	elif ifStatementPending():
-		ifStatement()
-	elif whileStatementPending():
-		whileStatement()
-	else:
-		match(TODO)
+	def statement(self):
+		if self.expressionPending():
+			self.expression()
+			self.match("SEMICOLON")
+		elif self.ifStatementPending():
+			self.ifStatement()
+		elif self.whileStatementPending():
+			self.whileStatement()
+		else:
+			self.match("TODO")
 
-def primary():
-	if check(VARIABLE):
-		match(VARIABLE)
-	elif check(INTEGER):
-		match(INTEGER)
-	elif check(STRING):
-		match(STRING)
-	elif check(NOTHING):
-		match(NOTHING)
-	elif expressionPending():
-		expression()
-	else:
-		boolean()
+	def primary(self):
+		if self.check("VARIABLE"):
+			self.match("VARIABLE")
+		elif self.check("INTEGER"):
+			self.match("INTEGER")
+		elif self.check("STRING"):
+			self.match("STRING")
+		elif self.check("NOTHING"):
+			self.match("NOTHING")
+		elif self.expressionPending():
+			self.expression()
+		else:
+			self.boolean()
 
-def functionCall():
-	match(IDENTIFIER)
-	match(OPEN_PARENTHESIS)
-	optList()
-	match(CLOSE_PARENTHESIS)
+	def functionCall(self):
+		self.match("IDENTIFIER")
+		self.match("OPEN_PARENTHESIS")
+		self.optSequence()
+		self.match("CLOSE_PARENTHESIS")
 
-def optList():
-	if listPending():
-		list() # change name
+	def optSequence(self):
+		if self.sequencePending():
+			self.sequence()
 
-def list(): # rename from list since python has built-in
-	primary()
-	if check(AND):
-		match(AND)
-		primary()
-	else:
-		commaChain()
-		match(COMMA)
-		match(AND)
-		primary()
+	def sequence(self):
+		self.primary()
+		if self.check("AND"):
+			self.match("AND")
+			self.primary()
+		else:
+			self.commaChain()
+			self.match("COMMA")
+			self.match("AND")
+			self.primary()
 
-def commaChain():
-	if check(COMMA):
-		match(COMMA)
-		primary()
-		commaChain()
-	else:
-		pass
+	def commaChain(self):
+		if self.check("COMMA"):
+			self.match("COMMA")
+			self.primary()
+			self.commaChain()
+		else:
+			pass
 
-def functionDef():
-	match(TO)
-	match(VARIABLE)
-	optList()
-	match(COLON)
+	def functionDef(self):
+		self.match("TO")
+		self.match("VARIABLE")
+		self.optSequence()
+		self.match("COLON")
 
-def expr():
-	if check(OPEN_PARENTHESIS):
-		match(OPEN_PARENTHESIS)
-		primary()
-		operator()
-		primary()
-		match(CLOSE_PARENTHESIS)
-	else:
-		functionCall()
+	def expr(self):
+		if self.check("OPEN_PARENTHESIS"):
+			self.match("OPEN_PARENTHESIS")
+			self.primary()
+			self.operator()
+			self.primary()
+			self.match("CLOSE_PARENTHESIS")
+		else:
+			self.functionCall()
 
-def operator():
-	if check(PLUS):
-		match(PLUS)
-	elif check(MINUS):
-		match(MINUS)
-	elif check(DIVIDE):
-		match(DIVIDE)
-	elif check(MULTIPLY):
-		match(MULTIPLY)
-	elif check(DOUBLE_EQUALS):
-		match(DOUBLE_EQUALS)
-	elif check(NOT_EQUAL):
-		match(NOT_EQUAL)
-	elif check(LESS_THAN):
-		match(LESS_THAN)
-	elif check(LESS_THAN_EQUAL):
-		match(LESS_THAN_EQUAL)
-	elif check(GREATER_THAN):
-		match(GREATER_THAN)
-	else:
-		match(GREATER_THAN_EQUAL)
+	def operator(self):
+		if self.check("PLUS"):
+			self.match("PLUS")
+		elif self.check("MINUS"):
+			self.match("MINUS")
+		elif self.check("DIVIDE"):
+			self.match("DIVIDE")
+		elif self.check("MULTIPLY"):
+			self.match("MULTIPLY")
+		elif self.check("DOUBLE_EQUALS"):
+			self.match("DOUBLE_EQUALS")
+		elif self.check("NOT_EQUAL"):
+			self.match("NOT_EQUAL")
+		elif self.check("LESS_THAN"):
+			self.match("LESS_THAN")
+		elif self.check("LESS_THAN_EQUAL"):
+			self.match("LESS_THAN_EQUAL")
+		elif self.check("GREATER_THAN"):
+			self.match("GREATER_THAN")
+		else:
+			self.match("GREATER_THAN_EQUAL")

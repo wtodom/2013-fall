@@ -1,7 +1,8 @@
 (include "random.lib")
 (randomSeed (int (time))) ; TODO: CHANGE TO A UNIQUE SEED RATHER THAN (TIME)
-(define WORD_COUNT 210680) ; offset by 1 to allow it's use as an index
-
+; (define wordDic (words))
+; (define WORD_COUNT (length wordDic)) ; offset by 1 to allow it's use as an index
+(define WORD_COUNT 8672) ; offset by 1 to allow it's use as an index
 (define oldMinus -)
 
 (define (abs x) ;;; DONE ;;;
@@ -11,30 +12,6 @@
 		x
 		)
 	)
-
-; Given a collection of strings and an element, return the indexo f the element if found, otherwise -1
-(define (index element collection) ;;; DONE ;;;
-	(define (indexIter count tail)
-		(cond
-			((null? tail) -1)
-			((= (string-compare (car tail) element) 0) count)
-			(else
-				(indexIter (+ count 1) (cdr tail))
-				)
-			)
-		)
-	(indexIter 0 collection)
-	)
-
-; (inspect (index "q" (list "a" "b" "c" "d" "e" "f")))
-
-; Given a letter, returns the one-based alphabetic index of the letter.
-(define (ascii letter) ;;; DONE ;;;
-	(define letters "abcdefghijklmnopqrstuvwxyz")
-	(+ (index letter letters) 1)
-	)
-
-; (inspect (ascii "b"))
 
 ; Given a word, returns the sum of the one-based alphabetic indexes of its letters.
 (define (word2int word) ;;; DONE ;;;
@@ -49,10 +26,8 @@
 	(converterator word 0)
 	)
 
-; (inspect (word2int "ab"))
-
 (define (kthWord k) ;;; DONE ;;;
-	(define p (open "words5000" 'read)) ; p points to a port (in this case the file pointer)
+	(define p (open "words10000" 'read)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
 
     (define (readIter word i)
@@ -71,18 +46,12 @@
 	w
 	)
 
-; (inspect (kthWord (randomRange 0 WORD_COUNT)))
-
 (define (randomWord)
 	(kthWord (randomRange 0 WORD_COUNT))
 	)
 
-; (inspect (randomWord))
-
-; (inspect (diff (randomWord) (randomWord)))
-
 (define (firstMatch value) ;;; DONE ;;;
-	(define p (open "words5000" 'read)) ; p points to a port (in this case the file pointer)
+	(define p (open "words10000" 'read)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
 
     (define (readIter word)
@@ -101,10 +70,8 @@
 	w
 	)
 
-; (inspect (firstMatch 16))
-
 (define (wordsWithValue value) ;;; WORKS, BUT TAKES FOREVER
-	(define p (open "words5000" 'read))
+	(define p (open "words10000" 'read))
     (define oldInput (setPort p))
 
 	(define (listIter wordList word)
@@ -123,8 +90,6 @@
 	l
 	)
 
-; (inspect (wordsWithValue 3))
-
 (define (getMatch value)
 	(define wordList (wordsWithValue value))
 	(define len (length wordList))
@@ -134,8 +99,6 @@
 			(getElement wordList (randomRange 0 len)))
 		)
 	)
-
-; (inspect (getMatch 132))
 
 (define (- a b)
 	(cond
@@ -161,9 +124,56 @@
 
 (inspect (diff "love" "hate"))
 
+; (inspect (diff (randomWord) (randomWord)))
+
 ; (inspect (- 3 1))
 ; (inspect (- "aaa" "a"))
-; (inspect (- 3 "a"))
+; (inspect (- 3 "a")))
 ; (inspect (- "aaa" 1))
 ; (inspect (- "aaa" 1.3))
 ; (inspect (- 3.5 "aa"))
+
+
+;{ THINGS TO CHANGE/ADD
+	Read entire file into a list at the beginning.
+	When it's read, store the words as pairs like: (cons word (word2int word))
+	Make a function that takes a function and a collection and filters
+		items that don't match.
+	Filter the list, shuffle it, take car.
+;}
+
+
+(define words ((lambda () 
+	(define p (open "words10000" 'read))
+    (define oldInput (setPort p))
+
+	(define (listIter wordList word)
+		(cond
+			((eq? word 'EOF) wordList)
+			(else
+				(listIter (cons (cons word (word2int word)) wordList) (readLine))
+				)
+			)
+		)
+	(define l (listIter () (readLine)))
+
+	(setPort oldInput)
+	(close p)
+	l
+	)))
+
+; (inspect words)
+
+
+
+; (define l (list (cons "q" 1) (cons "w" 2) (cons "e" 3) (cons "r" 4)))
+; (inspect l)
+; (inspect (cdr (car (cdr (cdr l)))))
+
+;{
+	use this format for the function parameter:
+	
+	(define (cons-stream # a $b)
+    	(cons a (lambda () (eval $b #)))
+    	)
+;}

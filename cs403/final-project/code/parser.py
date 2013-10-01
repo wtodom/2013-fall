@@ -1,4 +1,4 @@
-from exceptions import ParseException
+from exceptions import ParseError
 from lexer import Lexer
 import sys
 
@@ -24,7 +24,7 @@ class Parser:
 
 	def match(self, tokenType):
 		if self.check(tokenType) == False:
-			raise ParseException(tokenType)
+			raise ParseError(tokenType)
 		self.old = self.current
 		self.current = self.l.lex()
 		return self.old

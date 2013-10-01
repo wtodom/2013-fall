@@ -256,6 +256,8 @@ CS 475 - Programming Languages
 		- S -> bSa
 		- S -> SS
 
+- If a CFG has more than one possible parse tree for any string in the language it is considered "ambiguous", and is not ideal.
+
 ## 23 September 2013
 
 - Example: Table of Distinguishabilities - image @ 1:16
@@ -266,3 +268,57 @@ CS 475 - Programming Languages
 	- Another conversion: notebook-53 (using incoming edges) (aka left linear)
 - Linear Grammar
 	- Every right side of production (right of the ->) has at most one rule.
+
+## 27 September 2013 - Simplifying/improving ambiguous CFGs
+
+- Example:
+	- notebook-56 (wrote all on paper to test new pencil)
+
+##### Arithmetic Expressions
+
+- Ex: (a + b) * (c - d)
+	- this is infix notation
+	- Let "E" generate an expression:
+		- grammar: notebook-57
+
+- Ex: * + a b - c d (prefix)
+	- notebook-58
+
+- Ex: a b + c d - * (postfix)
+	- notebook-59
+
+## 30 September 2013 - Arithmetic Expressions (cont.)
+
+- Adding precedence: can use something like this format:
+	- Expr = Term + Term - Term + Term
+	- Term = Factor * Factor / Factor
+	- This translates into:
+		- E -> E+E | E-E | T (see change below)
+		- [empty line because I broke formatting somehow...]
+		- T -> T*T | T/T | F
+		- F -> (E) | Var
+	- Parse tree for a-b*c: notebook-60
+		- This is still ambiguous in cases where you have multiple operators at the same precednece level (for example, a-b+c)
+	To fix it, change the def of E above to:
+		- E -> E+T | E-T | T
+		- This makes it left-associative. The fact that the rule is left-recursive is what makes it left-associative.
+		- This change makes it unambiguous.
+
+- If statements:
+	- most languages have two forms:
+	- S -> if (E) S | if (E) S else S | (other things)
+	- E -> (some definition for expressions)
+	- This is ambiguous. For example:
+		if (something)
+			if (something)
+				other
+			else
+				other
+	- The else could stick to either if.
+	- To fix it, add additional symbols:
+		- U for "unmatched"
+		- M for "matched"
+		- new version:
+			- S -> M | U
+			- M -> if (E) M else M | (other things)
+			- U -> if (E) S | if (E) M else U

@@ -254,3 +254,7 @@ prior to this will not be tested, but will have homework
 
 - just r stuff.
 
+## 26 September 2013 - Test Review
+
+- worked old exam in class
+

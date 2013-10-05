@@ -169,11 +169,3 @@
 ; (define l (list (cons "q" 1) (cons "w" 2) (cons "e" 3) (cons "r" 4)))
 ; (inspect l)
 ; (inspect (cdr (car (cdr (cdr l)))))
-
-;{
-	use this format for the function parameter:
-	
-	(define (cons-stream # a $b)
-    	(cons a (lambda () (eval $b #)))
-    	)
-;}

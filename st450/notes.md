@@ -258,3 +258,17 @@ prior to this will not be tested, but will have homework
 
 - worked old exam in class
 
+## 3 October 2013
+
+##### Sampling Distrobutions
+
+- Recall that discrete and continuus distrobutions have parameters. These parameters are almost always unknown.
+- Sample Statistic - Some numerical descriptive measure calculated based on the observations in our sample.
+	- Examples: notebook-65
+- Sampling Distrobution - is a probability distrobution of a statistic
+- Different statistics have different sampling distrobutions
+- Additional terminology:
+	- A statistic g(x1, x2, ..., xn) is an unbiased estimator of the parameter Rho (notebook-66) if the expected value of g(x1, x2, ..., xn) = Rho.
+- Example: notebook-67
+	- "iid" - independent identically distributed
+- An unbiased estimator with the smallest variance is called a "minimum variance unbiased estimator".

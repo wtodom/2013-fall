@@ -7,6 +7,37 @@ should generate the list:
 The order of the tuples is not specified.
 ;}
 
-(define (tuple width max)
-	
+(define (interval lo hi step)
+	(if (>= lo hi)
+		nil
+		(cons lo (interval (+ step lo) hi step))
+		)
 	)
+
+(define (accumulate op base items)
+	(cond
+		((null? items) base)
+		(else
+			(op (car items) (accumulate op base (cdr items))
+				)
+			)
+		)
+	)
+
+(define (otuple q)
+	(accumulate append ()
+		(map
+			(lambda (q) ; change to y to do all permutations
+				(map
+					(lambda (x)
+						(list x q) ; change q to y with above change
+						)
+					(interval 0 (+ q 1) 1)
+					)
+				)
+			(interval 0 (+ q 1) 1)
+			)
+		)
+	)
+
+(inspect (otuple 3))

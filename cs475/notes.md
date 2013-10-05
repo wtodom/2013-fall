@@ -322,3 +322,21 @@ CS 475 - Programming Languages
 			- S -> M | U
 			- M -> if (E) M else M | (other things)
 			- U -> if (E) S | if (E) M else U
+
+## 2 October 2013 - Pushdown Automata (PDA)
+
+- PDA = FSM + Stack
+- Notation: notebook-61
+- Example: L = {a^n b^n}:
+	- notebook-62
+	- Z0 = bottom-of-stack symbol
+- Example: L = {strings over {a, b} where #a's == #b's}
+	- notebook-63
+- Example: L = {palindromes over {a, b}}
+	- notebook-63
+
+## 4 October 2013 (PDA and CFG review, quiz monday on CFGs)
+
+- examples in notebook (68-72)
+- Relationship between CFG and PDA:
+	- If a string comes before the variable in the CFG, push something on the stack in the PDA. Likewise, if a string comes after the variable, pop something off the stack.

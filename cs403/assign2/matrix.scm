@@ -48,7 +48,7 @@
 	)
 
 (define (matrix-*-matrix m n)
-	(transpose (rm-matrix-*-matrix m n))
+	(rm-matrix-*-matrix (transpose m) (transpose n))
 	)
 
 (inspect (dot-product '(1 2) '(3 4)))
@@ -62,3 +62,5 @@
 
 (inspect (matrix-*-matrix '((1 2) (3 4)) '((1 0) (0 1))))
 (println "    [it should be ((1 3) (2 4))]")
+
+(inspect (matrix-*-matrix '((1 2 6 4) (3 4 -3 0)) '((1 0) (0 1) (5 5))))

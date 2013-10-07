@@ -101,22 +101,22 @@
 
 ; (inspect (word2int (diff "love" "hate")))
 
-(define (kthWord items k) ;;; DONE ;;;
-	(define (readIter collection i)
+(define (kth items k)
+	(define (iter tail i)
     	(cond
-    		((= i (- k 1)) (car collection))
+    		((= i k) (car tail))
     		(else
-    			(readIter (cdr collection) (+ i 1))
+    			(iter (cdr tail) (+ i 1))
     			)
     		)
     	)
-    (readIter items 0)
+    (iter items 0)
 	)
 
 ; (inspect (kthWord words 5))
 
 (define (randomWord)
-	(kthWord (randomRange 0 (length words)))
+	(kth (randomRange 0 (- (length words) 1)))
 	)
 
 

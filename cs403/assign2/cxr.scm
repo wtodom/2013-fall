@@ -6,7 +6,7 @@
 		; (pretty $function)
 		; (inspect remainingSymbol)
 		(cond
-			((null? remainingSymbol) (eval $function this))
+			((null? remainingSymbol) (eval $function #))
 			((equal? (car (string remainingSymbol)) "d") (cxrIter (lambda () $(cdr $function)) (cdr remainingSymbol)))
 			((equal? (car (string remainingSymbol)) "a") (cxrIter (lambda () $(car $function)) (cdr remainingSymbol)))
 			(else

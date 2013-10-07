@@ -1,43 +1,5 @@
-(define (zero x)
-	(lambda (y) y)
-	)
-
-(define (one x)
-	
-	)
-
-(define (two x)
-	
-	)
-
-(define (three x)
-	
-	)
-
-(define (four x)
-	
-	)
-
-(define (five x)
-	
-	)
-
-(define (six x)
-	
-	)
-
-(define (seven x)
-	
-	)
-
-(define (eight x)
-	
-	)
-
-(define (nine x)
-	
-	)
-
+(define (inc x) (cons 'x x))
+(define base '(x))
 
 (define (increment number)
 	(lambda (incrementer)
@@ -48,35 +10,77 @@
 		)
 	)
 
+(define (zero x)
+	(lambda (y) y)
+	)
 
-(define (inc x) (cons 'x x))
-(define base '(x))
+(define (one x)
+	((increment zero) x)
+	)
 
+(define (two x)
+	((increment one) x)
+	)
 
+(define (three x)
+	((increment two) x)
+	)
 
+(define (four x)
+	((increment three) x)
+	)
 
+(define (five x)
+	((increment four) x)
+	)
 
+(define (six x)
+	((increment five) x)
+	)
 
+(define (seven x)
+	((increment six) x)
+	)
+
+(define (eight x)
+	((increment seven) x)
+	)
+
+(define (nine x)
+	((increment eight) x)
+	)
 
 (define numbers
-    (list
-        (list ((zero inc) base) 'zero)
-        (list ((one inc) base)  'one)
-        (list ((two inc) base)  'two)
-        (list ((three inc) base)  'three)
-        (list ((four inc) base)  'four)
-        (list ((five inc) base)  'five)
-        (list ((six inc) base)  'osixne)
-        (list ((seven inc) base)  'seven)
-        (list ((eight inc) base)  'eight)
-        (list ((nine inc) base) 'nine)
-        )
-    )
+	(list
+		(list ((zero inc) base) 'zero)
+		(list ((one inc) base) 'one)
+		(list ((two inc) base) 'two)
+		(list ((three inc) base) 'three)
+		(list ((four inc) base) 'four)
+		(list ((five inc) base) 'five)
+		(list ((six inc) base) 'six)
+		(list ((seven inc) base) 'seven)
+		(list ((eight inc) base) 'eight)
+		(list ((nine inc) base) 'nine)
+		)
+	)
 
-(inspect numbers)
+(define (add m n)
+	(lambda (f)
+		(lambda (x)
+			((((m increment) n) f) x)
+			)
+		)
+	)
+
+(define (translate number)
+	(cadr (assoc ((number inc) base) numbers))
+	)
 
 
-
+(inspect (translate zero))
+(inspect (translate one))
+(inspect (translate (add three five)))
 
 
 
@@ -102,4 +106,3 @@
 ; translates into 'number' ignoring 'incrementer' and
 ; then the identity function being called with 'base'
 ; as its argument, leaving just 'base' behind.")
-

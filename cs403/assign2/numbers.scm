@@ -65,12 +65,24 @@
 		)
 	)
 
+; (define (add m n)
+; 	(lambda (f)
+; 		(lambda (x)
+; 			((((m increment) n) f) x)
+; 			)
+; 		)
+; 	)
+
 (define (add m n)
-	(lambda (f)
-		(lambda (x)
-			((((m increment) n) f) x)
+	(lambda (x)
+		(lambda (y)
+			((m x) ((n x) y))
 			)
 		)
+	)
+
+(define (multiply m n)
+	(lambda (f) (m (n f)))
 	)
 
 (define (translate number)
@@ -81,6 +93,7 @@
 (inspect (translate zero))
 (inspect (translate (increment one)))
 (inspect (translate (add three five)))
+; (inspect (translate (add2 three two)))
 
 
 

@@ -29,7 +29,8 @@
 	(define (iter ops E)
 		(cond
 			((null? ops) (car E))
-			((contains E (car ops)) (iter ops (doOne E (indexOf (car ops) E))))
+			((and (contains E (car ops)) (eq? (car ops) '^)) (iter ops (doOne E (indexOf (car ops) E))))
+			((contains E (car ops)) (iter ops (doOne E (lastIndexOf (car ops) E))))
 			(else
 				(iter (cdr ops) E)
 				)
@@ -38,5 +39,9 @@
 	(iter operators expr)
 	)
 
-(inspect (infix->prefix '(2 + 3 ^ 4 * 4 - 7)))
+; (inspect (infix->prefix '(2 + 3 ^ 4 * 4 - 7)))
+(inspect (infix->prefix '(1 + 2 + 3 ^ 4 ^ 5)))
 ; (inspect (doOne '(2 + 3 * 4 - 7) 5))
+
+; (inspect (indexOf '2 '(1 2 3 2 3 4 2)))
+; (inspect (lastIndexOf '2 '(1 2 3 2 3 4 2)))

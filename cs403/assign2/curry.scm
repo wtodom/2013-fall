@@ -5,15 +5,20 @@
 ; (include "ci.lib")
 
 (define (curry f)
-	; (ppTable this)
+	(define numParamsNeeded (length (get ' parameters f)))
+	(define (curryIter params)
+		(cond
+			((= (length params) numParamsNeeded) params) ; this returns the full parameter list
+			(else
+				(curryIter (append params (get 'parameters curryIter)))
+				)
+			)
+		)
+	(curryIter ())
 	)
 
-; (inspect (- 9 4 1))
-; (ppTable (((((curry -) 9) 4) 1)))
-
-(define (f a b c d e f)
+(define (f a b c)
 
 	)
 
-; (inspect (get 'parameters f))
-; (inspect (length (get 'parameters f)))
+(inspect (curry f))

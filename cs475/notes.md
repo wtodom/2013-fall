@@ -340,3 +340,17 @@ CS 475 - Programming Languages
 - examples in notebook (68-72)
 - Relationship between CFG and PDA:
 	- If a string comes before the variable in the CFG, push something on the stack in the PDA. Likewise, if a string comes after the variable, pop something off the stack.
+
+## 9 October 2013
+
+- Example from last time - notebook-80
+
+- Computation Sequence for PDA
+	- notation: (current state, remaining input, stack contents)
+	- shorthand for notation: only do (state, stack) but include input on edges between them.
+
+- *** notebook-81 ***
+	- Differences between FSM and PDA
+	- notebook-82: differences between different transition functions.
+
+- We showed previously that Regular Expressions, DFSMs, and NFSMs were equivalent. We will soon show that CFGs and NPDAs are analogously equivalent, but DPDAs are less powerful.

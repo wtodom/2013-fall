@@ -79,7 +79,7 @@
 
 
 (inspect (translate zero))
-(inspect (translate one))
+(inspect (translate (increment one)))
 (inspect (translate (add three five)))
 
 

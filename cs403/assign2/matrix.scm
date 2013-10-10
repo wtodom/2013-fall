@@ -64,3 +64,5 @@
 (println "    [it should be ((1 3) (2 4))]")
 
 (inspect (matrix-*-matrix '((1 2 6 4) (3 4 -3 0)) '((1 0) (0 1) (5 5))))
+
+(inspect (matrix-*-vector '((1 2 3) (4 5 6) (7 8 9)) '(1 2 3)))

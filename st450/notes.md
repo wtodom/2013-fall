@@ -272,3 +272,76 @@ prior to this will not be tested, but will have homework
 - Example: notebook-67
 	- "iid" - independent identically distributed
 - An unbiased estimator with the smallest variance is called a "minimum variance unbiased estimator".
+
+
+## 8 October 2013
+
+- Important Results:
+	1. If a random sample of size n is selected from a population with normal distrobition, the sampling distrobution of xBAR is also normal. Therefore, if x1, x2, x3, x4, x5, xn~(iid)Normal(MU, SIGMA^2), then XBAR~Normal(MU, (SIGMA^2)/n)
+	2. If a random sample of size n (n -> infinity)is selected from *any* distrobution with mean MU and variance SIGMA^2, the sampling distrobution of XBAR is approximately normal with mean MU and variance ((SIGMA^2)/n). If x1, x2, x3, x4, xn ~(iid)f(MU, SIGMA^2) (that is, some distrobution) and n is **large**, then XBAR~(approx)Normal(MU, ((SIGMA^2)/n)). This is the Central Limit Theorem. Many books recommend n >= 30 (large) and don't use CLT for n < 30. This isn't a hard limit.
+
+- Example:
+	- x1, x2, x3, xn~(iid)Bernoulli(p) (for example, 0, 0, 1, 0, 0, 1, 1, 1, 0, ...)
+	- Assume n is large. notebook-73
+
+#### Inference Based on a Single Sample
+
+##### Confidence Intervals
+
+- We used to work with point estimators. For example, xBAR is a point estimator for MU. Now we will consider interval estimators called confidence intervals.
+
+- The confidence coefficient is the probability that tan interval estimator encloses the population parameter.
+
+- The confidence level is literally the same thing as the confidence coefficient, but expressed as a percentage.
+
+- If we have a sample x1, x2, x3, x4, ..., xn~(iid)Normal(MU, SIGMA^2), we know that XBAR~Normal(MU, ((SIGMA^2)/n)).
+	- notebook-74
+	- Example:
+		- We want 95% CI.
+		- (1 - alpha) * 100% = 95%
+		- 1 - alpha = .95
+		- alpha = 0.05
+		- (alpha / 2) = 0.025 -> notebook-75
+- SImilarly, but the CLT, is x1, x2, x3, ..., xn~(iid)f(MU, SIGMA^2) and n is large, then (1 - alpha) * 100% CI for MU is notebook-76
+
+- Interpretation:
+	- We can be (1 - alpha) * 100% confident that MU lies between the lower and upper bounds of the CI.
+
+- Example:
+	- Suppose we have a sample of size 100.
+	- The observed XBAR = 15.
+	- SIGMA = 5.
+	- Find 95% CI for MU.
+	- By CLT (since n is large), (1 - alpha) * 100% CI for MU is notebook-76.
+		- for 95% CI, Z = 1.96
+		- notebook-77
+	- Conclusion: With 95% confidence we can statee that MU is between 14.02 and 15.98.
+
+- Problem: We almost never know SIGMA in real life situations. Sometimes we can assume that SIGMA is known based on pilot studies. If SIGMA is unknown, we can use S instead of SIGMA. If SIGMA^2 is unknown and we use S^2 instead, we have to rely on the T-Dristrobution rather than the Z-Distrobution (standard normal distrobution).
+
+- ###### T-Distrobution
+	- Also bell-shaped
+	- very similar to normal for large degrees of freedom
+	- notation: notebook-78
+	- different from normal for df < 30
+	- has heavy tails.
+	- The higher the df, the closer it is to normal.
+
+- Recall that Z(0.025) - 1.96
+	- t with one df (and 0.025) = 12.706
+	- with 10, 2.228
+	- with 30, 2.042
+	- with 120, 1.98
+	- with infinity, 1.96
+
+- For one sample, df = n - 1
+
+- If SIGMA^2 is unknown, but x1, x2, x3, x3, ..., xn~(iid)Normal(MU, SIGMA^2, we use S^2.
+	- Then (1 - alpha) * 100% for MU is notebook-79
+
+- Example: breakfast time
+	- Find 95% CI for mean breakfast time MU. Assume n=9.
+	- data points: 15.25, 9.5, 8.5, 9, 9.75, 8, 7.017, 10.5, 7.25
+	- XBAR = 10.95
+	- S^2 = 29.47
+	- (using formula from notebook-79) : t-value is 2.306, XBAR = 9.42, S^2 = 6.10. answer: (7.52, 11.32)

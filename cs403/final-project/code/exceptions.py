@@ -15,3 +15,4 @@ class ParseError(Error):
 	def __init__(self, expected):
 		self.expected = expected
 		# self.found = found
+	

@@ -147,7 +147,7 @@
         (println "\n\n------your tests--------------------\n")
         (run10)
         (println "\n-------my tests of your code--------\n")
-        (inspect ((Integer 0)'toString))
+        (inspect (((Integer 0)'toString)))
         (println "    [it should be 0]\n")
         (inspect (((Integer 0)'rank)))
         (println "    [it should be a number]\n")

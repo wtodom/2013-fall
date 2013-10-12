@@ -59,6 +59,7 @@ def main_menu():
 	choice = ""
 	newline()
 	print("Today we'll be counting words in the Holy Bible, New Shakespeare Version.")
+	newline()
 
 	while choice != '4':
 		print("Please select one of the following options:")
@@ -67,7 +68,9 @@ def main_menu():
 		print("3)  Enter two words to see how many times those two words occur together.")
 		print("4)  Exit.")
 
+		newline()
 		choice = input(">> ")
+		newline()
 
 		if choice == '1':
 			print("Which word would you like to count?")
@@ -90,7 +93,9 @@ def main_menu():
 			print("Bye!")
 
 		else:
-			print("I'm sorry, I didn't understand that. Please choose try again:")
+			newline()
+			print("I'm sorry, I didn't understand that.")
+			newline()
 
 if __name__ == "__main__":
 	main_menu()

@@ -354,3 +354,19 @@ CS 475 - Programming Languages
 	- notebook-82: differences between different transition functions.
 
 - We showed previously that Regular Expressions, DFSMs, and NFSMs were equivalent. We will soon show that CFGs and NPDAs are analogously equivalent, but DPDAs are less powerful.
+
+## 11 October 2013 (PDA cont.)
+
+##### For DPDA
+- Prefix property:
+	- if w ELEMENT L then no prefix of w is in L.
+		- If w = abcde ELEMENT L:
+			[a, ab, abc, abcd, EPSILON] are not in L.
+- If a language satisfies the prefix property, the ending in a final state and popping the bottom of stack are equivalent ways to accept a string.
+
+- Adding an "end of inupt" symbol is a way to allow a DPDA for a language like {A^n B^n}
+
+### Algorithm for converting CFG -> NPDA
+
+1. For each rule of the form "a -> b", add a transition like "E, a/b" (where "E" = epsilon)
+2. For each item 'c' in the language, make a rule like "c, c/E"

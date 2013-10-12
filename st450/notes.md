@@ -345,3 +345,25 @@ prior to this will not be tested, but will have homework
 	- XBAR = 10.95
 	- S^2 = 29.47
 	- (using formula from notebook-79) : t-value is 2.306, XBAR = 9.42, S^2 = 6.10. answer: (7.52, 11.32)
+
+- Summary: notebook-83
+
+## 10 October 2013 - Sample Size Detection
+
+- Assume we know SIGMA^2. We need to know how many subjects we need to recruitto guarantee the width of the confidence interval (1 - alpha) * 100%, W. The number is notebook-84.
+
+- If we don't know SIGMA^2, things are more complicated.
+	- notebook-85
+
+#### Hypothesis testing
+
+- notebook-86
+- notebook-87
+- p-value: notebook-88
+	- Compare p-value with alpha-level.
+	- If p-value is <= alpha, reject null hypothesis.
+		- Else, fail to reject the null hypothesis.
+	- Interpretation: We have (or don't have) enough evidence to reject the null hypothesis.
+
+- SUMMARY:
+	- IMAGE @ 

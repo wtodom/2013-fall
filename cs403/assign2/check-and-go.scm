@@ -13,3 +13,9 @@
             )
         )
 	)
+
+
+; (inspect (check-and-go 1 nil))
+; (println "    [it should be 1]")
+
+(inspect (check-and-go (/ 2 1) nil))

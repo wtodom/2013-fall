@@ -1,4 +1,5 @@
 (include "random.lib")
+(include "ci.lib")
 
 (randomSeed (int (time))) ; TODO: CHANGE TO A UNIQUE SEED RATHER THAN (TIME)
 
@@ -22,12 +23,13 @@
 ; generates a list of word pairs of the form (wordString . wordValue)
 ; from the words in the specified file
 (define words ((lambda () 
+	; (define p (open "words10000" 'read))
 	(define p (open "words10000" 'read))
     (define oldInput (setPort p))
 
 	(define (listIter wordList word)
 		(cond
-			((eof?) wordList)
+			((eof?) (cons (cons word (word2int word)) wordList))
 			(else
 				(listIter (cons (cons word (word2int word)) wordList) (readLine))
 				)
@@ -40,7 +42,7 @@
 	l
 	)))
 
-(inspect words)
+; (inspect words)
 
 (define (- a b)
 	(cond
@@ -101,28 +103,9 @@
 
 ; (inspect (word2int (diff "love" "hate")))
 
-(define (kth items k)
-	(define (iter tail i)
-    	(cond
-    		((= i k) (car tail))
-    		(else
-    			(iter (cdr tail) (+ i 1))
-    			)
-    		)
-    	)
-    (iter items 0)
-	)
-
-; (inspect (kthWord words 5))
-
 (define (randomWord)
-	(kth (randomRange 0 (- (length words) 1)))
+	(kth words (randomRange 0 (length words)))
 	)
-
-
-
-
-
 
 (define (exampleSearch n) ;;; DONE ;;;
 	(define p (open "examples2" 'write)) ; p points to a port (in this case the file pointer)
@@ -146,3 +129,6 @@
 	)
 
 ; (exampleSearch 20000)
+
+(inspect (diff "happy" "dance"))
+(inspect (diff "happy" "feet"))

@@ -29,6 +29,7 @@
 
 ; (inspect (infix->prefix '(2 + 3 ^ 4 * 4 - 7)))
 (inspect (infix->prefix '(1 + 2 + 3 ^ 4 ^ 5)))
+(inspect (infix->prefix '(5)))
 ; (inspect (doOne '(2 + 3 * 4 - 7) 5))
 
 ; (inspect (indexOf '2 '(1 2 3 2 3 4 2)))

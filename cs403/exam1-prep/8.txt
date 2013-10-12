@@ -1,0 +1,13 @@
+functionCall: OPEN-PAREN ID optArgs CLOSE-PAREN
+
+optArgs: *empty*
+	   | args
+
+args: arg optArgs
+
+arg: expression
+   | functionCall
+   | INT
+   | STRING
+   | FLOAT
+   | BOOLEAN

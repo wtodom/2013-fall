@@ -7,7 +7,7 @@
 		)
 	)
 
-(inspect (check-and-go (/ 4 0)
+(inspect (check-and-go (/ x 0)
         (lambda (error)
             (ppTable error)
             )

@@ -1,0 +1,1 @@
+(accumulate (lambda (x y) (+ y 1)) 0 (keep odd? (flatten items)))

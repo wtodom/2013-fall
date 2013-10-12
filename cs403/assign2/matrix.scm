@@ -44,11 +44,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (matrix-*-vector m v)
-	(rm-matrix-*-vector (transpose m) v)
+	(transpose (rm-matrix-*-vector (transpose m) v))
 	)
 
 (define (matrix-*-matrix m n)
-	(rm-matrix-*-matrix (transpose m) (transpose n))
+	(transpose (rm-matrix-*-matrix (transpose m) (transpose n)))
 	)
 
 (inspect (dot-product '(1 2) '(3 4)))

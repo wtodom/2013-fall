@@ -21,24 +21,26 @@ statement: expr SEMICOLON
 primary: VARIABLE
 	   | INTEGER
 	   | STRING
-	   | TRUE
-	   | FALSE
+	   | boolean
 	   | NOTHING (NULL)
 	   | expr
 
-functionCall: IDENTIFIER OPEN_PARENTHESIS optList CLOSE_PARENTHESIS
+boolean: TRUE
+	   | FALSE
 
-optList: list
+functionCall: IDENTIFIER OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
+
+optSequence: sequence
 	   | *empty*
 
-list: primary
+sequence: primary
 	| primary AND primary
 	| primary commaChain COMMA AND primary
 
 commaChain: COMMA primary commaChain
 		  | *empty*
 
-functionDef: TO VARIABLE optList COLON
+functionDef: TO VARIABLE optSequence COLON
 
 expr: OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
 	| functionCall

@@ -1,43 +1,36 @@
-;{
-Define a procedure named tuple that computes all tuples of a given size such that no entry in the tuples is less than zero or greater than a given limit. Moreover, a value in the tuple cannot exceed the following value in the tuple. For example:
-    (tuple 4 2)
-should generate the list:
+(include "ci.lib")
 
-    ((0 0 0 0) (0 0 0 1) (0 0 0 2) (0 0 1 1) (0 0 1 2) ... (2 2 2 2))
-The order of the tuples is not specified.
-;}
-
-(define (interval lo hi step)
-	(if (>= lo hi)
-		nil
-		(cons lo (interval (+ step lo) hi step))
-		)
-	)
-
-(define (accumulate op base items)
-	(cond
-		((null? items) base)
-		(else
-			(op (car items) (accumulate op base (cdr items))
-				)
-			)
-		)
-	)
-
-(define (otuple q)
-	(accumulate append ()
-		(map
-			(lambda (q) ; change to y to do all permutations
-				(map
-					(lambda (x)
-						(list x q) ; change q to y with above change
+(define (t n m)
+	(define (tIter i tuples)
+		(cond
+			((= n 0) nil)
+			((= i n) tuples)
+			(else
+				(tIter (+ i 1) 
+					(accumulate append () 
+						(map ; for each 
+							(lambda (sublist)
+								(map ; for each
+									(lambda (x) ; number in the interval
+										(cons x sublist)
+										)
+									(interval 0 (+ (car sublist) 1) 1) ; from 0 to the car of the sublist
+									)
+								)
+							tuples
+							)
 						)
-					(interval 0 (+ q 1) 1)
 					)
 				)
-			(interval 0 (+ q 1) 1)
 			)
 		)
+	(tIter 1 (map (lambda (x) (list x)) (interval 0 (+ m 1) 1)))
 	)
 
-(inspect (otuple 3))
+(inspect (t 3 3))
+
+;{
+for each sublist in tuples:
+	cons each number from 0 to the car of the sublist to the front of the sublist and append them all together.
+	recur on this list.
+;}

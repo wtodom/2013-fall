@@ -1,21 +1,23 @@
 (include "ci.lib")
 
-(define (curry f)
-	(define numParamsNeeded (length (get ' parameters f)))
-	(define (curryIter params)
+(define (curry x)
+	(define params (get ' parameters x))
+	(define me this)
+
+	(define (cIter paramList lambdas)
 		(cond
-			((= (length params) numParamsNeeded) params) ; this returns the full parameter list
+			((null? paramList) (eval lambdas me))
 			(else
-				(curryIter (append params (get 'parameters curryIter)))
+				(cIter (cdr paramList) (list lambda (list car paramList)) lambdas))
 				)
 			)
 		)
-	(curryIter ())
+
+	(cIter (reverse params) (cons x params))
 	)
 
 (define (f a b c)
-	(print "a: " a " b: " b " c: " c)
+	(+ a b c)
 	)
 
-; (f 1 2 3)
-(inspect (curry f))
+(inspect ((((curry f) 1) 2) 3))

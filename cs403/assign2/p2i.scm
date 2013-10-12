@@ -2,18 +2,6 @@
 
 (define operators '(^ / * - +))
 
-(define (listFromIndex n L)
-	(define (iter i rest)
-		(cond
-			((= i (- n 1)) (cdr rest))
-			(else
-				(iter (+ i 1) (cdr rest))
-				)
-			)
-		)
-	(iter 0 L)
-	)
-
 (define (doOne expr opIndex)
 	(define (iter i current)
 		(cond

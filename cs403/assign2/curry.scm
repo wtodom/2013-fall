@@ -8,7 +8,7 @@
 		(cond
 			((null? paramList) (eval lambdas me))
 			(else
-				(cIter (cdr paramList) (list lambda (list car paramList)) lambdas))
+				(cIter (cdr paramList) (list lambda (list (car paramList)) lambdas))
 				)
 			)
 		)

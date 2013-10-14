@@ -26,14 +26,6 @@
 	)
 
 (define (Rational numer denom)
-	; (define (simplest n-or-d) ; pass 'n or 'd to get that term in lowest form
-	; 	(cond
-	; 		((eq? n-or-d 'n) )
-	; 		(else
-	; 			(/ (real denom) (gcd numer denom))
-	; 			)
-	; 		)
-	; 	)
 	(define n (/ numer (gcd numer denom))
 		)
 	(define d (/ denom (gcd numer denom))

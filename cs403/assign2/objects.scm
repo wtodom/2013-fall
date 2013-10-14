@@ -60,7 +60,7 @@
 		(Real (oldplus (/ integerVersion (^ 10.0 decIndex)) (/ (other'integerVersion) (^ 10.0 (other'decIndex)))) 0)
 		)
 	(define (promote)
-		(Complex (value) 0.0)
+		(Complex (Real integerVersion decIndex) (Real 0 0))
 		)
 	(define (demote)
 		(Rational integerVersion (int (^ 10.0 decIndex)))
@@ -118,6 +118,8 @@
 	)
 
 (define (+ @)
+	; (inspect (car @))
+	; (inspect (cadr @))
 	(if (not (object? (car @)))
 		(oldplus @) ; if they're just regular ints or reals or whatever
 		(if (null? (cdr @)) 
@@ -125,16 +127,16 @@
 			(if (null? (cddr @)) ; only two numbers to add
 				(cond
 					((> (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)))))
-					((> (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)))))
+					((< (((car @)'rank)) (((cadr @)'rank))) (apply + (list (((car @)'promote)) (cadr @))))
 					(else
 						((((car @)'add) (cadr @)))
 						)
 					)
 				(cond
-					((< (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)) (cddr @))))
-					((< (((cadr @)'rank)) (((car @)'rank))) (apply + (list (((car @)'promote)) (cadr @) (cddr @))))
+					; ((< (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)) (cddr @))))
+					; ((< (((cadr @)'rank)) (((car @)'rank))) (apply + (list (((car @)'promote)) (cadr @) (cddr @))))
 					(else
-						(apply + (list ((((car @)'add) (cadr @))) (cddr @)))
+						; (apply + (list ((((car @)'add) (cadr @))) (cddr @)))
 						)
 					)
 				)
@@ -273,10 +275,6 @@
 ;                  \______/     \_/    \_______/|__/      |__/ \______/  \_______/ \_______/
 
 
-
-
-(inspect (((+ (Real 3 1) (Integer 5))'value)))
-(inspect (((+ (Integer 5) (Rational 3 2))'rank)))
-(inspect (((+ (Integer 5) (Rational 3 2))'toString)))
-(inspect (((Rational 3 2)'toString)))
-(inspect (((+ (Integer 5) (Rational 3 2))'value)))
+(inspect (+ five point3+-.2i))
+(inspect (((+ five point3+-.2i)'toString)))
+(inspect (((+ five point3+-.2i)'value)))

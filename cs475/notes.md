@@ -370,3 +370,12 @@ CS 475 - Programming Languages
 
 1. For each rule of the form "a -> b", add a transition like "E, a/b" (where "E" = epsilon)
 2. For each item 'c' in the language, make a rule like "c, c/E"
+
+## 14 October 2013 - Converting PDA -> CFG
+
+* Not on quiz *
+
+- Identifying useless variables in a grammar
+	1. Identify for each variable T, is there some sequence starting with T that lets us derive some string alpha?
+		- Every rule (or partial rule) that cannot produce symbols terminally is eliminated
+	2. Identify for each variable T, is there a sequence of productions that, starting with S, can reach alpha T beta?

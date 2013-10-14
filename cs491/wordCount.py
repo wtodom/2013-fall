@@ -89,7 +89,6 @@ def main_menu():
             print("Bye!")
 
         else:
-            newline()
             print("I'm sorry, I didn't understand that.")
             newline()
 

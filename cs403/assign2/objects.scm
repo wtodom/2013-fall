@@ -26,31 +26,35 @@
 	)
 
 (define (Rational numer denom)
-	(define (simplest n-or-d) ; pass 'n or 'd to get that term in lowest form
-		(cond
-			((eq? n-or-d 'n) (/ (real numer) (gcd numer denom)))
-			(else
-				(/ (real denom) (gcd numer denom))
-				)
-			)
+	; (define (simplest n-or-d) ; pass 'n or 'd to get that term in lowest form
+	; 	(cond
+	; 		((eq? n-or-d 'n) )
+	; 		(else
+	; 			(/ (real denom) (gcd numer denom))
+	; 			)
+	; 		)
+	; 	)
+	(define n (/ numer (gcd numer denom))
+		)
+	(define d (/ denom (gcd numer denom))
 		)
 	(define (add other)
-		(Rational (oldplus (* numer (other'denom)) (* (other'numer) denom)) (* denom (other'denom)))
+		(Rational (oldplus (* n (other'd)) (* (other'n) d)) (* d (other'd)))
 		)
 	(define (promote)
-		(Real (* (/ (real (simplest 'n)) (simplest 'd)) 1000000) 6)
+		(Real (* (/ (real n) d) 1000000) 6)
 		)
 	(define (demote)
-		(Integer (int (/ (simplest 'n) (simplest 'd))))
+		(Integer (int (/ (real n) d)))
 		)
 	(define (rank)
 		1 
 		)
 	(define (toString)
-		(string+ (string (int (simplest 'n))) "/" (string (int (simplest 'd))))
+		(string+ (string (int n)) "/" (string (int d)))
 		)
 	(define (value)
-		(/ (simplest 'n) (simplest 'd))
+		(/ (real n) d)
 		)
 	this
 	)
@@ -63,7 +67,7 @@
 		(Complex (Real integerVersion decIndex) (Real 0 0))
 		)
 	(define (demote)
-		(Rational integerVersion (int (^ 10.0 decIndex)))
+		(Rational (int integerVersion) (int (^ 10.0 decIndex)))
 		)
 	(define (rank)
 		2
@@ -85,22 +89,8 @@
 		(Complex realPart imaginaryPart)
 		)
 	(define (demote)
-		; (cond
-		; 	((not (contains (string realPart) ".")) (Real realPart (strLength (string realPart))))
-		; 	(else
-		; 		(define decIndex (indexOf "." (string realPart)))
-		; 		(Real
-		; 			(int
-		; 				(string+
-		; 					(substring 0 decIndex)
-		; 					(substring (+ decIndex 1) (strLength (string realPart)))
-		; 					)
-		; 				)
-		; 			decIndex
-		; 			)
-		; 		)
-		; 	)
-		realPart
+		(define rVal (sqrt (oldplus (^ ((realPart'value)) 2) (^ ((imaginaryPart'value)) 2))))
+		(Real (int (* rVal 1000000)) 6)
 		)
 	(define (rank)
 		3
@@ -118,8 +108,7 @@
 	)
 
 (define (+ @)
-	; (inspect (car @))
-	; (inspect (cadr @))
+	(inspect @)
 	(if (not (object? (car @)))
 		(oldplus @) ; if they're just regular ints or reals or whatever
 		(if (null? (cdr @)) 
@@ -133,10 +122,10 @@
 						)
 					)
 				(cond
-					; ((< (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)) (cddr @))))
-					; ((< (((cadr @)'rank)) (((car @)'rank))) (apply + (list (((car @)'promote)) (cadr @) (cddr @))))
+					((> (((car @)'rank)) (((cadr @)'rank))) (apply + (cons (car @) (cons (((cadr @)'promote)) (cddr @)))))
+					((< (((car @)'rank)) (((cadr @)'rank))) (apply + (cons (((car @)'promote)) (cons (cadr @) (cddr @)))))
 					(else
-						; (apply + (list ((((car @)'add) (cadr @))) (cddr @)))
+						(apply + (cons ((((car @)'add) (cadr @))) (cddr @)))
 						)
 					)
 				)
@@ -233,7 +222,7 @@
 ; (inspect ((point333'demote)))
 ; (inspect ((((point333'demote))'value)))
 ; (inspect ((point333'promote)))
-; (inspect ((((point333'promote))'value))) ; DOESN'T WORK
+; (inspect ((((point333'promote))'value)))
 ; (inspect (((((point333'add) twopoint333))'value)))
 
 
@@ -275,6 +264,21 @@
 ;                  \______/     \_/    \_______/|__/      |__/ \______/  \_______/ \_______/
 
 
-(inspect (+ five point3+-.2i))
-(inspect (((+ five point3+-.2i)'toString)))
-(inspect (((+ five point3+-.2i)'value)))
+; (inspect (+ five point3+-.2i))
+(define a (Complex (Real -78 2) (Real 1909 3)))
+(define b (Integer 3))
+
+; (inspect ((a'toString)))
+
+; (inspect ((((a'demote))'value)))
+; (inspect ((((((a'demote))'demote))'toString)))
+; (inspect ((((((((a'demote))'demote))'demote))'value)))
+; (inspect ((((((((((((((b'promote))'promote))'promote))'demote))'demote))'demote))'value)))
+
+; (inspect (((+ point3+-.2i five)'demote)))
+; (inspect (((((+ point3+-.2i five)'demote))'demote)))
+; (inspect (((((((+ point3+-.2i five)'demote))'demote))'demote)))
+; (inspect (((+ five point3+-.2i)'toString)))
+; (inspect (((+ five point3+-.2i)'value)))
+
+(inspect (((+ a b twothirds twopoint333)'value)))

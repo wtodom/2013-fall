@@ -11,7 +11,7 @@
 		(Rational val 1)
 		)
 	(define (demote)
-		this
+		(Integer val)
 		)
 	(define (rank)
 		0
@@ -35,7 +35,7 @@
 			)
 		)
 	(define (add other)
-		(Rational (+ (* numer (other'denom)) (* (other'numer) denom)) (* denom (other'denom)))
+		(Rational (oldplus (* numer (other'denom)) (* (other'numer) denom)) (* denom (other'denom)))
 		)
 	(define (promote)
 		(Real (* (/ (real (simplest 'n)) (simplest 'd)) 1000000) 6)
@@ -57,13 +57,13 @@
 
 (define (Real integerVersion decIndex)
 	(define (add other)
-		(Real (+ (/ integerVersion (^ 10.0 decIndex)) (/ (other'integerVersion) (^ 10.0 (other'decIndex)))) 0)
+		(Real (oldplus (/ integerVersion (^ 10.0 decIndex)) (/ (other'integerVersion) (^ 10.0 (other'decIndex)))) 0)
 		)
 	(define (promote)
-		(Complex (value) 0)
+		(Complex (value) 0.0)
 		)
 	(define (demote)
-		(Rational integerVersion (^ 10.0 decIndex))
+		(Rational integerVersion (int (^ 10.0 decIndex)))
 		)
 	(define (rank)
 		2
@@ -82,30 +82,34 @@
 		(Complex (((realPart'add) (other'realPart))) (((imaginaryPart'add) (other'imaginaryPart))))
 		)
 	(define (promote)
-		this
+		(Complex realPart imaginaryPart)
 		)
 	(define (demote)
-		(cond
-			((not (contains (string realPart) ".")) (Real realPart (length (string realPart))))
-			(else
-				(define decIndex (indexOf "." (string realPart)))
-				(Real 
-					(int 
-						(string+ 
-							(substring 0 decIndex)
-							(substring (+ decIndex 1) (length (string realPart)))
-							)
-						)
-					decIndex
-					)
-				)
-			)
+		; (cond
+		; 	((not (contains (string realPart) ".")) (Real realPart (strLength (string realPart))))
+		; 	(else
+		; 		(define decIndex (indexOf "." (string realPart)))
+		; 		(Real
+		; 			(int
+		; 				(string+
+		; 					(substring 0 decIndex)
+		; 					(substring (+ decIndex 1) (strLength (string realPart)))
+		; 					)
+		; 				)
+		; 			decIndex
+		; 			)
+		; 		)
+		; 	)
+		realPart
 		)
 	(define (rank)
 		3
 		)
 	(define (toString)
-		(string+ (string ((realPart'value))) "+" (string ((imaginaryPart'value))) "i")
+		(if (> 0 ((imaginaryPart'value)))
+			(string+ (string ((realPart'value))) (string ((imaginaryPart'value))) "i")
+			(string+ (string ((realPart'value))) "+" (string ((imaginaryPart'value))) "i")
+			)
 		)
 	(define (value)
 		(list ((realPart'value)) ((imaginaryPart'value)))
@@ -114,34 +118,23 @@
 	)
 
 (define (+ @)
-	(inspect @)
-	(inspect (car @))
-	(inspect (cdr @))
-	(cond ;;; REFACTOR HERE some of these binary conds to ifs
-		((not (object? (car @))) (oldplus @))
-		(else ; if they are objects
-			(cond
-				((null? (cdr @)) @) ; only one number passed to +
-				(else
-					(cond
-						((null? (cddr @)) ; only two numbers to add
-							(cond
-								((> (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)))))
-								((< (((cadr @)'rank)) (((car @)'rank))) (apply + (list (((car @)'promote)) (cadr @))))
-								(else
-									((((car @)'add) (cadr @)))
-									)
-								)
-							)
-						(else
-							(cond
-								((< (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)) (cddr @))))
-								((< (((cadr @)'rank)) (((car @)'rank))) (apply + (list (((car @)'promote)) (cadr @) (cddr @))))
-								(else
-									(apply + (list ((((car @)'add) (cadr @))) (cddr @)))
-									)
-								)
-							)
+	(if (not (object? (car @)))
+		(oldplus @) ; if they're just regular ints or reals or whatever
+		(if (null? (cdr @)) 
+			@ ; if only one number passed to +, just return it
+			(if (null? (cddr @)) ; only two numbers to add
+				(cond
+					((> (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)))))
+					((> (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)))))
+					(else
+						((((car @)'add) (cadr @)))
+						)
+					)
+				(cond
+					((< (((car @)'rank)) (((cadr @)'rank))) (apply + (list (car @) (((cadr @)'promote)) (cddr @))))
+					((< (((cadr @)'rank)) (((car @)'rank))) (apply + (list (((car @)'promote)) (cadr @) (cddr @))))
+					(else
+						(apply + (list ((((car @)'add) (cadr @))) (cddr @)))
 						)
 					)
 				)
@@ -149,74 +142,141 @@
 		)
 	)
 
-(inspect (((+ (Integer 5) (Real 3 1))'value)))
+;  .----------------.  .----------------.  .----------------.  .----------------.  .----------------. 
+; | .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
+; | |  _________   | || |  _________   | || |    _______   | || |  _________   | || |    _______   | |
+; | | |  _   _  |  | || | |_   ___  |  | || |   /  ___  |  | || | |  _   _  |  | || |   /  ___  |  | |
+; | | |_/ | | \_|  | || |   | |_  \_|  | || |  |  (__ \_|  | || | |_/ | | \_|  | || |  |  (__ \_|  | |
+; | |     | |      | || |   |  _|  _   | || |   '.___`-.   | || |     | |      | || |   '.___`-.   | |
+; | |    _| |_     | || |  _| |___/ |  | || |  |`\____) |  | || |    _| |_     | || |  |`\____) |  | |
+; | |   |_____|    | || | |_________|  | || |  |_______.'  | || |   |_____|    | || |  |_______.'  | |
+; | |              | || |              | || |              | || |              | || |              | |
+; | '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
+;  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' 
 
-;$
 
-;{;;;;;;;;;;;;;;;;;;;;;;
 
-Integer tests
+;  /$$$$$$             /$$                                            
+; |_  $$_/            | $$                                            
+;   | $$   /$$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$ 
+;   | $$  | $$__  $$|_  $$_/   /$$__  $$ /$$__  $$ /$$__  $$ /$$__  $$
+;   | $$  | $$  \ $$  | $$    | $$$$$$$$| $$  \ $$| $$$$$$$$| $$  \__/
+;   | $$  | $$  | $$  | $$ /$$| $$_____/| $$  | $$| $$_____/| $$      
+;  /$$$$$$| $$  | $$  |  $$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$$| $$      
+; |______/|__/  |__/   \___/   \_______/ \____  $$ \_______/|__/      
+;                                        /$$  \ $$                    
+;                                       |  $$$$$$/                    
+;                                        \______/                     
 
-;};;;;;;;;;;;;;;;;;;;;;;
+
 
 (define five (Integer 5))
 (define two (Integer 2))
-(inspect (((((five'add) two))'value)))
+
+; (inspect ((five'rank)))
+; (inspect ((five'toString)))
+; (inspect ((five'value)))
+; (inspect ((five'demote)))
+; (inspect ((((five'demote))'value)))
+; (inspect ((five'promote)))
+; (inspect ((((five'promote))'value)))
+; (inspect (((((five'add) two))'value)))
 
 
 
-;{;;;;;;;;;;;;;;;;;;;;;;
+;  /$$$$$$$              /$$     /$$                               /$$
+; | $$__  $$            | $$    |__/                              | $$
+; | $$  \ $$  /$$$$$$  /$$$$$$   /$$  /$$$$$$  /$$$$$$$   /$$$$$$ | $$
+; | $$$$$$$/ |____  $$|_  $$_/  | $$ /$$__  $$| $$__  $$ |____  $$| $$
+; | $$__  $$  /$$$$$$$  | $$    | $$| $$  \ $$| $$  \ $$  /$$$$$$$| $$
+; | $$  \ $$ /$$__  $$  | $$ /$$| $$| $$  | $$| $$  | $$ /$$__  $$| $$
+; | $$  | $$|  $$$$$$$  |  $$$$/| $$|  $$$$$$/| $$  | $$|  $$$$$$$| $$
+; |__/  |__/ \_______/   \___/  |__/ \______/ |__/  |__/ \_______/|__/
 
-Rational tests
-
-;};;;;;;;;;;;;;;;;;;;;;;
 
 
 (define twothirds (Rational 2 3))
 (define thirteen221sts (Rational 13 221))
 
-(inspect ((twothirds'value)))
-(inspect ((twothirds'rank)))
-(inspect ((twothirds'toString)))
+; (inspect ((twothirds'value)))
+; (inspect ((twothirds'rank)))
+; (inspect ((twothirds'toString)))
+; (inspect ((twothirds'demote)))
+; (inspect ((((twothirds'demote))'value)))
+; (inspect ((twothirds'promote)))
+; (inspect ((((twothirds'promote))'value)))
 
-(inspect (((((twothirds'add) thirteen221sts))'value)))
+; (inspect (((((twothirds'add) thirteen221sts))'value)))
 
 
-;{;;;;;;;;;;;;;;;;;;;;;;
+;  /$$$$$$$                      /$$
+; | $$__  $$                    | $$
+; | $$  \ $$  /$$$$$$   /$$$$$$ | $$
+; | $$$$$$$/ /$$__  $$ |____  $$| $$
+; | $$__  $$| $$$$$$$$  /$$$$$$$| $$
+; | $$  \ $$| $$_____/ /$$__  $$| $$
+; | $$  | $$|  $$$$$$$|  $$$$$$$| $$
+; |__/  |__/ \_______/ \_______/|__/
 
-Real tests
-
-;};;;;;;;;;;;;;;;;;;;;;;
 
 
 (define point333 (Real 333 3))
 (define twopoint333 (Real 2333 3))
 
-(inspect (twopoint333'integerVersion))
+; (inspect (twopoint333'integerVersion))
 
-(inspect ((point333'value)))
-(inspect ((point333'rank)))
-(inspect ((point333'toString)))
+; (inspect ((point333'value)))
+; (inspect ((point333'rank)))
+; (inspect ((point333'toString)))
+; (inspect ((point333'demote)))
+; (inspect ((((point333'demote))'value)))
+; (inspect ((point333'promote)))
+; (inspect ((((point333'promote))'value))) ; DOESN'T WORK
+; (inspect (((((point333'add) twopoint333))'value)))
 
-(inspect ((twopoint333'value)))
-(inspect ((twopoint333'rank)))
-(inspect ((twopoint333'toString)))
-(inspect (((((point333'add) twopoint333))'value)))
+
+;   /$$$$$$                                    /$$                    
+;  /$$__  $$                                  | $$                    
+; | $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$ | $$  /$$$$$$  /$$   /$$
+; | $$       /$$__  $$| $$_  $$_  $$ /$$__  $$| $$ /$$__  $$|  $$ /$$/
+; | $$      | $$  \ $$| $$ \ $$ \ $$| $$  \ $$| $$| $$$$$$$$ \  $$$$/ 
+; | $$    $$| $$  | $$| $$ | $$ | $$| $$  | $$| $$| $$_____/  >$$  $$ 
+; |  $$$$$$/|  $$$$$$/| $$ | $$ | $$| $$$$$$$/| $$|  $$$$$$$ /$$/\  $$
+;  \______/  \______/ |__/ |__/ |__/| $$____/ |__/ \_______/|__/  \__/
+;                                   | $$                              
+;                                   | $$                              
+;                                   |__/                              
 
 
-;{;;;;;;;;;;;;;;;;;;;;;;
-
-Complex tests
-
-;};;;;;;;;;;;;;;;;;;;;;;
 
 (define one+2i (Complex (Real 1 0) (Real 2 0)))
 (define point3+-.2i (Complex (Real 3 1) (Real -2 1)))
 
-(inspect ((one+2i'value)))
-(inspect ((one+2i'toString)))
+; (inspect ((point3+-.2i'value)))
+; (inspect ((point3+-.2i'toString)))
+; (inspect ((point3+-.2i'demote)))
+; (inspect ((((point3+-.2i'demote))'value)))
+; (inspect ((point3+-.2i'promote)))
+; (inspect ((((point3+-.2i'promote))'value)))
 
-(inspect ((point3+-.2i'value)))
-(inspect ((point3+-.2i'toString)))
+; (inspect (((((one+2i'add) point3+-.2i))'toString)))
 
-(inspect (((((one+2i'add) point3+-.2i))'toString)))
+
+
+;                   /$$$$$$                                /$$                           /$$
+;     /$$          /$$__  $$                              | $$                          | $$
+;    | $$         | $$  \ $$ /$$    /$$ /$$$$$$   /$$$$$$ | $$  /$$$$$$   /$$$$$$   /$$$$$$$
+;  /$$$$$$$$      | $$  | $$|  $$  /$$//$$__  $$ /$$__  $$| $$ /$$__  $$ |____  $$ /$$__  $$
+; |__  $$__/      | $$  | $$ \  $$/$$/| $$$$$$$$| $$  \__/| $$| $$  \ $$  /$$$$$$$| $$  | $$
+;    | $$         | $$  | $$  \  $$$/ | $$_____/| $$      | $$| $$  | $$ /$$__  $$| $$  | $$
+;    |__/         |  $$$$$$/   \  $/  |  $$$$$$$| $$      | $$|  $$$$$$/|  $$$$$$$|  $$$$$$$
+;                  \______/     \_/    \_______/|__/      |__/ \______/  \_______/ \_______/
+
+
+
+
+(inspect (((+ (Real 3 1) (Integer 5))'value)))
+(inspect (((+ (Integer 5) (Rational 3 2))'rank)))
+(inspect (((+ (Integer 5) (Rational 3 2))'toString)))
+(inspect (((Rational 3 2)'toString)))
+(inspect (((+ (Integer 5) (Rational 3 2))'value)))

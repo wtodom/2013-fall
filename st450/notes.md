@@ -290,7 +290,7 @@ prior to this will not be tested, but will have homework
 
 - We used to work with point estimators. For example, xBAR is a point estimator for MU. Now we will consider interval estimators called confidence intervals.
 
-- The confidence coefficient is the probability that tan interval estimator encloses the population parameter.
+- The confidence coefficient is the probability that an interval estimator encloses the population parameter.
 
 - The confidence level is literally the same thing as the confidence coefficient, but expressed as a percentage.
 
@@ -367,3 +367,65 @@ prior to this will not be tested, but will have homework
 
 - SUMMARY:
 	- IMAGE @ 
+
+## Confidence Interval Z-values
+
+<p><strong>Small Table of z-values for Confidence Intervals</strong></p>
+<table style="width: 13%; height: 132px" cellspacing="7" cellpadding="4">
+	<tbody>
+		<tr>
+			<td><strong>Confidence Level</strong></td>
+			<td style="width: 114px"><strong>z</strong></td>
+		</tr>
+		<tr>
+			<td>0.70</td>
+			<td style="width: 114px">1.04</td>
+		</tr>
+		<tr>
+			<td>0.75</td>
+			<td style="width: 114px">1.15</td>
+		</tr>
+		<tr>
+			<td>0.80</td>
+			<td style="width: 114px">1.28</td>
+		</tr>
+		<tr>
+			<td>0.85</td>
+			<td style="width: 114px">1.44</td>
+		</tr>
+		<tr>
+			<td>0.90</td>
+			<td style="width: 114px">&nbsp;1.645</td>
+		</tr>
+		<tr>
+			<td>0.92</td>
+			<td style="width: 114px">1.75</td>
+		</tr>
+		<tr>
+			<td>0.95</td>
+			<td style="width: 114px">1.96</td>
+		</tr>
+		<tr>
+			<td>0.96</td>
+			<td style="width: 114px">2.05</td>
+		</tr>
+		<tr>
+			<td>0.98</td>
+			<td style="width: 114px">2.33</td>
+		</tr>
+		<tr>
+			<td>0.99</td>
+			<td style="width: 114px">2.58</td>
+		</tr>
+</table>
+
+## 17 October 2013
+
+- Sampling Size Detection (notebook 84 and 85 cont.)
+	- Assume that variance1 and variance2 are both known. Then the (1-alpha)*100% CI for MU1-MU2 is notebook-92.
+	- Assume that the desired width of a (1-alpha)*100% CI (denoted by W) is provided. Then, notebook-93.
+	- Asume that variance1 = variance2 = variance, and variance is unknown. (1-alpha)*100% CI for mu1-mu2 is notebook-94
+
+- Paired Samples
+	- Example: healthy and sick twins. volume of brain regions measued.
+		- photo @ 4:43

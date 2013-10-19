@@ -15,5 +15,6 @@
 	(lambda (x) (cxrIter x sym))
 	)
 
-(inspect ((cxr 'add) '(1 2 3 4 5 6)))
-(inspect ((cxr 'add) '(1 2 3 4 5 6)))
+(inspect ((cxr 'adddd) '(1 2 3 4 5 6)))
+(inspect ((cxr 'addddd) '("Hi" "!" "What" "is" "your" "name" "?")))
+(inspect ((cxr 'aaddd) '(car cdr (cadr cddr) (caddr cdddr))))

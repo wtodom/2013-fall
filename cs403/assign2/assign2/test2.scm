@@ -1,6 +1,6 @@
 (include "assign2.scm")
 
-(println "Test Script: VERSION 1\n")
+(println "Test Script: VERSION 2\n")
 
 (println "author...\n")
 (author)
@@ -76,7 +76,7 @@
         (inspect (transpose '((1 2) (3 4))))
         (println "    [it should be ((1 3) (2 4))]")
         (inspect (matrix-*-matrix '((1 2) (3 4)) '((1 0) (0 1))))
-        (println "    [it should be ((1 3) (2 4))]")
+        (println "    [it should be ((1 2) (3 4))]")
         )
     (println " NOT IMPLEMENTED")
     )

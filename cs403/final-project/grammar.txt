@@ -21,12 +21,10 @@ statement: expr SEMICOLON
 primary: VARIABLE
 	   | INTEGER
 	   | STRING
-	   | boolean
+	   | TRUE
+	   | FLASE
 	   | NOTHING (NULL)
 	   | expr
-
-boolean: TRUE
-	   | FALSE
 
 functionCall: IDENTIFIER OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
 

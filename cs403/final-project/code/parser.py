@@ -22,6 +22,7 @@ class Parser:
 	def check(self, tokenType):
 		return self.current.tokenType == tokenType
 
+
 	def match(self, tokenType):
 		if self.check(tokenType) == False:
 			raise ParseError(tokenType)
@@ -29,29 +30,23 @@ class Parser:
 		self.current = self.l.lex()
 		return self.old
 
-	def blockPending(self):
-		# todo
-		pass
-
-	def statementsPending(self):
-		# todo
-		pass
-
 	def ifStatementPending(self):
-		# todo
-		pass
+		return self.check("IF")
 
 	def whileStatementPending(self):
-		# todo
-		pass
+		return self.check("WHILE")
 
 	def expressionPending(self):
-		# todo
-		pass
+		return self.check("OPEN_PARENTHESIS")
+
+	def statementsPending(self):
+		return self.ifStatementPending() or self.whileStatementPending() or self.expressionPending() or self.check("TODO")
 
 	def sequencePending(self):
-		# todo
-		pass
+		return self.primaryPending()
+
+	def primaryPending(self):
+		return self.check("VARIABLE") or self.check("INTEGER") or self.check("STRING") or self.check("TRUE") or self.check("FALSE") or self.check("NOTHING") or self.expressionPending()
 
 	def program(self):
 		# todo
@@ -82,10 +77,10 @@ class Parser:
 	def optOtherwise(self):
 		if self.check("OTHERWISE"):
 			self.match("OTHERWISE")
-			if self.blockPending():
-				self.block()
-			else:
+			if self.ifStatementPending():
 				self.ifStatement()
+			else:
+				self.block()
 		else:
 			pass
 

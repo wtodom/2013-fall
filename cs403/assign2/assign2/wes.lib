@@ -1,0 +1,175 @@
+(define (filter p? items)
+	(cond ((null? items) nil)
+		((p? (car items)) (cons (car items) (filter p? (cdr items))))
+		(else
+			(filter p? (cdr items))
+			)
+		)
+	)
+
+;;; filter when you keep the items that match ;;;
+(define (keep p? items)
+	(cond
+		((null? items) nil)
+		((p? (car items)) (cons (car items) (keep p? (cdr items))))
+		(else
+			(keep p? (cdr items))
+			)
+		)
+	)
+
+;;; filter when you don't keep them ;;;
+(define (remove p? items)
+	(keep? (lambda (x) (not (p? x))) items)
+	)
+
+(define (accumulate op initial sequence)
+	(if (null? sequence)
+		initial
+		(op (car sequence)
+			(accumulate op initial (cdr sequence))
+			)
+		)
+	)
+
+(define (accumulate-n op init sequence)
+	(if (null? (car sequence))
+		nil
+		(cons (accumulate op init (map car sequence))
+			(accumulate-n op init (map cdr sequence))
+			)
+		)
+	)
+
+(define (interval lo hi step)
+	(if (>= lo hi)
+		nil
+		(cons lo (interval (+ step lo) hi step))
+		)
+	)
+
+(define (kth items k)
+	(define (iter tail i)
+		(cond
+			((= i k) (car tail))
+			(else
+				(iter (cdr tail) (+ i 1))
+				)
+			)
+		)
+	(iter items 0)
+	)
+
+(define (indexOf element collection)
+	(define (indexIter count rest)
+		(cond
+			((null? rest) -1)
+			((eq? element (car rest)) count)
+			(else
+				(indexIter (+ count 1) (cdr rest))
+				)
+			)
+		)
+	(indexIter 0 collection)
+	)
+
+(define (lastIndexOf element collection)
+	(define (indexIter count i rest)
+		(cond
+			((null? rest) i)
+			((eq? element (car rest)) (indexIter (+ count 1) count (cdr rest)))
+			(else
+				(indexIter (+ count 1) i (cdr rest))
+				)
+			)
+		)
+	(indexIter 0 -1 collection)
+	)
+
+(define (flatten l)
+	(cond
+		((null? l) ())
+		((pair? l) (append (flatten (car l)) (flatten (cdr l))))
+		(else (list l))
+		)
+	)
+
+(define (contains collection element)
+	(define (iter rest)
+		(cond
+			((null? rest) #f)
+			((eq? (car rest) element) #t)
+			(else
+				(iter (cdr rest)))
+			)
+		)
+	(iter collection)
+	)
+
+(define (reverse l)
+	(cond
+		((null? l) nil)
+		(else
+			(flatten (cons (reverse (cdr l)) (car l)))
+			)
+		)
+	)
+
+(define (expand l char direction)
+	(cond
+		((eq? direction 'front) (map (lambda (x) (list char x)) l))
+		((eq? direction 'back) (map (lambda (x) (list x char)) l))
+		(else
+			()
+			)
+		)
+	)
+
+(define (flatmap proc seq)
+	(accumulate append nil (map proc seq)))
+
+(define (listFromIndex n L)
+	(define (iter i rest)
+		(cond
+			((= i (- n 1)) (cdr rest))
+			(else
+				(iter (+ i 1) (cdr rest))
+				)
+			)
+		)
+	(iter 0 L)
+	)
+
+(define (substring start stop s)
+	(define (iter sub i rest)
+		(inspect rest)
+		(cond
+			((> start stop) sub)
+			((< i start) (iter sub (+ i 1) (cdr rest)))
+			((= i stop) sub)
+			(else
+				(iter (string+ sub (car rest)) (+ i 1) (cdr rest))
+				)
+			)
+		)
+	(iter "" 0 s)
+	)
+
+(define (gcd a b) ; taken from rosettacode.org
+	(if (= b 0)
+		a
+		(gcd b (% a b))
+		)
+	)
+
+(define (strLength str)
+	(define (iter len rest)
+		(cond
+			((eq? rest "") len)
+			(else
+				(iter (+ len 1) (cdr rest))
+				)
+			)
+		)
+		(iter 0 str)
+	)

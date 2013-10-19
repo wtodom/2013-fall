@@ -1,6 +1,6 @@
 (include "ci.lib")
 
-(define (t n m)
+(define (tuple n m)
 	(define (tIter i tuples)
 		(cond
 			((= n 0) nil)
@@ -27,7 +27,9 @@
 	(tIter 1 (map (lambda (x) (list x)) (interval 0 (+ m 1) 1)))
 	)
 
-(inspect (t 3 3))
+(inspect (tuple 3 3))
+(inspect (tuple 3 3))
+(inspect (tuple 2 4))
 
 ;{
 for each sublist in tuples:

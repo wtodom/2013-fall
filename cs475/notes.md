@@ -379,3 +379,36 @@ CS 475 - Programming Languages
 	1. Identify for each variable T, is there some sequence starting with T that lets us derive some string alpha?
 		- Every rule (or partial rule) that cannot produce symbols terminally is eliminated
 	2. Identify for each variable T, is there a sequence of productions that, starting with S, can reach alpha T beta?
+
+## 16 October 2013
+
+- Removing Epsilon production
+	1. identify "nullable" symbols
+		- A symbol is nullable if it can produce a string containing nothing but epsilon by any series of operations.
+	2. Take away the Epsilong rules (the rules/options that are Epsilon)
+	3. add back rules that produce the lost strings.
+		- notebook-89
+	4. Special case - if S in nullable then the language contained Epsilon, but it won't after applying this process (the language is changed).
+
+- Removing unit productions
+	- unit productions are rules where one variable simply produces another single variable.
+	- Algo:
+		1. Find all pairs (X, Y) such that X produces Y (unit production)
+			- include transitive pairs, such as A -> B -> C => A -> C
+		2. Remove unit productions from the grammar
+		3. Add new rules in place of unit productions, essentially skipping the removed step.
+			- notebook-90
+			- For each pair (X, Y) and each rule Y -> alpha, add new rule: X -> alpha
+		4. If a rule that produces some string is only encountered as a unit production, you can eliminate that rule after eliminating the unit productions.
+			- Also in notebook-90
+
+- Convert to Chomsky Normal Form (CNF)
+	- Every production is in one of two formats:
+		1. X -> YZ (two variables)
+		2. X -> a (a single non-variable)
+	- Algo:
+		1. Remove epsilon productions
+		2. Remove unit productions
+		3. Factor out (replace with new variables) any alphabet characters (terminals) that occur in a longer right-hand side (ones that are more than single symbols)
+		4. Factor out groups of two variables that are part of a longer right-hand side
+		

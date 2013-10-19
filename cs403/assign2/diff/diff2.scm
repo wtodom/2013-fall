@@ -108,16 +108,16 @@
 	)
 
 (define (exampleSearch n) ;;; DONE ;;;
-	(define p (open "examples2" 'write)) ; p points to a port (in this case the file pointer)
+	(define p (open "examples3" 'write)) ; p points to a port (in this case the file pointer)
     (define oldInput (setPort p))
 
     (define (iter i)
     	(cond
     		((= i n) nil)
     		(else
-    			(define r1 (randomWord))
-    			(define r2 (randomWord))
-    			(println r1 " - " r2 " = " (diff r1 r2))
+    			(define r1 (wordStr (randomWord)))
+    			(define r2 (wordStr (randomWord)))
+    			(println r1 " - " r2 " = " (- r1 r2))
     			(iter (+ i 1))
     			)
     		)

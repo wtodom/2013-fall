@@ -302,6 +302,9 @@
 (define (infix->prefix expr)
 	(define (iter ops E)
 		(cond
+			((null? expr)
+				nil
+				)
 			((null? ops)
 				(car E)
 				)
@@ -695,51 +698,150 @@
 
 (define (run10)
 	(inspect (define five (Integer 5)))
+	(println "	It should be an Integer object.")
+	(newline)
+	
 	(inspect (define two (Integer 2)))
-	(inspect (define point333 (Real 333 3)))
-	(inspect (define twopoint333 (Real 2333 3)))
+	(println "	It should be an Integer object.")
+	(newline)
+	
 	(inspect (define twothirds (Rational 2 3)))
+	(println "	It should be a Rational object.")
+	(newline)
+	
 	(inspect (define thirteen221sts (Rational 13 221)))
+	(println "	It should be a Rational object.")
+	(newline)
+	
+	(inspect (define point333 (Real 333 3)))
+	(println "	It should be a Real object.")
+	(newline)
+	
+	(inspect (define twopoint333 (Real 2333 3)))
+	(println "	It should be a Real object.")
+	(newline)
+	
 	(inspect (define one+2i (Complex (Real 1 0) (Real 2 0))))
+	(println "	It should be a Complex object.")
+	(newline)
+	
 	(inspect (define point3+-.2i (Complex (Real 3 1) (Real -2 1))))
+	(println "	It should be a Complex object.")
+	(newline)
+	
 	(inspect (define a (Complex (Real -78 2) (Real 1909 3))))
+	(println "	It should be a Complex object.")
+	(newline)
+	
 	(inspect (define b (Integer 3)))
-
+	(println "	It should be an Integer object.")
+	(newline)
+	
 	(inspect ((((five'promote))'value)))
+	(println "	It should be 5.000000.")
+	(newline)
+	
 	(inspect (((((five'add) two))'value)))
-
+	(println "	It should be 7.")
+	(newline)
+	
 	(inspect ((twothirds'toString)))
+	(println "	It should be 2/3.")
+	(newline)
+	
 	(inspect ((((twothirds'demote))'value)))
-
+	(println "	It should be 0.")
+	(newline)
+	
 	(inspect (((((twothirds'add) thirteen221sts))'value)))
-
+	(println "	It should be 0.725490.")
+	(newline)
+	
 	(inspect ((point333'toString)))
+	(println "	It should be 333e-3.")
+	(newline)
+	
 	(inspect ((point333'rank)))
+	(println "	It should be 2.")
+	(newline)
+	
 	(inspect ((point333'promote)))
+	(println "	It should be a Complex object.")
+	(newline)
+	
 	(inspect ((((point333'promote))'value)))
+	(println "	It should be (0.333000 0.000000).")
+	(newline)
+	
 	(inspect (((((point333'add) twopoint333))'value)))
-
+	(println "	It should be 2.666000.")
+	(newline)
+	
 	(inspect ((point3+-.2i'value)))
+	(println "	It should be (0.300000 -0.200000).")
+	(newline)
+	
 	(inspect ((point3+-.2i'toString)))
+	(println "	It should be 0.300000-0.200000i.")
+	(newline)
+	
 	(inspect ((((point3+-.2i'demote))'value)))
+	(println "	It should be 0.360555.")
+	(newline)
+	
 	(inspect ((((point3+-.2i'promote))'value)))
-
+	(println "	It should be (0.300000 -0.200000).")
+	(newline)
+	
 	(inspect (((((one+2i'add) point3+-.2i))'toString)))
-
+	(println "	It should be 1.300000+1.800000i.")
+	(newline)
+	
 	(inspect (+ five point3+-.2i))
-
+	(println "	It should be a Complex object.")
+	(newline)
+	
 	(inspect ((a'toString)))
-
+	(println "	It should be -0.780000+1.909000i.")
+	(newline)
+	
 	(inspect ((((a'demote))'value)))
+	(println "	It should be 2.062202.")
+	(newline)
+	
 	(inspect ((((((a'demote))'demote))'toString)))
+	(println "	It should be 1031101/500000.")
+	(newline)
+	
 	(inspect ((((((((a'demote))'demote))'demote))'value)))
+	(println "	It should be 2.")
+	(newline)
+	
 	(inspect ((((((((((((((b'promote))'promote))'promote))'demote))'demote))'demote))'value)))
-
+	(println "	It should be 3.")
+	(newline)
+	
 	(inspect (((+ point3+-.2i five)'demote)))
+	(println "	It should be a Real object.")
+	(newline)
+	
 	(inspect (((((+ point3+-.2i five)'demote))'demote)))
+	(println "	It should be a Rational object.")
+	(newline)
+	
 	(inspect (((((((+ point3+-.2i five)'demote))'demote))'demote)))
+	(println "	It should be an Integer object.")
+	(newline)
+	
 	(inspect (((+ five point3+-.2i)'toString)))
+	(println "	It should be 5.300000-0.200000i.")
+	(newline)
+	
 	(inspect (((+ five point3+-.2i)'value)))
-
+	(println "	It should be (5.300000 -0.200000).")
+	(newline)
+	
 	(inspect (((+ a b twothirds twopoint333)'value)))
+	(println "	It should be (5.219667 1.909000).")
+	(newline)
 	)

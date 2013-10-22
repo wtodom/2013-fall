@@ -22,7 +22,6 @@ class Parser:
 	def check(self, tokenType):
 		return self.current.tokenType == tokenType
 
-
 	def match(self, tokenType):
 		if self.check(tokenType) == False:
 			raise ParseError(tokenType)
@@ -48,9 +47,69 @@ class Parser:
 	def primaryPending(self):
 		return self.check("VARIABLE") or self.check("INTEGER") or self.check("STRING") or self.check("TRUE") or self.check("FALSE") or self.check("NOTHING") or self.expressionPending()
 
+	def commaChainPending(self):
+		return self.check("COMMA")
+
 	def program(self):
-		# todo
-		pass
+		self.functionDef()
+		if self.statementsPending():
+			self.statements()
+
+	def functionDef(self):
+		self.match("TO")
+		self.match("VARIABLE")
+		self.optSequence()
+		self.match("COLON")
+		self.block()
+
+	def optSequence(self):
+		if self.sequencePending():
+			self.sequence()
+
+	def sequence(self):
+		self.primary()
+		if self.check("AND"):
+			self.match("AND")
+			self.primary()
+		elif self.commaChainPending():
+			self.commaChain()
+			self.match("COMMA")
+			self.match("AND")
+			self.primary()
+
+	def commaChain(self):
+		if self.check("COMMA"):
+			self.match("COMMA")
+			self.primary()
+			self.commaChain()
+		else:
+			pass
+
+	def block(self):
+		self.optStatements()
+		self.match("PERIOD")
+
+	def optStatements(self):
+		if self.statementsPending():
+			# print("Statements are pending...")
+			self.statements()
+		else:
+			pass
+
+	def statements(self):
+		self.statement()
+		self.optStatements()
+
+	def statement(self):
+		if self.expressionPending():
+			self.expression()
+			self.match("SEMICOLON")
+		elif self.ifStatementPending():
+			self.ifStatement()
+		elif self.whileStatementPending():
+			self.whileStatement()
+		else:
+			self.match("TODO")
 
 	def ifStatement(self):
 		self.match("IF")
@@ -70,10 +129,6 @@ class Parser:
 		self.block()
 		self.optOtherwise()
 
-	def block(self):
-		self.optStatements()
-		self.match("PERIOD")
-
 	def optOtherwise(self):
 		if self.check("OTHERWISE"):
 			self.match("OTHERWISE")
@@ -84,26 +139,19 @@ class Parser:
 		else:
 			pass
 
-	def optStatements(self):
-		if self.statementsPending():
-			self.statements()
-		else:
-			pass
+	def assignment(self):
+		pass
+		# TODO
 
-	def statements(self):
-		self.statement()
-		self.optStatements()
-
-	def statement(self):
-		if self.expressionPending():
-			self.expression()
-			self.match("SEMICOLON")
-		elif self.ifStatementPending():
-			self.ifStatement()
-		elif self.whileStatementPending():
-			self.whileStatement()
+	def expr(self):
+		if self.check("OPEN_PARENTHESIS"):
+			self.match("OPEN_PARENTHESIS")
+			self.primary()
+			self.operator()
+			self.primary()
+			self.match("CLOSE_PARENTHESIS")
 		else:
-			self.match("TODO")
+			self.functionCall()
 
 	def primary(self):
 		if self.check("VARIABLE"):
@@ -124,45 +172,6 @@ class Parser:
 		self.match("OPEN_PARENTHESIS")
 		self.optSequence()
 		self.match("CLOSE_PARENTHESIS")
-
-	def optSequence(self):
-		if self.sequencePending():
-			self.sequence()
-
-	def sequence(self):
-		self.primary()
-		if self.check("AND"):
-			self.match("AND")
-			self.primary()
-		else:
-			self.commaChain()
-			self.match("COMMA")
-			self.match("AND")
-			self.primary()
-
-	def commaChain(self):
-		if self.check("COMMA"):
-			self.match("COMMA")
-			self.primary()
-			self.commaChain()
-		else:
-			pass
-
-	def functionDef(self):
-		self.match("TO")
-		self.match("VARIABLE")
-		self.optSequence()
-		self.match("COLON")
-
-	def expr(self):
-		if self.check("OPEN_PARENTHESIS"):
-			self.match("OPEN_PARENTHESIS")
-			self.primary()
-			self.operator()
-			self.primary()
-			self.match("CLOSE_PARENTHESIS")
-		else:
-			self.functionCall()
 
 	def operator(self):
 		if self.check("PLUS"):
@@ -185,3 +194,7 @@ class Parser:
 			self.match("GREATER_THAN")
 		else:
 			self.match("GREATER_THAN_EQUAL")
+
+if __name__ == "__main__":
+	p = Parser()
+	p.parse()

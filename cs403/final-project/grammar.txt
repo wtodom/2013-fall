@@ -1,32 +1,6 @@
-ifStatement: IF primary IS primary COMMA block optOtherwise
+program: functionDef optStatements
 
-whileStatement: WHILE primary IS primary COMMA block
-
-block: optStatements PERIOD
-
-optOtherwise: OTHERWISE block
-			| OTHERWISE ifStatement
-			| *empty*
-
-optStatements: statements
-			 | *empty*
-
-statements: statement optStatements
-
-statement: expr SEMICOLON
-		 | ifStatement
-		 | whileStatement
-		 | TODO
-
-primary: VARIABLE
-	   | INTEGER
-	   | STRING
-	   | TRUE
-	   | FLASE
-	   | NOTHING (NULL)
-	   | expr
-
-functionCall: IDENTIFIER OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
+functionDef: TO VARIABLE optSequence COLON block
 
 optSequence: sequence
 	   | *empty*
@@ -38,10 +12,40 @@ sequence: primary
 commaChain: COMMA primary commaChain
 		  | *empty*
 
-functionDef: TO VARIABLE optSequence COLON
+block: optStatements PERIOD
+
+optStatements: statements
+			 | *empty*
+
+statements: statement optStatements
+
+statement: expr SEMICOLON
+		 | ifStatement
+		 | whileStatement
+		 | TODO
+		 | assignment
+
+ifStatement: IF primary IS primary COMMA block optOtherwise
+
+whileStatement: WHILE primary IS primary COMMA block
+
+optOtherwise: OTHERWISE block
+			| OTHERWISE ifStatement
+			| *empty*
+
+assignment: SET variable TO expr
 
 expr: OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
-	| functionCall
+
+primary: VARIABLE
+	   | INTEGER
+	   | STRING
+	   | TRUE
+	   | FLASE
+	   | NOTHING (NULL)
+	   | functionCall
+
+functionCall: IDENTIFIER OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
 
 operator: PLUS
 		| MINUS

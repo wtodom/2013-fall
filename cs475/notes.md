@@ -411,4 +411,28 @@ CS 475 - Programming Languages
 		2. Remove unit productions
 		3. Factor out (replace with new variables) any alphabet characters (terminals) that occur in a longer right-hand side (ones that are more than single symbols)
 		4. Factor out groups of two variables that are part of a longer right-hand side
-		
+
+## 21 October 2013 (Chomsky Normal Form, cont.)
+
+- Rules must have the form:
+	- X -> YZ (two variables)
+	- or
+	- X -> a (a terminal)
+	- These rule types can be combined. For example, the following is acceptable:
+		- V -> WS | UT | c
+
+- The upper bound for string length if the parse tree repeats no symbols is 2^(n-1) (n = # variables).
+	- Thus, if a grammar produces a string longer than this, the parse tree must repeat symbols.
+
+- Pumping Theorem for Context Free Languages (CFLs):
+	- Let L be a CFL.
+	- u = first unrepeated portion
+	- v = first repeated portion
+	- w = middle unrepeated portion
+	- x = second repeated portion
+	- y = final unrepeated portion
+	- Then there exists a constant, p, such that: (usually p = 2^n)
+		- For every string, s, in the language and of length p or more, we can write S = uvwxy such that:
+			- The length of vwx <= p
+			- The length of vx >= 1
+			- u(v^k)w(x^k)y is in the language for all integers k >= 0.

@@ -1,5 +1,6 @@
-(include "wes.lib")
+(include "ci.lib")
 (include "random.lib")
+(randomSeed 1987)
 
 (define (author)
     (println "AUTHOR: Weston Odom wtodom@crimson.ua.edu")
@@ -369,9 +370,7 @@
 (define (word2int w)
 	(define (converterator restOfWord sum)
 		(cond
-			((null? restOfWord)
-				sum
-				)
+			((null? restOfWord) sum)
 			(else
 				(converterator (cdr restOfWord) (+ sum (ascii (car restOfWord))))
 				)
@@ -384,14 +383,12 @@
 ; from the words in the specified file
 (define words ((lambda () 
 	; (define p (open "words10000" 'read))
-	(define p (open "words10000" 'read))
+	(define p (open "words" 'read))
     (define oldInput (setPort p))
 
 	(define (listIter wordList word)
 		(cond
-			((eof?)
-				(cons (cons word (word2int word)) wordList)
-				)
+			((eof?) (cons (cons word (word2int word)) wordList))
 			(else
 				(listIter (cons (cons word (word2int word)) wordList) (readLine))
 				)
@@ -404,17 +401,13 @@
 	l
 	)))
 
+; (inspect words)
+
 (define (- a b)
 	(cond
-		((and (eq? (type a) 'STRING) (eq? (type b) 'STRING))
-			(diff a b)
-			)
-		((eq? (type a) 'STRING) 
-			(oldMinus (word2int a) b)
-			)
-		((eq? (type b) 'STRING)
-			(oldMinus a (word2int b))
-			)
+		((and (eq? (type a) 'STRING) (eq? (type b) 'STRING)) (diff a b))
+		((eq? (type a) 'STRING) (oldMinus (word2int a) b))
+		((eq? (type b) 'STRING) (oldMinus a (word2int b)))
 		(else
 			(oldMinus a b)
 			)
@@ -436,9 +429,7 @@
 	(define (listIter wordList allWords)
 		(cond
 			((null? allWords) wordList)
-			((= (wordVal (car allWords)) value)
-				(listIter (cons (wordStr (car allWords)) wordList) (cdr allWords))
-				)
+			((= (wordVal (car allWords)) value) (listIter (cons (wordStr (car allWords)) wordList) (cdr allWords)))
 			(else
 				(listIter wordList (cdr allWords))
 				)
@@ -454,20 +445,18 @@
 	(cond
 		((= len 0) "the difference is unknown to us")
 		(else
-			(getElement wordList (randomRange 0 len))
-			)
+			(getElement wordList (randomRange 0 len))) ; MAYBE MAKE THIS (- len 1) !!!!!!!!!!!!!!!!!!!!!!!
 		)
 	)
 
 ; Given two strings, returns the difference in their word values (the 
 ; sum of their letters' one-based alphabetic indexes.
-(define (diff word1 word2)
+(define (diff word1 word2) ;;; DONE ;;;
 	(define value (abs (- (word2int word1) (word2int word2))))
 	(cond
 		((= value 0) "there is no difference")
 		(else
-			(getMatch value)
-			)
+			(getMatch value))
 		)
 	)
 
@@ -616,13 +605,20 @@
 ;  '----------------'  '----------------'  '----------------' 
 
 (define (run1)
-	(println "(check-and-go (/ x 0) (lambda (error) (ppTable error))) should be: undefinedVariable")
-
-	(println "\nThe actual call:")
+	(println "Problem 1")
+	(newline)
 	(inspect (check-and-go (/ x 0) (lambda (error) (get 'code error))))
+	(println "	Should be: undefinedVariable")
+	(newline)
+	(inspect (check-and-go (/ 4 2) (lambda (error) (throw error))))
+	(println "	Should be 2.")
+	(println "End problem 1")
+	(newline)
 	)
 
 (define (run2)
+	(println "Problem 2")
+	(newline)
 	(inspect (define (f a b c) (oldMinus a b c)))
 	(inspect ((((curry f) 1) 2) 3))
 	(println "    [it should be -4]")
@@ -630,13 +626,19 @@
 	(inspect (define (g w x y z) (* x (/ y (+ w z)))))
 	(inspect (((((curry g) 5.0) 2.0) 3.0) 4.0))
 	(println "    [it should be 0.666667]")
+	(println "End problem 2")
+	(newline)
 	)
 
 (define (run3)
-
+	(println "Problem 3")
+	(newline)
 	(inspect (translate zero))
+	(println "	Should be zero.")
 	(inspect (translate (increment one)))
+	(println "	Should be two.")
 	(inspect (translate (add three five)))
+	(println "	Should be eight.")
 
 	(println "
 	This problem deals with Church numerals.
@@ -644,59 +646,119 @@
 	n calls to some function. The example 
 	given shows one repetition of the function
 	on zero, which is equivalent to one.")
+	(println "End problem 3")
+	(newline)
 	)
 
 (define (run4)
+	(println "Problem 4")
+	(newline)
 	(inspect (nodeCount (node 5 (node 6 'None 'None) (node 8))))
-	(println "		It should be 3.")
-
+	(println "	It should be 3.")
+	(newline)
 	(inspect (nodeCount (node 1 (node 6 (node 6 'None (node 3 10 1)) 'None) (node 3 'None (node 4)))))
-	(println "		It should be 8.")
+	(println "	It should be 8.")
+	(println "End problem 4")
+	(newline)
 	)
 
 (define (run5)
+	(println "Problem 5")
+	(newline)
 	(inspect (matrix-*-matrix '((1 2 6 4) (3 4 -3 0)) '((1 0) (0 1) (5 5))))
-	(println "		It should be ((1 2 6 4) (3 4 -3 0) (20 30 15 20)).")
-
+	(println "	It should be ((1 2 6 4) (3 4 -3 0) (20 30 15 20)).")
+	(newline)
 	(inspect (matrix-*-vector '((1 2 3) (4 5 6) (7 8 9)) '(1 2 3)))
-	(println "		It should be (30 36 42).")
+	(println "	It should be (30 36 42).")
+	(println "End problem 5")
+	(newline)
 	)
 
 (define (run6)
+	(println "Problem 6")
+	(newline)
 	(inspect (tuple 3 3))
 	(println "It should be: ((0 0 0) (0 0 1) (0 1 1) (1 1 1) (0 0 2) (0 1 2) (1 1 2) (0 2 2) (1 2 2) (2 2 2) (0 0 3) (0 1 3) (1 1 3) (0 2 3) (1 2 3) (2 2 3) (0 3 3) (1 3 3) (2 3 3) (3 3 3))")
+	(newline)
 	(inspect (tuple 2 4))
 	(println "It should be: ((0 0) (0 1) (1 1) (0 2) (1 2) (2 2) (0 3) (1 3) (2 3) (3 3) (0 4) (1 4) (2 4) (3 4) (4 4))")
+	(println "End problem 6")
+	(newline)
 	)
 
 (define (run7)
+	(println "Problem 7")
+	(newline)
 	(inspect (infix->prefix '(2 + 3 ^ 4 * 4 - 7)))
-	(println "Is should be: (+ 2 (- (* (^ 3 4) 4) 7))")
+	(println "	It should be: (+ 2 (- (* (^ 3 4) 4) 7))")
+	(newline)
 	(inspect (infix->prefix '(1 + 2 + 3 ^ 4 ^ 5)))
-	(println "Is should be: (+ 1 (+ 2 (^ (^ 3 4) 5)))")
+	(println "	It should be: (+ 1 (+ 2 (^ (^ 3 4) 5)))")
+	(newline)
 	(inspect (infix->prefix '(5)))
-	(println "Is should be: 5")
+	(println "	It should be: 5")
+	(println "End problem 7")
+	(newline)
 	)
 
 (define (run8)
+	(println "Problem 8")
+	(newline)
 	(inspect ((cxr 'addddd) '("Hi" "!" "What" "is" "your" "name" "?")))
-	(println "		It should be name.")
+	(println "	It should be name.")
+	(newline)
 	(inspect ((cxr 'aaddd) '(car cdr (cadr cddr) (caddr cdddr))))
-	(println "		It should be caddr.")
+	(println "	It should be caddr.")
+	(println "End problem 8")
+	(newline)
 	)
 
 (define (run9)
+	(println "Problem 9")
+	(newline)
+	(println "==========================================================")
+	(println "==================== Regular Examples ====================")
+	(println "==========================================================")
+	(newline)
+	(inspect (- "a" "a"))
+	(println "	Should be the difference is unknown to us.")
+	(inspect (word2int (- "b" "a")))
+	(println "	Should be 1.")
+	(inspect (word2int (- "c" "d")))
+	(println "	Should be 1.")
+	(inspect (word2int (- "fish" "hat")))
+	(println "	Should be 13.")
+	(println "==========================================================")
+	(println "================== Interesting Examples ==================")
+	(println "==========================================================")
+	(newline)
 	(println "volkswagen - mitsubishi = there is no difference")
-	(println "EXPLAIN HERE")
+	(println "Volkswagen and Mitsubishi are two competing car companies, but")
+	(println "it looks like they aren't really offering competing products")
+	(println "after all.")
+	(newline)
 	(println "lock - writes = cdrom")
-	(println "EXPLAIN HERE")
+	(println "When you take OS you learn about I/O and deadlocks and such.")
+	(println "This example isn't amazing semantically, but it does provide several")
+	(println "key components of that sitation - an I/O device (cdrom), its")
+	(println "function (writing), and what can happen if it isn't done")
+	(println "right (a lock) (or, alternatively, a lock could be used to")
+	(println "ensure that it works correctly, so it goes both ways.")
+	(newline)
 	(println "activist - impose = tea")
-	(println "EXPLAIN HERE")
+	(println "This one feels vaguely reminiscent of the Boston Tea Party.")
+	(println "There were activists, and they were being imposed upon.")
+	(println "The difference? The activists dealt with tea, not taxes.")
+	(newline)
+	(println "End problem 9")
+	(newline)
 
 
 	)
 
 (define (run10)
+	(println "Problem 10")
+	(newline)
 	(inspect (define five (Integer 5)))
 	(println "	It should be an Integer object.")
 	(newline)
@@ -844,4 +906,18 @@
 	(inspect (((+ a b twothirds twopoint333)'value)))
 	(println "	It should be (5.219667 1.909000).")
 	(newline)
+	(println "End problem 10")
+	(newline)
 	)
+
+(run1)
+(run2)
+(run3)
+(run4)
+(run5)
+(run6)
+(run7)
+(run8)
+(run9)
+(run10)
+(println "assignment 2 loaded!")

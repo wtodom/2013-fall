@@ -5,12 +5,14 @@ functionDef: TO VARIABLE optSequence COLON block
 optSequence: sequence
 	   | *empty*
 
-sequence: primary
-	| primary AND primary
-	| primary commaChain COMMA AND primary
+sequence: expr
+	| expr AND expr
+	| expr commaChain COMMA AND expr
 
-commaChain: COMMA primary commaChain
-		  | *empty*
+commaChain: COMMA expr optCommaChain
+
+optCommaChain: COMMA expr commaChain
+			 | *empty*
 
 block: optStatements PERIOD
 
@@ -22,12 +24,12 @@ statements: statement optStatements
 statement: expr SEMICOLON
 		 | ifStatement
 		 | whileStatement
-		 | TODO
 		 | assignment
+		 | TODO
 
-ifStatement: IF primary IS primary COMMA block optOtherwise
+ifStatement: IF expr IS expr COMMA block optOtherwise
 
-whileStatement: WHILE primary IS primary COMMA block
+whileStatement: WHILE expr IS expr COMMA block
 
 optOtherwise: OTHERWISE block
 			| OTHERWISE ifStatement
@@ -35,7 +37,9 @@ optOtherwise: OTHERWISE block
 
 assignment: SET variable TO expr
 
-expr: OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
+expr: primary
+	| functionCall
+	| OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
 
 primary: VARIABLE
 	   | INTEGER
@@ -43,7 +47,6 @@ primary: VARIABLE
 	   | TRUE
 	   | FLASE
 	   | NOTHING (NULL)
-	   | functionCall
 
 functionCall: IDENTIFIER OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
 

@@ -77,7 +77,26 @@ class Lexer:
 
 		self.pushback()
 
-		return Lexeme(tokenType="Variable", value=var)
+		if var == "to":
+			return Lexeme(tokenType="TO", value="to")
+		elif var == "set":
+			return Lexeme(tokenType="SET", value="set")
+		elif var == "is":
+			return Lexeme(tokenType="IS", value="is")
+		elif var == "while":
+			return Lexeme(tokenType="WHILE", value="while")
+		elif var == "if":
+			return Lexeme(tokenType="IF", value="if")
+		elif var == "true":
+			return Lexeme(tokenType="TRUE", value="true")
+		elif var == "false":
+			return Lexeme(tokenType="FALSE", value="false")
+		elif var == "if":
+			return Lexeme(tokenType="IF", value="if")
+		elif var == "if":
+			return Lexeme(tokenType="IF", value="if")
+		else:
+			return Lexeme(tokenType="VARIABLE", value=var)
 		# todo: check for keywords
 		# todo: check for inequality symbols
 

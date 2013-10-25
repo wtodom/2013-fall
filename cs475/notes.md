@@ -436,3 +436,26 @@ CS 475 - Programming Languages
 			- The length of vwx <= p
 			- The length of vx >= 1
 			- u(v^k)w(x^k)y is in the language for all integers k >= 0.
+
+## 23 October 2013 - CFG Pumping Theorem Examples
+
+- all in notebook
+	- notebook-95 through notebook-99
+
+## 25 October 2013
+
+- Algorithm for determining the parse tree for a string from a CNF grammar
+	- grammar on notebook-104
+	- string is abcabca
+	- length denoted by n=7
+	- string denoted by z1, z2, z3,  etc for each letter (1-based counting of indexes)
+	- pseudocode:
+		for i=1 to n:
+			table[i][i] = { Y | Y -> zi };
+		for length=2 to n:
+			for i=1 to n-length+1:
+				{j=i+length-1};
+				for k=i to j-1:
+					{table[i][j]=table[i][j]}
+					or
+					{ X | X -> YZ where table[i][k] contains Y and table[k+1][j] contains Z};

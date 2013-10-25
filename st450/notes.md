@@ -429,3 +429,33 @@ prior to this will not be tested, but will have homework
 - Paired Samples
 	- Example: healthy and sick twins. volume of brain regions measued.
 		- photo @ 4:43
+
+## 24 October 2013 - Categorical Data Analysis
+
+- categorical variables: gender, political party, pass/fail, etc.
+- topics:
+	- inference for one proportion
+	- inference for two proportions
+	- chi-square tests
+	- Fisher's exact test
+
+#### Inference for a single proportion
+
+- have sample x1, x2, x3, xn ~(iid)Bernoulli(p)
+- xi represents the number of successes of one trial
+- E(xi) = p
+- Var(xi) = p(1-p)
+- (some stuff about phat)
+- (1-alpha)*100% CI for p is notebook-100
+- hypothesis testing, notebook-101
+
+- Example: pepsi vs coke
+	- notebook-102
+
+#### Inference for two proportions
+- have independent samples:
+	- have sample x11, x12, x13, xn ~(iid)Bernoulli(p1)
+	- have sample x21, x22, x23, xn ~(iid)Bernoulli(p2)
+- find phat for each respective sample
+- p1hat and p2hat are both approx Normal (same as before, with subscripts)
+- notebook-103

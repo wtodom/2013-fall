@@ -405,6 +405,7 @@
 
 (define (- a b)
 	(cond
+		((or (null? a) (null? b)) (diff a b))
 		((and (eq? (type a) 'STRING) (eq? (type b) 'STRING)) (diff a b))
 		((eq? (type a) 'STRING) (oldMinus (word2int a) b))
 		((eq? (type b) 'STRING) (oldMinus a (word2int b)))
@@ -721,7 +722,7 @@
 	(println "==========================================================")
 	(newline)
 	(inspect (- "a" "a"))
-	(println "	Should be the difference is unknown to us.")
+	(println "	Should be there is no difference.")
 	(inspect (word2int (- "b" "a")))
 	(println "	Should be 1.")
 	(inspect (word2int (- "c" "d")))

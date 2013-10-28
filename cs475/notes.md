@@ -3,7 +3,7 @@ CS 475 - Programming Languages
 
 ## Regular Expressions - 28 August 2013
 
-- TERM: Regular Expression = 
+- TERM: Regular Expression =
 - TERM: Operators (in order of increasing precedence)
 	- Union = or
 	- Concatenation = (normal def.)
@@ -86,7 +86,7 @@ CS 475 - Programming Languages
 - example of a non-regular language
 	- L = {AnBn}   (where n is an exponent in place of the *).
 	- machine for above, notebook-26
-	- How can we actually show/prove that L is not regular? 
+	- How can we actually show/prove that L is not regular?
 		- There is a property that all regular languages have. Here are some properties of Regular Languages:
 			- Suppose R is a RegLang.
 			- Let M be a DFSM that accepts R.
@@ -459,3 +459,18 @@ CS 475 - Programming Languages
 					{table[i][j]=table[i][j]}
 					or
 					{ X | X -> YZ where table[i][k] contains Y and table[k+1][j] contains Z};
+
+## 28 October 2013 - Closure Properties for Context Free Languages
+
+- If L1 and L2 are CFL having CFGs with start rules S1 and S2, respectively.
+- Assume no variables are shared between the languages (none occur in both)
+- Then each of the following is also a CFL:
+	- L1 Union L2
+		- CFG: S -> S1 | S2
+	- L1 L2 (concatenation)
+		- CFG: S -> S1S2
+	- L1*
+		- CFG: S -> S1S | Epsilon
+	- L1 Intersection L2 is *not* always a CFL
+	- Compliment of L1 is *not* always a CFL
+	- If L1 is a CFL, then then reverse of L1 is a CFL

@@ -42,7 +42,7 @@ expr: primary
 	| OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
 
 primary: VARIABLE
-	   | INTEGER
+	   | NUMBER
 	   | STRING
 	   | TRUE
 	   | FLASE

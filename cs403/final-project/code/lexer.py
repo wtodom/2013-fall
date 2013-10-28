@@ -78,23 +78,21 @@ class Lexer:
 		self.pushback()
 
 		if var == "to":
-			return Lexeme(tokenType="TO", value="to")
+			return Lexeme(tokenType="TO")
 		elif var == "set":
-			return Lexeme(tokenType="SET", value="set")
+			return Lexeme(tokenType="SET")
 		elif var == "is":
-			return Lexeme(tokenType="IS", value="is")
+			return Lexeme(tokenType="IS")
 		elif var == "while":
-			return Lexeme(tokenType="WHILE", value="while")
+			return Lexeme(tokenType="WHILE")
 		elif var == "if":
-			return Lexeme(tokenType="IF", value="if")
+			return Lexeme(tokenType="IF")
 		elif var == "true":
-			return Lexeme(tokenType="TRUE", value="true")
+			return Lexeme(tokenType="TRUE")
 		elif var == "false":
-			return Lexeme(tokenType="FALSE", value="false")
+			return Lexeme(tokenType="FALSE")
 		elif var == "if":
-			return Lexeme(tokenType="IF", value="if")
-		elif var == "if":
-			return Lexeme(tokenType="IF", value="if")
+			return Lexeme(tokenType="IF")
 		else:
 			return Lexeme(tokenType="VARIABLE", value=var)
 		# todo: check for keywords
@@ -108,7 +106,7 @@ class Lexer:
 
 		self.pushback()
 
-		return Lexeme(tokenType="Number", value=num)
+		return Lexeme(tokenType="NUMBER", value=num)
 
 	def get_string(self):
 		self.read_char()

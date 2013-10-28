@@ -24,7 +24,7 @@ statements: statement optStatements
 statement: expr SEMICOLON
 		 | ifStatement
 		 | whileStatement
-		 | assignment
+		 | assignment SEMICOLON
 		 | TODO
 
 ifStatement: IF expr IS expr COMMA block optOtherwise

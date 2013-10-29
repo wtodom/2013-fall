@@ -1,0 +1,3 @@
+(define (scoping symbol object)
+
+	)

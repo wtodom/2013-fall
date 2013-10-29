@@ -1,3 +1,5 @@
+(include "ci.lib")
+
 (define debug #f)
 (define (bst)
 	(define count 0)
@@ -10,17 +12,17 @@
 	(define (rightChild node)
 		(cadr (cdr node))
 		)
-	(define (size)  ; DONE
+	(define (size)
 		count
 		)
-	(define (root)  ; DONE
+	(define (root)
 		(car base)
 		)
-	(define (find val)  ; TODO
-
+	(define (find val)
+		(contains (flatten base) val)
 		)
-	(define (insert @)  ; DONE
-		(map insert-helper @)
+	(define (insert @)
+		(for-each insert-helper @)
 		)
 	(define (insert-helper x)
 		(if debug (newline))
@@ -70,10 +72,10 @@
 				)
 			)
 		)
-	(define (delete)  ; TODO
+	(define (delete)
 
 		)
-	(define (traverse)  ; TODO
+	(define (traverse)
 		(define (preorder node)
 			(cond
 				((null? node) nil)
@@ -85,6 +87,7 @@
 				)
 			)
 		(preorder base)
+		(newline)
 		)
 	(define (printTree)
 		(println base)
@@ -110,11 +113,12 @@
 
 (define t (bst))
 ((t 'insert) 3 4 5 1 0)
-; ((t 'find) 5)   ; should return #t
-; ((t 'find) 7)   ; should return #f
-((t 'root))     ; should return 3
-((t 'size))     ; should return 5
+(inspect ((t 'find) 5))   ; should return #t
+(inspect ((t 'find) 7))   ; should return #f
+(inspect ((t 'root)))     ; should return 3
+(inspect ((t 'size)))     ; should return 5
 ((t 'traverse)) ; should print 3 1 0 4 5
+((t 'printTree))
 
 ; (define l '(1 (2 nil) 4))
 ; (inspect (cadr (cadr l)))

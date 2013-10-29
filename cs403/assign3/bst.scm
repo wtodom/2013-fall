@@ -1,3 +1,4 @@
+(define debug #f)
 (define (bst)
 	(define count 0)
 	(define base (cons nil (list nil nil)))
@@ -18,40 +19,40 @@
 	(define (find val)  ; TODO
 
 		)
-	(define (insert @)  ; TODO
+	(define (insert @)  ; DONE
 		(map insert-helper @)
 		)
 	(define (insert-helper x)
-		(newline)
-		(println "Current tree: " base)
-		(println "Attempting to insert " x "...")
+		(if debug (newline))
+		(if debug (println "Current tree: " base))
+		(if debug (println "Attempting to insert " x "..."))
 		(define (insertWalker node)
-			(println "Node: " node)
+			(if debug (println "Node: " node))
 			(cond
 				((< x (car node))
-					(println x " was smaller than " (car node) ". Checking left child...")
+					(if debug (println x " was smaller than " (car node) ". Checking left child..."))
 					(cond
 						((null? (leftChild node))
-							(println "left child was null. inserting.")
+							(if debug (println "left child was null. inserting."))
 							(set-car! (cdr node) (cons x (list nil nil)))
 							(size+)
 							)
 						(else
-							(println "left child was not null. recurring...")
+							(if debug (println "left child was not null. recurring..."))
 							(insertWalker (leftChild node))
 							)
 						)
 					)
 				(else ; (> x (car node))
-					(println x " was bigger than " (car node) ". Checking right child...")
+					(if debug (println x " was bigger than " (car node) ". Checking right child..."))
 					(cond
 						((null? (rightChild node))
-							(println "right child was null. inserting.")
+							(if debug (println "right child was null. inserting."))
 							(set-car! (cdr (cdr node)) (cons x (list nil nil)))
 							(size+)
 							)
 						(else
-							(println "right child was not null. recurring...")
+							(if debug (println "right child was not null. recurring..."))
 							(insertWalker (rightChild node))
 							)
 						)
@@ -60,7 +61,7 @@
 			)
 		(cond
 			((null? (root))
-				(println "root was null. inserting.")
+				(if debug (println "root was null. inserting."))
 				(set-car! base x)
 				(size+)
 				)
@@ -77,15 +78,9 @@
 			(cond
 				((null? node) nil)
 				(else
-					(print (car node))
-					(if (null? (cadr node))
-						nil
-						(preorder (cadr node))
-						)
-					(if (null? (cadr (cadr node)))
-						nil
-						(preorder (cadr (cadr node)))
-						)
+					(print (car node) " ")
+					(preorder (leftChild node))
+					(preorder (rightChild node))
 					)
 				)
 			)
@@ -97,19 +92,29 @@
 	this
 	)
 
-(define tree (bst))
-; ((tree 'size))
-((tree 'insert) 5 0 10 3 7)
+; (define tree (bst))
+; ; ((tree 'size))
+; ((tree 'insert) 5 0 10 3 7)
+; ; ((tree 'traverse))
+; ; ((tree 'insert) 0)
+; ; ((tree 'traverse))
+; ; ((tree 'insert) 10)
+; ; ((tree 'traverse))
+; ; ((tree 'insert) 3)
+; ; ((tree 'traverse))
+; ; ((tree 'insert) 7)
 ; ((tree 'traverse))
-; ((tree 'insert) 0)
-; ((tree 'traverse))
-; ((tree 'insert) 10)
-; ((tree 'traverse))
-; ((tree 'insert) 3)
-; ((tree 'traverse))
-; ((tree 'insert) 7)
-; ((tree 'traverse))
-((tree 'printTree))
+; (newline)
+; ((tree 'printTree))
+
+
+(define t (bst))
+((t 'insert) 3 4 5 1 0)
+; ((t 'find) 5)   ; should return #t
+; ((t 'find) 7)   ; should return #f
+((t 'root))     ; should return 3
+((t 'size))     ; should return 5
+((t 'traverse)) ; should print 3 1 0 4 5
 
 ; (define l '(1 (2 nil) 4))
 ; (inspect (cadr (cadr l)))

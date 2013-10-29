@@ -1,4 +1,4 @@
-(define debug #f)
+(define debug #t)
 (define (bst)
 	(define count 0)
 	(define base (cons nil (list nil nil)))
@@ -18,6 +18,21 @@
 		)
 	(define (find val)
 		; theta(log n) if balanced, theta(n) otherwise
+		(define (find-helper node)
+			(cond
+				((null? node) #f)
+				((= val (car node))
+					#t
+					)
+				((< val (car node))
+					(find-helper (leftChild node))
+					)
+				((> val (car node))
+					(find-helper (rightChild node))
+					)
+				)
+			)
+		(find-helper base)
 		)
 	(define (insert @)
 		(for-each insert-helper @)
@@ -48,7 +63,7 @@
 					(cond
 						((null? (rightChild node))
 							(if debug (println "right child was null. inserting."))
-							(set-car! (cdr (cdr node)) (cons x (list nil nil)))
+							(set-car! (cddr node) (cons x (list nil nil)))
 							(size+)
 							)
 						(else
@@ -110,12 +125,17 @@
 
 
 (define t (bst))
+; ((t 'insert) 1 2 3 4 5 6 7 8 9 10)
 ((t 'insert) 3 4 5 1 0)
-; ((t 'find) 5)   ; should return #t
-; ((t 'find) 7)   ; should return #f
+(newline)
+(println "Test results: ")
+(inspect ((t 'find) 5))   ; should return #t
+(inspect ((t 'find) 7))   ; should return #f
 (inspect ((t 'root)))     ; should return 3
 (inspect ((t 'size)))     ; should return 5
+(print "Pre-order traversal: ")
 ((t 'traverse)) ; should print 3 1 0 4 5
+(print "Tree, literal representation: ")
 ((t 'printTree))
 
 ; (define l '(1 (2 nil) 4))

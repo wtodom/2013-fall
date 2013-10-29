@@ -1,5 +1,3 @@
-(include "ci.lib")
-
 (define debug #f)
 (define (bst)
 	(define count 0)
@@ -19,7 +17,7 @@
 		(car base)
 		)
 	(define (find val)
-		(contains (flatten base) val)
+		; theta(log n) if balanced, theta(n) otherwise
 		)
 	(define (insert @)
 		(for-each insert-helper @)
@@ -113,8 +111,8 @@
 
 (define t (bst))
 ((t 'insert) 3 4 5 1 0)
-(inspect ((t 'find) 5))   ; should return #t
-(inspect ((t 'find) 7))   ; should return #f
+; ((t 'find) 5)   ; should return #t
+; ((t 'find) 7)   ; should return #f
 (inspect ((t 'root)))     ; should return 3
 (inspect ((t 'size)))     ; should return 5
 ((t 'traverse)) ; should print 3 1 0 4 5

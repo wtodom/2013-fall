@@ -129,53 +129,56 @@
 			(tracer base)
 			)
 		(define (delete-helper node)
-			(inspect (car node))
-			(inspect val)
+			(if debug (inspect (car node)))
+			(if debug (inspect val))
 			; (if (pair? val) (set! val (car val)))
 			(cond
 				((null? node) nil)
 				((< val (car node))
-					(println val " is less than " (car node) ". recurring left.")
+					(if debug (println val " is less than " (car node) ". recurring left."))
 					(delete-helper (leftChild node))
 					)
 				((> val (car node))
-					(println val " is more than " (car node) ". recurring right.")
+					(if debug (println val " is more than " (car node) ". recurring right."))
 					(delete-helper (rightChild node))
 					)
 				(else
-					(println val " is " (car node) ". beginning delete.")
+					(if debug (println val " is " (car node) ". beginning delete."))
 					(cond
 						((and (null? (rightChild node)) (null? (leftChild node)))
-						(println "Both children are null. Deleting...")
-							(inspect node)
-							(inspect (parent node))
-							(inspect (eq? (rightChild (parent node)) node))
+						(if debug (println "Both children are null. Deleting..."))
+							; (inspect node))
+							; (inspect (parent node)))
+							; (inspect (eq? (rightChild (parent node)) node)))
 							(if (eq? (rightChild (parent node)) node)
 								(set-car! (cddr (parent node)) nil)
 								(set-car! (cdr (parent node)) nil)
 								)
+							(size-)
 							; (set-cdr! (parent node) (list nil nil))
 							)
 						((null? (rightChild node))
-						(println "Right child is null.  Replacing node with " (leftChild node))
+							(if debug (println "Right child is null.  Replacing node with " (leftChild node)))
 							; (set! node (leftChild node))
 							; (set! (leftChild node) nil)
 							(set-car! node (car (leftChild node)))
 							(set-cdr! node (list nil nil))
+							(size-)
 							)
 						((null? (leftChild node))
-						(println "Left child is null.  Replacing node with "  (rightChild node))
+							(if debug (println "Left child is null.  Replacing node with "  (rightChild node)))
 							(set-car! node (car (rightChild node)))
 							(set-cdr! node (list nil nil))
+							(size-)
 							)
 						(else
 							; Call the node to be deleted N.
 							; Do not delete N.
 							; Instead, choose either its in-order successor node or its in-order predecessor node, R.
 							; Replace the value of N with the value of R, then delete R.
-							(println "Complicated one. This probably fails...")
-							(inspect (car (predecessor node)))
-							(inspect (car node))
+							(if debug (println "Complicated one. This probably fails..."))
+							; (inspect (car (predecessor node)))
+							; (inspect (car node))
 							(define tmp (car (predecessor node)))
 							(delete (car (predecessor node)))
 							(set-car! node tmp)
@@ -215,7 +218,7 @@
 (inspect ((t 'find) 5))   ; should return #t
 (inspect ((t 'find) 7))   ; should return #f
 (inspect ((t 'root)))     ; should return 3
-(inspect ((t 'size)))     ; should return 5
+(inspect ((t 'size)))     ; should return 6
 (print "Pre-order traversal: ")
 ((t 'traverse)) ; should print 3 1 0 4 5
 (print "Tree, literal representation: ")
@@ -223,11 +226,11 @@
 
 (newline)
 
-(println "Testing predecessor and successor...")
-(inspect ((t 'predecessor) (t' base)))
-(inspect ((t 'successor) (t' base)))
+; (println "Testing predecessor and successor...")
+; (inspect ((t 'predecessor) (t' base)))
+; (inspect ((t 'successor) (t' base)))
 
-(newline)
+; (newline)
 
 (println "Testing delete...")
 (print "Pre-delete tree: ")
@@ -240,6 +243,8 @@
 ((t 'traverse)) ; should print 3 1 0 4 5
 (print "Tree, literal representation: ")
 ((t 'printTree))
+(inspect ((t 'size)))     ; should return 5
+(inspect ((t 'root)))     ; should return 2
 
 ; (define l '(1 (2 nil) 4))
 ; (inspect (cadr (cadr l)))

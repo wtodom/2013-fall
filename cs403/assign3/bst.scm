@@ -1,4 +1,4 @@
-(define debug #t)
+(define debug #f)
 (define (bst)
 	(define count 0)
 	(define base (cons nil (list nil nil)))
@@ -17,7 +17,6 @@
 		(car base)
 		)
 	(define (find val)
-		; theta(log n) if balanced, theta(n) otherwise
 		(define (find-helper node)
 			(cond
 				((null? node) #f)
@@ -85,8 +84,98 @@
 				)
 			)
 		)
-	(define (delete)
-
+	(define (predecessor node)
+		(define (p-helper node)
+			(cond
+				((null? (rightChild node))
+					node
+					)
+				(else
+					(p-helper (rightChild node))
+					)
+				)
+			)
+		(p-helper (leftChild node))
+		)
+	(define (successor node)
+		(define (p-helper node)
+			(cond
+				((null? (leftChild node))
+					node
+					)
+				(else
+					(p-helper (leftChild node))
+					)
+				)
+			)
+		(p-helper (rightChild node))
+		)
+	(define (delete val)
+		(define (parent node)
+			(define (tracer curr)
+				(cond
+					((or (eq? (leftChild curr) node) (eq? (rightChild curr) node))
+						curr
+						)
+					(else
+						(if (> (car curr) (car node))
+							(tracer (leftChild curr))
+						; else
+							(tracer (rightChild curr))
+							)
+						)
+					)
+				)
+			(tracer base)
+			)
+		(define (find-helper node)
+			(cond
+				((null? node) nil)
+				((< val (car node))
+					(println val " is less than " (car node) ". recurring left.")
+					(find-helper (leftChild node))
+					)
+				((> val (car node))
+					(println val " is more than " (car node) ". recurring right.")
+					(find-helper (rightChild node))
+					)
+				(else
+					(println val " is " (car node) ". beginning delete.")
+					(cond
+						((and (null? (rightChild node)) (null? (leftChild node)))
+						(println "Both children are null. Deleting...")
+							(inspect node)
+							(inspect (parent node))
+							(set-cdr! (parent node) (list nil nil))
+							)
+						((null? (rightChild node))
+						(println "Right child is null.  Replacing node with " (leftChild node))
+							; (set! node (leftChild node))
+							; (set! (leftChild node) nil)
+							(set-car! node (car (leftChild node)))
+							(set-cdr! node (list nil nil))
+							)
+						((null? (leftChild node))
+						(println "Left child is null.  Replacing node with "  (rightChild node))
+							(set-car! node (car (rightChild node)))
+							(set-cdr! node (list nil nil))
+							)
+						(else
+							; Call the node to be deleted N.
+							; Do not delete N.
+							; Instead, choose either its in-order successor node or its in-order predecessor node, R.
+							; Replace the value of N with the value of R, then delete R.
+							(println "Complicated one. This probably fails...")
+							; (inspect (car (predecessor node)))
+							; (inspect (car node))
+							(set-car! node (car (predecessor node)))
+							(delete (predecessor node))
+							)
+						)
+					)
+				)
+			)
+		(find-helper base)
 		)
 	(define (traverse)
 		(define (preorder node)
@@ -108,31 +197,34 @@
 	this
 	)
 
-; (define tree (bst))
-; ; ((tree 'size))
-; ((tree 'insert) 5 0 10 3 7)
-; ; ((tree 'traverse))
-; ; ((tree 'insert) 0)
-; ; ((tree 'traverse))
-; ; ((tree 'insert) 10)
-; ; ((tree 'traverse))
-; ; ((tree 'insert) 3)
-; ; ((tree 'traverse))
-; ; ((tree 'insert) 7)
-; ((tree 'traverse))
-; (newline)
-; ((tree 'printTree))
-
 
 (define t (bst))
 ; ((t 'insert) 1 2 3 4 5 6 7 8 9 10)
-((t 'insert) 3 4 5 1 0)
+((t 'insert) 3 4 5 1 0 2)
 (newline)
 (println "Test results: ")
 (inspect ((t 'find) 5))   ; should return #t
 (inspect ((t 'find) 7))   ; should return #f
 (inspect ((t 'root)))     ; should return 3
 (inspect ((t 'size)))     ; should return 5
+(print "Pre-order traversal: ")
+((t 'traverse)) ; should print 3 1 0 4 5
+(print "Tree, literal representation: ")
+((t 'printTree))
+
+(newline)
+
+(println "Testing predecessor and successor...")
+(inspect ((t 'predecessor) (t' base)))
+(inspect ((t 'successor) (t' base)))
+
+(newline)
+
+(println "Testing delete...")
+(println "Trying: ((t 'delete) 2)")
+((t 'delete) 2)
+(newline)
+(println "After delete:")
 (print "Pre-order traversal: ")
 ((t 'traverse)) ; should print 3 1 0 4 5
 (print "Tree, literal representation: ")

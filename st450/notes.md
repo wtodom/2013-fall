@@ -366,7 +366,7 @@ prior to this will not be tested, but will have homework
 	- Interpretation: We have (or don't have) enough evidence to reject the null hypothesis.
 
 - SUMMARY:
-	- IMAGE @ 
+	- IMAGE @
 
 ## Confidence Interval Z-values
 
@@ -459,3 +459,16 @@ prior to this will not be tested, but will have homework
 - find phat for each respective sample
 - p1hat and p2hat are both approx Normal (same as before, with subscripts)
 - notebook-103
+- example: notebook-105
+
+## 29 October 2013 - Contingency Tables
+
+- notation is image on phone
+- null hypothesis: Depends on particular table
+	- This means that row and column classifications are independent. In other words, the distrobution of proportions over columns is the same for all rows.
+- Test Statistic: Chi^2 observed (http://en.wikipedia.org/wiki/Chi-squared_distribution)
+	- notebook-106
+- p-value: notebook-107
+- Requirements:
+	- all Eij's > 1
+	- 80# of them >= 5

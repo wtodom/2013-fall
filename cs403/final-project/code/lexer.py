@@ -117,6 +117,8 @@ class Lexer:
 			return Lexeme(tokenType="FALSE")
 		elif var == "if":
 			return Lexeme(tokenType="IF")
+		elif var == "and":
+			return Lexeme(tokenType="AND")
 		else:
 			return Lexeme(tokenType="VARIABLE", value=var)
 

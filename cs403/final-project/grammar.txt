@@ -3,15 +3,15 @@ program: functionDef optStatements
 functionDef: TO VARIABLE optSequence COLON block
 
 optSequence: sequence
-	   | *empty*
+		   | *empty*
 
 sequence: expr
-	| expr AND expr
-	| expr commaChain COMMA AND expr
+		| expr AND expr
+		| expr commaChain COMMA AND expr
 
 commaChain: COMMA expr optCommaChain
 
-optCommaChain: COMMA expr commaChain
+optCommaChain: COMMA expr optCommaChain
 			 | *empty*
 
 block: optStatements PERIOD

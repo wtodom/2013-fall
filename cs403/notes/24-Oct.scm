@@ -62,7 +62,7 @@
 (define (stream-remove stream pred?)
 	(if (pred? (stream-car stream))
 		(stream-remove (stream-cdr stream) pred?)
-		(cons-stream (stream-car s) (stream-remove (stream-cdr s) pred?))
+		(cons-stream (stream-car stream) (stream-remove (stream-cdr s) pred?))
 		)
 	)
 
@@ -100,9 +100,9 @@
 ; use euler transform to make faster
 
 (define (transform s)
-	(define Sn+1 (stream-car s))
+	(define Sn-1 (stream-car s))
 	(define Sn (stream-cadr s))
-	(define Sn-1 (stream-caddr s))
+	(define Sn+1 (stream-caddr s))
 	(- Sn+1 (/ (^ (- Sn+1 Sn) 2) (+ Sn-1 (* -2 Sn) Sn+1)))
 	)
 

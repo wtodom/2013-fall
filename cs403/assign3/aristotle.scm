@@ -1,3 +1,5 @@
+; http://en.wikipedia.org/wiki/1/4_%2B_1/16_%2B_1/64_%2B_1/256_%2B_%C2%B7_%C2%B7_%C2%B7
+
 (include "stream.lib")
 
 (define fours (cons-stream 4 fours))

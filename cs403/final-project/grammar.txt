@@ -27,9 +27,11 @@ statement: expr SEMICOLON
 		 | assignment SEMICOLON
 		 | TODO
 
-ifStatement: IF expr IS expr COMMA block optOtherwise
+ifStatement: IF booleanExpr COMMA block optOtherwise
 
-whileStatement: WHILE expr IS expr COMMA block
+whileStatement: WHILE booleanExpr COMMA block
+
+booleanExpr: expr IS boolOp expr
 
 optOtherwise: OTHERWISE block
 			| OTHERWISE ifStatement
@@ -37,9 +39,9 @@ optOtherwise: OTHERWISE block
 
 assignment: SET variable TO expr
 
-expr: primary
+expr: OPEN_PARENTHESIS expr operator expr CLOSE_PARENTHESIS
+	| primary
 	| functionCall
-	| OPEN_PARENTHESIS primary operator primary CLOSE_PARENTHESIS
 
 primary: VARIABLE
 	   | NUMBER
@@ -48,15 +50,16 @@ primary: VARIABLE
 	   | FLASE
 	   | NOTHING (NULL)
 
-functionCall: IDENTIFIER OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
+functionCall: CARROT VARIABLE OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
 
 operator: PLUS
 		| MINUS
 		| DIVIDE
 		| MULTIPLY
-		| DOUBLE_EQUALS
-		| NOT_EQUAL
-		| LESS_THAN
-		| GREATER_THAN
-		| LESS_THAN_EQUAL
-		| GREATER_THAN_EQUAL
+
+boolOp: DOUBLE_EQUALS
+	  | NOT_EQUAL
+	  | LESS_THAN
+	  | GREATER_THAN
+	  | LESS_THAN_EQUAL
+	  | GREATER_THAN_EQUAL

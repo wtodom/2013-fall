@@ -4,9 +4,10 @@ class Lexer:
 	"""Scans files and returns a Lexeme object for each token discovered."""
 
 	def __init__(self, source):
-		self.f = self.open_file(source)	
+		self.f = self.open_file(source)
 		self.pushbackStack = []
 		self.currentChar = None
+		self.boolean_symbols = ["<", ">", "!", "="]
 		self.keywords = ["set", "to", "is", "return", "true", "false"]
 
 	def open_file(self, source):
@@ -40,10 +41,12 @@ class Lexer:
 			return Lexeme(tokenType="SEMICOLON")
 		elif self.currentChar == ".":
 			return Lexeme(tokenType="PERIOD")
+		elif self.currentChar == "^":
+			return Lexeme(tokenType="CARROT")
 		elif self.currentChar == "(":
-			return Lexeme(tokenType="OPEN_PAREN")
+			return Lexeme(tokenType="OPEN_PARENTHESIS")
 		elif self.currentChar == ")":
-			return Lexeme(tokenType="CLOSE_PAREN")
+			return Lexeme(tokenType="CLOSE_PARENTHESIS")
 		elif self.currentChar == "[":
 			return Lexeme(tokenType="OPEN_BRACKET")
 		elif self.currentChar == "]":
@@ -60,14 +63,35 @@ class Lexer:
 			return self.lex_variable()
 
 	def lex_variable(self):
-		if self.currentChar == None:
-			return
 		if self.currentChar.isalpha():
 			return self.get_variable()
 		elif self.currentChar.isdigit():
 			return self.get_number()
 		elif self.currentChar == "\"":
 			return self.get_string()
+		elif self.currentChar in self.boolean_symbols:
+			return self.get_boolean_operator()
+		elif self.currentChar == "":
+			return Lexeme("EOF")
+
+	def get_boolean_operator(self):
+		op = ""
+		while self.currentChar in self.boolean_symbols and len(op) <= 2:
+			op += self.currentChar
+			self.read_char()
+
+		if op == "<":
+			return Lexeme(tokenType="LESS_THAN")
+		elif op == ">":
+			return Lexeme(tokenType="GREATER_THAN")
+		elif op == "<=":
+			return Lexeme(tokenType="LESS_THAN_EQUAL")
+		elif op == ">=":
+			return Lexeme(tokenType="GREATER_THAN_EQUAL")
+		elif op == "!=":
+			return Lexeme(tokenType="NOT_EQUAL")
+		elif op == "==":
+			return Lexeme(tokenType="DOUBLE_EQUALS")
 
 	def get_variable(self): # and keywords
 		var = ""
@@ -95,8 +119,6 @@ class Lexer:
 			return Lexeme(tokenType="IF")
 		else:
 			return Lexeme(tokenType="VARIABLE", value=var)
-		# todo: check for keywords
-		# todo: check for inequality symbols
 
 	def get_number(self):
 		num = ""

@@ -9,6 +9,7 @@ class Lexer:
 		self.currentChar = None
 		self.boolean_symbols = ["<", ">", "!", "="]
 		self.keywords = ["set", "to", "is", "return", "true", "false"]
+		self.whitespace_chars = [" ", "\n", "\t", "\r"]
 
 	def open_file(self, source):
 		return open(source, "r")
@@ -23,8 +24,14 @@ class Lexer:
 			self.currentChar = self.f.read(1).lower()
 
 	def skip_whitespace(self):
-		while self.currentChar in [" ", "\n", "\t", "\r"]:
-			self.read_char()
+		while self.currentChar == "~" or self.currentChar in self.whitespace:
+			while self.currentChar in self.whitespace_chars:
+				self.read_char()
+			if self.currentChar == "~":
+				self.read_char()
+				while self.currentChar != "~":
+					self.read_char()
+				self.read_char()
 
 	def pushback(self):
 		self.pushbackStack.append(self.currentChar)
@@ -119,6 +126,8 @@ class Lexer:
 			return Lexeme(tokenType="IF")
 		elif var == "and":
 			return Lexeme(tokenType="AND")
+		elif var == "otherwise":
+			return Lexeme(tokenType="OTHERWISE")
 		else:
 			return Lexeme(tokenType="VARIABLE", value=var)
 

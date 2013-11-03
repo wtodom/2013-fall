@@ -1,0 +1,26 @@
+to compareUsing a, b, and c:
+	if a is == true,
+		^ print("a was true.");
+		.
+	otherwise,
+		^ print("a was not true");
+		.
+
+	if b is == (5 - c),
+		^ print("b was == (5 - c).");
+		.
+	otherwise,
+		^ print("b was not == (5 - c)");
+		.
+
+	if c is == "some string",
+		^ print("c was == some string.");
+		.
+	otherwise,
+		^ print("c was not == some string");
+		.
+	.
+
+~ the below comment has been addressed, but I left it in to test comments in the lexer. ~
+
+~ need to fix commaChain so that it checks for AND rather than the comma before the AND. ~

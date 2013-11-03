@@ -19,7 +19,6 @@ class Parser:
 		return Lexer(sys.argv[1])
 
 	def parse(self):
-		if self._debug: print(" in ifStatementPending")
 		self.current = self.l.lex()
 		self.program()
 		self.l.close_file()
@@ -130,7 +129,6 @@ class Parser:
 			self.expression()
 		elif self.commaChainPending():
 			self.commaChain()
-			self.match("COMMA")
 			self.match("AND")
 			self.expression()
 
@@ -144,8 +142,9 @@ class Parser:
 		if self._debug: print(" in optCommaChain")
 		if self.check("COMMA"):
 			self.match("COMMA")
-			self.expression()
-			self.optCommaChain()
+			if self.expressionPending():
+				self.expression()
+				self.optCommaChain()
 
 	def block(self):
 		if self._debug: print(" in block")
@@ -201,6 +200,7 @@ class Parser:
 		if self._debug: print(" in optOtherwise")
 		if self.check("OTHERWISE"):
 			self.match("OTHERWISE")
+			self.match("COMMA")
 			if self.ifStatementPending():
 				self.ifStatement()
 			else:

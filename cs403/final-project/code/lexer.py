@@ -24,7 +24,7 @@ class Lexer:
 			self.currentChar = self.f.read(1).lower()
 
 	def skip_whitespace(self):
-		while self.currentChar == "~" or self.currentChar in self.whitespace:
+		while self.currentChar == "~" or self.currentChar in self.whitespace_chars:
 			while self.currentChar in self.whitespace_chars:
 				self.read_char()
 			if self.currentChar == "~":

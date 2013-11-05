@@ -98,10 +98,11 @@ class Parser:
 
 	def program(self):
 		if self._debug: print(" in program")
-		if self.functionDefPending():
-			self.functionDef()
-		if self.statementsPending():
-			self.statements()
+		while self.functionDefPending() or self.statementsPending():
+			if self.functionDefPending():
+				self.functionDef()
+			if self.statementsPending():
+				self.statements()
 		self.match("EOF")
 
 	def functionDef(self):

@@ -458,7 +458,7 @@ CS 475 - Programming Languages
 				for k=i to j-1:
 					{table[i][j]=table[i][j]}
 					or
-					{ X | X -> YZ where table[i][k] contains Y and table[k+1][j] contains Z};
+					{ X | X -> YZ where table[i][k] contains Y and table[k+1][j] contains Z };
 
 ## 28 October 2013 - Closure Properties for Context Free Languages
 
@@ -474,3 +474,15 @@ CS 475 - Programming Languages
 	- L1 Intersection L2 is *not* always a CFL
 	- Compliment of L1 is *not* always a CFL
 	- If L1 is a CFL, then then reverse of L1 is a CFL
+
+## 4 October 2013 - Turing Machines
+
+- A TM = a FSM plus a tape (a two-way infinite list)
+- Initially:
+	- string w = w1, w2, w3, ..., wn (a string of length n)
+	- the tape has n cells containing the characters of the string, with an infinite series of B (blanks) on each side.
+	- the tape head points to the character being read, which is initially the first character of w
+	- Transition in TM: notebook-108
+- basic idea: notebook-109
+- example: notebook-110 (success)
+- example: notebook-111 ()

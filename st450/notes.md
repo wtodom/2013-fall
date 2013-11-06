@@ -471,4 +471,11 @@ prior to this will not be tested, but will have homework
 - p-value: notebook-107
 - Requirements:
 	- all Eij's > 1
-	- 80# of them >= 5
+	- 80% of them >= 5
+
+## 5 November 2013 - Goodness of Fit Test
+
+- Fisher's Exact Test
+	- Previous methods based on large samples
+	- compares two proportions and computest he exact probability of observing a table and more extreme tables
+	- Keep totals for colums and rows the same.

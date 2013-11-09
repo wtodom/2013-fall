@@ -1,9 +1,8 @@
 from exceptions import ParseError
 from lexeme import Lexeme
 from lexer import Lexer
+import treeviz as tv
 import sys
-
-import treeviz
 
 
 class Parser:
@@ -23,12 +22,14 @@ class Parser:
 
 	def parse(self):
 		self.current = self.l.lex()
-		self.program()
+		tree = self.program()
 		self.l.close_file()
 		print()
 		print("###############################")
 		print("### Parsing was successful. ###")
 		print("###############################")
+		v = tv.TreeViz("loops.dot", tree)
+		v.viz()
 
 	def check(self, tokenType):
 		return self.current.tokenType == tokenType
@@ -100,12 +101,23 @@ class Parser:
 
 	def program(self):
 		if self._debug: print(" in program")
+		tree = Lexeme(tokenType="PROGRAM")
+		sections = []
 		while self.functionDefPending() or self.statementsPending():
 			if self.functionDefPending():
-				self.functionDef()
+				sections.append(self.functionDef())
 			if self.statementsPending():
-				self.statements()
+				sections.append(self.statements())
 		self.match("EOF")
+		tmp = Lexeme(tokenType="GLUE")
+		tracer = tmp
+		for section in sections:
+			tracer.left = section
+			tracer.right = Lexeme(tokenType="GLUE")
+			tracer = tracer.right
+		tree.right = tmp
+
+		return tree
 
 	def functionDef(self):
 		if self._debug: print(" in functionDef")
@@ -263,9 +275,10 @@ class Parser:
 	def assignment(self):
 		if self._debug: print(" in assignment")
 		self.match("SET")
-		tree = self.match("VARIABLE")
+		tree = Lexeme(tokenType="ASSIGNMENT")
+		tree.left = self.match("VARIABLE")
 		self.match("TO")
-		tree.value = self.expression()
+		tree.right = self.expression()
 		self.match("SEMICOLON")
 
 		return tree

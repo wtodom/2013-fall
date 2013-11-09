@@ -109,25 +109,27 @@ class Lexer:
 		self.pushback()
 
 		if var == "to":
-			return Lexeme(tokenType="TO")
+			return Lexeme(tokenType="TO", value="KEYWORD")
 		elif var == "set":
-			return Lexeme(tokenType="SET")
+			return Lexeme(tokenType="SET", value="KEYWORD")
 		elif var == "is":
-			return Lexeme(tokenType="IS")
+			return Lexeme(tokenType="IS", value="KEYWORD")
 		elif var == "while":
-			return Lexeme(tokenType="WHILE")
+			return Lexeme(tokenType="WHILE", value="KEYWORD")
 		elif var == "if":
-			return Lexeme(tokenType="IF")
+			return Lexeme(tokenType="IF", value="KEYWORD")
 		elif var == "true":
-			return Lexeme(tokenType="TRUE")
+			return Lexeme(tokenType="BOOLEAN", value=True)
 		elif var == "false":
-			return Lexeme(tokenType="FALSE")
-		elif var == "if":
-			return Lexeme(tokenType="IF")
+			return Lexeme(tokenType="BOOLEAN", value=False)
+		elif var == "or":
+			return Lexeme(tokenType="OR", value="KEYWORD")
 		elif var == "and":
-			return Lexeme(tokenType="AND")
+			return Lexeme(tokenType="AND", value="KEYWORD")
 		elif var == "otherwise":
-			return Lexeme(tokenType="OTHERWISE")
+			return Lexeme(tokenType="OTHERWISE", value="KEYWORD")
+		elif var == "nothing":
+			return Lexeme(tokenType="NOTHING", value=None)
 		else:
 			return Lexeme(tokenType="VARIABLE", value=var)
 

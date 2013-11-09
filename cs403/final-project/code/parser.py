@@ -1,6 +1,9 @@
 from exceptions import ParseError
+from lexeme import Lexeme
 from lexer import Lexer
 import sys
+
+import treeviz
 
 
 class Parser:
@@ -33,7 +36,7 @@ class Parser:
 	def match(self, tokenType):
 		print("Attempting to match Lexeme: " + str(self.current))
 		if not self.check(tokenType):
-			raise ParseError(tokenType)
+			raise ParseError(tokenType, self.current.tokenType)
 		print("token matched.")
 		self.old = self.current
 		self.current = self.l.lex()
@@ -83,8 +86,7 @@ class Parser:
 			self.check("VARIABLE") or
 			self.check("NUMBER") or
 			self.check("STRING") or
-			self.check("TRUE") or
-			self.check("FALSE") or
+			self.check("BOOLEAN") or
 			self.check("NOTHING")
 			)
 
@@ -108,175 +110,238 @@ class Parser:
 	def functionDef(self):
 		if self._debug: print(" in functionDef")
 		self.match("TO")
-		self.match("VARIABLE")
+		name = self.match("VARIABLE")
 		if self._debug: print("         Checking for optSequence.")
-		self.optSequence()
+		params = self.optSequence()
 		if self._debug: print("         about to match colon.")
 		self.match("COLON")
-		self.block()
+		body = self.block()
+		tmp = Lexeme(tokenType="GLUE", left=params, right=body)
+		tree = Lexeme(tokenType="FUNCTION_DEF", left=name, right=tmp)
+
+		return tree
 
 	def optSequence(self):
 		if self._debug: print(" in optSequence")
+		tree = None  # may be better to make this an empty LIST lexeme. not sure...
 		if self.sequencePending():
 			if self._debug: print("Sequence was pending.")
-			self.sequence()
+			tree = self.sequence()
 		if self._debug: print("         done with optSequence")
+
+		return tree
 
 	def sequence(self):
 		if self._debug: print(" in sequence")
-		self.expression()
+		tree = Lexeme(tokenType="LIST")
+		tree.left = self.expression()
 		if self.check("AND"):
 			self.match("AND")
-			self.expression()
+			tmp = Lexeme(tokenType="GLUE")
+			tmp.left = self.expression()
+			tree.right = tmp
 		elif self.commaChainPending():
-			self.commaChain()
+			tmp = self.commaChain()
 			self.match("AND")
-			self.expression()
+			tracer = tmp
+			while tracer.right:
+				tracer = tracer.right
+			tmp2 = Lexeme(tokenType="GLUE")
+			tmp2.left = self.expression()
+			tmp.rightChild = tmp2
+			tree.right = tmp
+
+		return tree
 
 	def commaChain(self):
 		if self._debug: print(" in commaChain")
 		self.match("COMMA")
-		self.expression()
-		self.optCommaChain()
+		tree = Lexeme(tokenType="GLUE")
+		tree.left = self.expression()
+		tree.right = self.optCommaChain()
+
+		return tree
 
 	def optCommaChain(self):
 		if self._debug: print(" in optCommaChain")
+		tree = None
 		if self.check("COMMA"):
+			tree = Lexeme(tokenType="GLUE")
 			self.match("COMMA")
 			if self.expressionPending():
-				self.expression()
-				self.optCommaChain()
+				tree.left = self.expression()
+				tree.right = self.optCommaChain()
+
+		return tree
 
 	def block(self):
 		if self._debug: print(" in block")
-		self.optStatements()
+		tree = self.optStatements()
 		self.match("PERIOD")
+
+		return tree
 
 	def optStatements(self):
 		if self._debug: print(" in optStatements")
+		tree = None
 		if self.statementsPending():
-			self.statements()
+			tree = self.statements()
+
+		return tree
 
 	def statements(self):
 		if self._debug: print(" in statements")
-		self.statement()
-		self.optStatements()
+		tree = Lexeme(tokenType="STATEMENTS")
+		tree.left = self.statement()
+		tree.right = self.optStatements()
+
+		return tree
 
 	def statement(self):
 		if self._debug: print(" in statement")
 		if self.expressionPending():
-			self.expression()
+			tree = self.expression()
 			self.match("SEMICOLON")
 		elif self.ifStatementPending():
-			self.ifStatement()
+			tree = self.ifStatement()
 		elif self.whileStatementPending():
-			self.whileStatement()
+			tree = self.whileStatement()
 		elif self.assignmentPending():
-			self.assignment()
+			tree = self.assignment()
 		else:
-			self.match("TODO")
+			tree = self.match("TODO")
+
+		return tree
 
 	def ifStatement(self):
 		if self._debug: print(" in ifStatement")
 		self.match("IF")
-		self.booleanExpression()
+		tree = Lexeme(tokenType="IF_STATEMENT")
+		tmp = Lexeme(tokenType="GLUE")
+		tree.left = self.booleanExpression()
 		self.match("COMMA")
-		self.block()
-		self.optOtherwise()
+		tmp.left = self.block()
+		tmp.right = self.optOtherwise()
+		tree.right = tmp
+
+		return tree
 
 	def whileStatement(self):
 		if self._debug: print(" in whileStatement")
 		self.match("WHILE")
-		self.booleanExpression()
+		tree = Lexeme(tokenType="IF_STATEMENT")
+		tree.left = self.booleanExpression()
 		self.match("COMMA")
-		self.block()
+		tree.right = self.block()
+
+		return tree
 
 	def booleanExpression(self):
-		self.expression()
+		tree = Lexeme(tokenType="BOOLEAN_EXPRESSION")
+		tmp = Lexeme(tokenType="GLUE")
+		tmp.left = self.expression()
 		self.match("IS")
-		self.boolOp()
-		self.expression()
+		tree.left = self.boolOp()
+		tmp.right = self.expression()
+		tree.right = tmp
+
+		return tree
 
 	def optOtherwise(self):
 		if self._debug: print(" in optOtherwise")
+		tree = None
 		if self.check("OTHERWISE"):
 			self.match("OTHERWISE")
 			self.match("COMMA")
 			if self.ifStatementPending():
-				self.ifStatement()
+				tree = self.ifStatement()
 			else:
-				self.block()
+				tree = self.block()
+
+		return tree
 
 	def assignment(self):
 		if self._debug: print(" in assignment")
 		self.match("SET")
-		self.match("VARIABLE")
+		tree = self.match("VARIABLE")
 		self.match("TO")
-		self.expression()
+		tree.value = self.expression()
 		self.match("SEMICOLON")
+
+		return tree
 
 	def expression(self):
 		if self._debug: print(" in expression")
 		if self.check("OPEN_PARENTHESIS"):
 			self.match("OPEN_PARENTHESIS")
-			self.expression()
-			self.operator()
-			self.expression()
+			tmp = self.expression()
+			tree = self.operator()
+			tree.right = self.expression()
+			tree.left = tmp
 			self.match("CLOSE_PARENTHESIS")
 		elif self.primaryPending():
-			self.primary()
+			tree = self.primary()
 		elif self.functionCallPending():
-			self.functionCall()
+			tree = self.functionCall()
+
+		return tree
 
 	def primary(self):
 		if self._debug: print(" in primary")
 		if self.check("VARIABLE"):
-			self.match("VARIABLE")
+			tree = self.match("VARIABLE")
 		elif self.check("INTEGER"):
-			self.match("INTEGER")
+			tree = self.match("INTEGER")
 		elif self.check("STRING"):
-			self.match("STRING")
+			tree = self.match("STRING")
 		elif self.check("NUMBER"):
-			self.match("NUMBER")
+			tree = self.match("NUMBER")
 		elif self.check("NOTHING"):
-			self.match("NOTHING")
-		elif self.check("TRUE"):
-			self.match("TRUE")
-		elif self.check("FALSE"):
-			self.match("FALSE")
+			tree = self.match("NOTHING")
+		elif self.check("BOOLEAN"):
+			tree = self.match("BOOLEAN")
+
+		return tree
 
 	def functionCall(self):
 		if self._debug: print(" in functionCall")
 		self.match("CARROT")
-		self.match("VARIABLE")  # IDENTIFIER
+		tree = self.match("VARIABLE")  # IDENTIFIER
 		self.match("OPEN_PARENTHESIS")
-		self.optSequence()
+		tree.left = self.optSequence()
 		self.match("CLOSE_PARENTHESIS")
+		tree.type = "FUNCTION_CALL"
+
+		return tree
 
 	def operator(self):
 		if self._debug: print(" in operator")
 		if self.check("PLUS"):
-			self.match("PLUS")
+			tree = self.match("PLUS")
 		elif self.check("MINUS"):
-			self.match("MINUS")
+			tree = self.match("MINUS")
 		elif self.check("DIVIDE"):
-			self.match("DIVIDE")
+			tree = self.match("DIVIDE")
 		else:
-			self.match("MULTIPLY")
+			tree = self.match("MULTIPLY")
+
+		return tree
 
 	def boolOp(self):
 		if self.check("DOUBLE_EQUALS"):
-			self.match("DOUBLE_EQUALS")
+			tree = self.match("DOUBLE_EQUALS")
 		elif self.check("NOT_EQUAL"):
-			self.match("NOT_EQUAL")
+			tree = self.match("NOT_EQUAL")
 		elif self.check("LESS_THAN"):
-			self.match("LESS_THAN")
+			tree = self.match("LESS_THAN")
 		elif self.check("LESS_THAN_EQUAL"):
-			self.match("LESS_THAN_EQUAL")
+			tree = self.match("LESS_THAN_EQUAL")
 		elif self.check("GREATER_THAN"):
-			self.match("GREATER_THAN")
+			tree = self.match("GREATER_THAN")
 		else:
-			self.match("GREATER_THAN_EQUAL")
+			tree = self.match("GREATER_THAN_EQUAL")
+
+		return tree
 
 if __name__ == "__main__":
 	p = Parser()

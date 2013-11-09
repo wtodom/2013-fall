@@ -46,9 +46,11 @@ expr: OPEN_PARENTHESIS expr operator expr CLOSE_PARENTHESIS
 primary: VARIABLE
 	   | NUMBER
 	   | STRING
-	   | TRUE
-	   | FLASE
+	   | BOOLEAN
 	   | NOTHING (NULL)
+
+boolean: TRUE
+	   | FALSE
 
 functionCall: CARROT VARIABLE OPEN_PARENTHESIS optSequence CLOSE_PARENTHESIS
 

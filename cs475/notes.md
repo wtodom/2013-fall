@@ -484,5 +484,14 @@ CS 475 - Programming Languages
 	- the tape head points to the character being read, which is initially the first character of w
 	- Transition in TM: notebook-108
 - basic idea: notebook-109
-- example: notebook-110 (success)
-- example: notebook-111 ()
+- example: notebook-110
+- example: notebook-111
+
+## 6 November 2013 - Turing Machines (cont.)
+
+- example: notebook-112, notebook-113
+
+## 8 November 2013 - Turing Machines and Functions
+
+- Example: notebook-117
+- Church-Turing thesis: Turin machine can solve any problem that a computer can solve.

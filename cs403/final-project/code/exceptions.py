@@ -12,7 +12,6 @@ class ParseError(Error):
 		typeFound -- the token type found by the parser
 	"""
 
-	def __init__(self, expected):
+	def __init__(self, expected, found):
 		self.expected = expected
-		# self.found = found
-	
+		self.found = found

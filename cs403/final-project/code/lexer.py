@@ -10,6 +10,7 @@ class Lexer:
 		self.boolean_symbols = ["<", ">", "!", "="]
 		self.keywords = ["set", "to", "is", "return", "true", "false"]
 		self.whitespace_chars = [" ", "\n", "\t", "\r"]
+		self.connectors = ["-", "_"]
 
 	def open_file(self, source):
 		return open(source, "r")
@@ -102,7 +103,10 @@ class Lexer:
 
 	def get_variable(self): # and keywords
 		var = ""
-		while self.currentChar.isalpha():
+		while (
+			self.currentChar.isalpha() or
+			self.currentChar in self.connectors
+			):
 			var += self.currentChar
 			self.read_char()
 

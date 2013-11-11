@@ -15,3 +15,18 @@ class ParseError(Error):
 	def __init__(self, expected, found):
 		self.expected = expected
 		self.found = found
+
+	def __str__(self):
+		print("ParseError: Expected " + str(self.expected) + ", but found " + str(self.found))
+
+class UndefinedException(Error):
+	"""
+	Raised when the a variable is referenced before it has been defined in
+	the local or any parent scopes.
+
+	Attributes:
+		variable -- the name of the referenced variable
+	"""
+
+	def __init__(self, variable):
+		self.variable = variable

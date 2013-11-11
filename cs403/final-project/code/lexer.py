@@ -42,31 +42,31 @@ class Lexer:
 		self.skip_whitespace()
 
 		if self.currentChar == ",":
-			return Lexeme(tokenType="COMMA")
+			return Lexeme(token_type="COMMA")
 		elif self.currentChar == ":":
-			return Lexeme(tokenType="COLON")
+			return Lexeme(token_type="COLON")
 		elif self.currentChar == ";":
-			return Lexeme(tokenType="SEMICOLON")
+			return Lexeme(token_type="SEMICOLON")
 		elif self.currentChar == ".":
-			return Lexeme(tokenType="PERIOD")
+			return Lexeme(token_type="PERIOD")
 		elif self.currentChar == "^":
-			return Lexeme(tokenType="CARROT")
+			return Lexeme(token_type="CARROT")
 		elif self.currentChar == "(":
-			return Lexeme(tokenType="OPEN_PARENTHESIS")
+			return Lexeme(token_type="OPEN_PARENTHESIS")
 		elif self.currentChar == ")":
-			return Lexeme(tokenType="CLOSE_PARENTHESIS")
+			return Lexeme(token_type="CLOSE_PARENTHESIS")
 		elif self.currentChar == "[":
-			return Lexeme(tokenType="OPEN_BRACKET")
+			return Lexeme(token_type="OPEN_BRACKET")
 		elif self.currentChar == "]":
-			return Lexeme(tokenType="CLOSE_BRACKET")
+			return Lexeme(token_type="CLOSE_BRACKET")
 		elif self.currentChar == "+":
-			return Lexeme(tokenType="PLUS")
+			return Lexeme(token_type="PLUS")
 		elif self.currentChar == "-":
-			return Lexeme(tokenType="MINUS")
+			return Lexeme(token_type="MINUS")
 		elif self.currentChar == "/":
-			return Lexeme(tokenType="DIVIDE")
+			return Lexeme(token_type="DIVIDE")
 		elif self.currentChar == "*":
-			return Lexeme(tokenType="MULTIPLY")
+			return Lexeme(token_type="MULTIPLY")
 		else:
 			return self.lex_variable()
 
@@ -89,17 +89,17 @@ class Lexer:
 			self.read_char()
 
 		if op == "<":
-			return Lexeme(tokenType="LESS_THAN")
+			return Lexeme(token_type="LESS_THAN")
 		elif op == ">":
-			return Lexeme(tokenType="GREATER_THAN")
+			return Lexeme(token_type="GREATER_THAN")
 		elif op == "<=":
-			return Lexeme(tokenType="LESS_THAN_EQUAL")
+			return Lexeme(token_type="LESS_THAN_EQUAL")
 		elif op == ">=":
-			return Lexeme(tokenType="GREATER_THAN_EQUAL")
+			return Lexeme(token_type="GREATER_THAN_EQUAL")
 		elif op == "!=":
-			return Lexeme(tokenType="NOT_EQUAL")
+			return Lexeme(token_type="NOT_EQUAL")
 		elif op == "==":
-			return Lexeme(tokenType="DOUBLE_EQUALS")
+			return Lexeme(token_type="DOUBLE_EQUALS")
 
 	def get_variable(self): # and keywords
 		var = ""
@@ -113,29 +113,29 @@ class Lexer:
 		self.pushback()
 
 		if var == "to":
-			return Lexeme(tokenType="TO", value="KEYWORD")
+			return Lexeme(token_type="TO", value="KEYWORD")
 		elif var == "set":
-			return Lexeme(tokenType="SET", value="KEYWORD")
+			return Lexeme(token_type="SET", value="KEYWORD")
 		elif var == "is":
-			return Lexeme(tokenType="IS", value="KEYWORD")
+			return Lexeme(token_type="IS", value="KEYWORD")
 		elif var == "while":
-			return Lexeme(tokenType="WHILE", value="KEYWORD")
+			return Lexeme(token_type="WHILE", value="KEYWORD")
 		elif var == "if":
-			return Lexeme(tokenType="IF", value="KEYWORD")
+			return Lexeme(token_type="IF", value="KEYWORD")
 		elif var == "true":
-			return Lexeme(tokenType="BOOLEAN", value=True)
+			return Lexeme(token_type="BOOLEAN", value=True)
 		elif var == "false":
-			return Lexeme(tokenType="BOOLEAN", value=False)
+			return Lexeme(token_type="BOOLEAN", value=False)
 		elif var == "or":
-			return Lexeme(tokenType="OR", value="KEYWORD")
+			return Lexeme(token_type="OR", value="KEYWORD")
 		elif var == "and":
-			return Lexeme(tokenType="AND", value="KEYWORD")
+			return Lexeme(token_type="AND", value="KEYWORD")
 		elif var == "otherwise":
-			return Lexeme(tokenType="OTHERWISE", value="KEYWORD")
+			return Lexeme(token_type="OTHERWISE", value="KEYWORD")
 		elif var == "nothing":
-			return Lexeme(tokenType="NOTHING", value=None)
+			return Lexeme(token_type="NOTHING", value=None)
 		else:
-			return Lexeme(tokenType="VARIABLE", value=var)
+			return Lexeme(token_type="VARIABLE", value=var)
 
 	def get_number(self):
 		num = ""
@@ -145,7 +145,7 @@ class Lexer:
 
 		self.pushback()
 
-		return Lexeme(tokenType="NUMBER", value=num)
+		return Lexeme(token_type="NUMBER", value=num)
 
 	def get_string(self):
 		self.read_char()
@@ -154,4 +154,4 @@ class Lexer:
 			string += self.currentChar
 			self.read_char()
 
-		return Lexeme(tokenType="STRING", value=string)
+		return Lexeme(token_type="STRING", value=string)

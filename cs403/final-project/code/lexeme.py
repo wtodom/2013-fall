@@ -1,14 +1,14 @@
 class Lexeme:
 	"""Stores data about single tokens to be returned by the Lexer."""
 
-	def __init__(self, tokenType=None, value=None, left=None, right=None):
-		self.tokenType = tokenType
+	def __init__(self, token_type=None, value=None, left=None, right=None):
+		self.token_type = token_type
 		self.value = value
 		self.left = left
 		self.right = right
 
 	def __str__(self):
 		if self.value is not None:
-			return str(self.tokenType) + ": " + str(self.value)
+			return str(self.token_type) + ": " + str(self.value)
 		else:
-			return str(self.tokenType)
+			return str(self.token_type)

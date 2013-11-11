@@ -28,16 +28,18 @@ class Parser:
 		print("###############################")
 		print("### Parsing was successful. ###")
 		print("###############################")
-		v = tv.TreeViz("loops.dot", tree)
+		v = tv.TreeViz(sys.argv[-1][3:-5], tree)
 		v.viz()
+		# v.create_image()
+		# v.open_image()
 
-	def check(self, tokenType):
-		return self.current.tokenType == tokenType
+	def check(self, token_type):
+		return self.current.token_type == token_type
 
-	def match(self, tokenType):
+	def match(self, token_type):
 		print("Attempting to match Lexeme: " + str(self.current))
-		if not self.check(tokenType):
-			raise ParseError(tokenType, self.current.tokenType)
+		if not self.check(token_type):
+			raise ParseError(token_type, self.current.token_type)
 		print("token matched.")
 		self.old = self.current
 		self.current = self.l.lex()
@@ -101,7 +103,7 @@ class Parser:
 
 	def program(self):
 		if self._debug: print(" in program")
-		tree = Lexeme(tokenType="PROGRAM")
+		tree = Lexeme(token_type="PROGRAM")
 		sections = []
 		while self.functionDefPending() or self.statementsPending():
 			if self.functionDefPending():
@@ -109,11 +111,11 @@ class Parser:
 			if self.statementsPending():
 				sections.append(self.statements())
 		self.match("EOF")
-		tmp = Lexeme(tokenType="GLUE")
+		tmp = Lexeme(token_type="GLUE")
 		tracer = tmp
 		for section in sections:
 			tracer.left = section
-			tracer.right = Lexeme(tokenType="GLUE")
+			tracer.right = Lexeme(token_type="GLUE")
 			tracer = tracer.right
 		tree.right = tmp
 
@@ -128,8 +130,8 @@ class Parser:
 		if self._debug: print("         about to match colon.")
 		self.match("COLON")
 		body = self.block()
-		tmp = Lexeme(tokenType="GLUE", left=params, right=body)
-		tree = Lexeme(tokenType="FUNCTION_DEF", left=name, right=tmp)
+		tmp = Lexeme(token_type="GLUE", left=params, right=body)
+		tree = Lexeme(token_type="FUNCTION_DEF", left=name, right=tmp)
 
 		return tree
 
@@ -145,11 +147,11 @@ class Parser:
 
 	def sequence(self):
 		if self._debug: print(" in sequence")
-		tree = Lexeme(tokenType="LIST")
+		tree = Lexeme(token_type="LIST")
 		tree.left = self.expression()
 		if self.check("AND"):
 			self.match("AND")
-			tmp = Lexeme(tokenType="GLUE")
+			tmp = Lexeme(token_type="GLUE")
 			tmp.left = self.expression()
 			tree.right = tmp
 		elif self.commaChainPending():
@@ -158,7 +160,7 @@ class Parser:
 			tracer = tmp
 			while tracer.right:
 				tracer = tracer.right
-			tmp2 = Lexeme(tokenType="GLUE")
+			tmp2 = Lexeme(token_type="GLUE")
 			tmp2.left = self.expression()
 			tmp.rightChild = tmp2
 			tree.right = tmp
@@ -168,7 +170,7 @@ class Parser:
 	def commaChain(self):
 		if self._debug: print(" in commaChain")
 		self.match("COMMA")
-		tree = Lexeme(tokenType="GLUE")
+		tree = Lexeme(token_type="GLUE")
 		tree.left = self.expression()
 		tree.right = self.optCommaChain()
 
@@ -178,7 +180,7 @@ class Parser:
 		if self._debug: print(" in optCommaChain")
 		tree = None
 		if self.check("COMMA"):
-			tree = Lexeme(tokenType="GLUE")
+			tree = Lexeme(token_type="GLUE")
 			self.match("COMMA")
 			if self.expressionPending():
 				tree.left = self.expression()
@@ -203,7 +205,7 @@ class Parser:
 
 	def statements(self):
 		if self._debug: print(" in statements")
-		tree = Lexeme(tokenType="STATEMENTS")
+		tree = Lexeme(token_type="STATEMENTS")
 		tree.left = self.statement()
 		tree.right = self.optStatements()
 
@@ -228,8 +230,8 @@ class Parser:
 	def ifStatement(self):
 		if self._debug: print(" in ifStatement")
 		self.match("IF")
-		tree = Lexeme(tokenType="IF_STATEMENT")
-		tmp = Lexeme(tokenType="GLUE")
+		tree = Lexeme(token_type="IF_STATEMENT")
+		tmp = Lexeme(token_type="GLUE")
 		tree.left = self.booleanExpression()
 		self.match("COMMA")
 		tmp.left = self.block()
@@ -241,7 +243,7 @@ class Parser:
 	def whileStatement(self):
 		if self._debug: print(" in whileStatement")
 		self.match("WHILE")
-		tree = Lexeme(tokenType="IF_STATEMENT")
+		tree = Lexeme(token_type="IF_STATEMENT")
 		tree.left = self.booleanExpression()
 		self.match("COMMA")
 		tree.right = self.block()
@@ -249,8 +251,8 @@ class Parser:
 		return tree
 
 	def booleanExpression(self):
-		tree = Lexeme(tokenType="BOOLEAN_EXPRESSION")
-		tmp = Lexeme(tokenType="GLUE")
+		tree = Lexeme(token_type="BOOLEAN_EXPRESSION")
+		tmp = Lexeme(token_type="GLUE")
 		tmp.left = self.expression()
 		self.match("IS")
 		tree.left = self.boolOp()
@@ -275,7 +277,7 @@ class Parser:
 	def assignment(self):
 		if self._debug: print(" in assignment")
 		self.match("SET")
-		tree = Lexeme(tokenType="ASSIGNMENT")
+		tree = Lexeme(token_type="ASSIGNMENT")
 		tree.left = self.match("VARIABLE")
 		self.match("TO")
 		tree.right = self.expression()

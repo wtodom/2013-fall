@@ -1,11 +1,15 @@
-make hello: parser.py
+hello: parser.py
 	python3 parser.py ../printHello.para
 
-make cond: parser.py
+cond: parser.py
 	python3 parser.py ../conditional.para
 
-make sort: parser.py
+sort: parser.py
 	python3 parser.py ../bubblesort.para
 
-make loops: parser.py
+loops: parser.py
 	python3 parser.py ../loops.para
+
+clean:
+	rm *.dot
+	rm *.png

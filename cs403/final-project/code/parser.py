@@ -30,8 +30,8 @@ class Parser:
 		print("###############################")
 		v = tv.TreeViz(sys.argv[-1][3:-5], tree)
 		v.viz()
-		# v.create_image()
-		# v.open_image()
+		v.create_image()
+		v.open_image()
 
 	def check(self, token_type):
 		return self.current.token_type == token_type
@@ -162,7 +162,7 @@ class Parser:
 				tracer = tracer.right
 			tmp2 = Lexeme(token_type="GLUE")
 			tmp2.left = self.expression()
-			tmp.rightChild = tmp2
+			tracer.right = tmp2
 			tree.right = tmp
 
 		return tree

@@ -1,70 +1,88 @@
 from lexeme import Lexeme
 from exceptions import UndefinedException
+from treeviz import TreeViz
 
 class Environment:
 
-	def __init__(self, parent_env=None):
-		self.parent_env = parent_env
+	def __init__(self):
 		self.env_list = self.create()
 
 	def create(self):
-		return Lexeme(token_type="ENVIRONMENT", right=Lexeme(tokenType="ENVIRONMENT"))
+		return self.extend(None, None, None)
 
 	def lookup(self, variable, env_list):
-		while env_list is not None:
-			vars = env_list.left
-			vals = env_list.right.left
-			while vars is not None:
-				if (sameVariable(variable, vars.left)):  # TODO: finish insert so I can figure this part out.
-					return vals.left
-				vars = vars.right
-				vals = vals.right
-			env_list = env_list.right.right
+		head = env_list.left
+		var = head.left
+		val = head.right
+		while var != None:
+			if var.value == variable:
+				return val.value
+			var = var.right
+			val = val.right
 
 		raise UndefinedException(variable)
+		return None
 
-		# return None  # is this needed?
+	def update(self, variable, new_value, env_list):
+		head = env_list.left
+		var = head.right
+		val = head.right
+		while var != None:
+			if var.value == variable:
+				val.value = new_value
+			var = var.right
+			val = val.right
 
-	def update(self, variable, new_value):
-		# for env in self.env_list:
-		# 	for i, var in enumerate(env[0]):
-		# 		if var == variable:
-		# 			env[1][i] = new_value
-		pass
+		raise UndefinedException(variable)
+		return None
 
-	def insert(self, variable, value):
-		self.env_list = Lexeme(token_type="JOIN", left=variable, right=self.env_list)
-		val = Lexeme(token_type="JOIN", left=value, right=self.env_list.right.left)
-        # setCar(
-        # 	envList,
-        # 	cons(
-        # 		JOIN,
-        # 		variable,
-        # 		car(envList)
-        # 		)
-        # 	)
-        # setCar(
-        # 	cdr(envList),
-        # 	cons(
-        # 		JOIN,
-        # 		value,
-        # 		cadr(envList)
-        # 		)
-        # 	)
-		pass
+	def insert(self, variable, value, env_list):
+		head = env_list.left
+		variable.right = head.left
+		value.right = head.right
+		head.left = variable
+		head.right = value
 
 	def extend(self, variables, values, parent):
-		# new_env = deque()
-		# new_env.append(deque(variables))
-		# new_env.append(deque(values))
-		# print(new_env)
-		pass
+		glue = Lexeme(token_type="GLUE", left=variables, right=values)
+		env = Lexeme(token_type="ENVIRONMENT", left=glue, right=parent)
 
-e = Environment()
-print("Inserting variable x with value 5...")
-e.insert("x", 5)
-print("Attempting to lookup the variable 'x'...")
-print("x = " + str(e.lookup("x")))
-# print(e.env_list)
-# e.extend(["x", "y", "z", "w"], [1, 2, 3, 4], None)
-# print(e.env_list)
+		return env
+
+	def __str__(self):
+		root = []
+		head = self.env_list.left
+		while head:
+			local = []
+			var = head.left
+			val = head.right
+			while var:
+				local.append([var.value, val.value])
+				var = var.right
+				val = val.right
+			root.append(local)
+			head = head.right
+
+		return str(root)
+
+
+if __name__ == '__main__':
+
+	e = Environment()
+	# tv = TreeViz("env", e.env_list)
+	# tv.viz()
+	# tv.create_image()
+	# tv.open_image()
+
+	print("Inserting variable x with value 5...")
+	var = Lexeme(token_type="VARIABLE", value="x")
+	val = Lexeme(token_type="NUMBER", value=5)
+	e.insert(var, val, e.env_list)
+	# tv = TreeViz("env", e.env_list)
+	# tv.viz()
+	# tv.create_image()
+	# tv.open_image()
+
+	print("Attempting to lookup the variable 'x'...")
+	print("x = " + str(e.lookup("x", e.env_list)))
+

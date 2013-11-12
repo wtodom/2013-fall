@@ -21,7 +21,6 @@ class TreeViz:
 		f.write("}\n")
 		f.close()
 
-
 	def viz_helper(self, stream, node):
 		stream.write(
 			'\t{0} [label="<f0> left| <f1> token_type = {1} | <f2> value = {2} | <f3> right"];\n'.format(

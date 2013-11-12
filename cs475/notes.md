@@ -495,3 +495,61 @@ CS 475 - Programming Languages
 
 - Example: notebook-117
 - Church-Turing thesis: Turin machine can solve any problem that a computer can solve.
+
+## 11 November 2013 - Turing Machines (cont.)
+
+- Terms:
+	- Turing Machine = "program"
+	- Turing Machine that always halts (no infinite loops) = "algorithm"
+	- Language = a set of strings
+	- Language that's accepted by an algorithm (a turing machine that always halts) =
+		- "recursive language"
+		- "decidable language" (usually use this one in class)
+		- "turing-decidable language"
+	- Language accepted by a program (that does not necessarily halt) =
+		- "R.E." (not used much in class, but is in the book)
+		- "recursively enumerable language" (not used much in class, but is in the book)
+		- "recognizable language" (used in class)
+		- "turing-recognizable language" (used in class)
+
+- Encoding
+	- if p = program, <p> = encoding os that program into some alphabet (binary, ascii, etc.)
+
+#### Halting Problem
+
+- Input:
+	- <p> (the encoding of a program)
+	- w (some string)
+- Question:
+	- Does program p halt with input string w? There are a couple of "outcomes":
+		- Halts with a yes.
+		- Halts with a no.
+		- Goes into an infinite loop. (no actual output)
+
+- Theorem: Halting Problem (HP) is undecidable.
+- Proof:
+	- Suppose HP is defidable.
+	- So HP is solved by some algorithm A (input <p>, string w).
+	- Put A into a library that can be called from other programs.
+	- Write program Q as follows:
+`
+def Q(<p>, w):
+	if A(<p>, w) == "YES":
+		while True:
+			pass  # infinite loop
+	else:
+		return "YES"  # halt. doesn't matter what we do.
+`
+	- Construct another program R as follows:
+`
+def R(<p>):
+	if A(<p>, <p>) == "YES":
+		while True:
+			pass  # inf. loop
+	else:
+		return "YES"  # halt. doesn't matter what we do.
+`
+	- What happens if we call `R(<R>)`?
+		- If A says it halts, it goes into an infinite loop.
+		- If A says it infinite loops, then it halts.
+		- DOUBLE-CONTRADICTION

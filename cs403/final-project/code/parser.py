@@ -23,10 +23,10 @@ class Parser:
 		self.current = self.l.lex()
 		tree = self.program()
 		self.l.close_file()
-		print()
-		print("###############################")
-		print("### Parsing was successful. ###")
-		print("###############################")
+		if self._debug: print()
+		if self._debug: print("###############################")
+		if self._debug: print("### Parsing was successful. ###")
+		if self._debug: print("###############################")
 		# v = tv.TreeViz(sys.argv[-1][3:-5], tree)
 		# v.viz()
 		# v.create_image()
@@ -38,10 +38,10 @@ class Parser:
 		return self.current.token_type == token_type
 
 	def match(self, token_type):
-		print("Attempting to match Lexeme: " + str(self.current))
+		if self._debug: print("Attempting to match Lexeme: " + str(self.current))
 		if not self.check(token_type):
 			raise ParseError(token_type, self.current.token_type)
-		print("token matched.")
+		if self._debug: print("token matched.")
 		self.old = self.current
 		self.current = self.l.lex()
 		return self.old

@@ -1,13 +1,16 @@
-hello: parser.py
+eval:
+	python3 evaluator.py ../add.para
+
+hello:
 	python3 parser.py ../printHello.para
 
-cond: parser.py
+cond:
 	python3 parser.py ../conditional.para
 
-sort: parser.py
+sort:
 	python3 parser.py ../bubblesort.para
 
-loops: parser.py
+loops:
 	python3 parser.py ../loops.para
 
 clean:

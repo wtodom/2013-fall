@@ -15,7 +15,6 @@ class Parser:
 		self.l = self.setup()
 
 	def setup(self):
-		if self._debug: print(" in ifStatementPending")
 		if len(sys.argv) != 2:
 			sys.exit("Usage: python3 parser.py sourceFile")
 		return Lexer(sys.argv[1])
@@ -28,10 +27,12 @@ class Parser:
 		print("###############################")
 		print("### Parsing was successful. ###")
 		print("###############################")
-		v = tv.TreeViz(sys.argv[-1][3:-5], tree)
-		v.viz()
-		v.create_image()
-		v.open_image()
+		# v = tv.TreeViz(sys.argv[-1][3:-5], tree)
+		# v.viz()
+		# v.create_image()
+		# v.open_image()
+
+		return tree
 
 	def check(self, token_type):
 		return self.current.token_type == token_type

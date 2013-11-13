@@ -145,7 +145,7 @@ class Lexer:
 
 		self.pushback()
 
-		return Lexeme(token_type="NUMBER", value=num)
+		return Lexeme(token_type="NUMBER", value=int(num))
 
 	def get_string(self):
 		self.read_char()

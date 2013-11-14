@@ -1,7 +1,7 @@
 to print_zero_to n:
 	set current to 0;
 	while current is <= n,
-		^ print(current);
+		show current;
 		set current to (current + 1);
 		.
 	.

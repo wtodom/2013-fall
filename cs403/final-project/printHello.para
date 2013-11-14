@@ -1,6 +1,5 @@
 to printHello:
-	^ print("hello");
-	5; ~ added to test graphviz ~
+	print "hello";
 	.
 
 ^ printHello();

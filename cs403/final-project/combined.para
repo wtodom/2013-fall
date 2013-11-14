@@ -1,31 +1,31 @@
 to printZeroTo n:
 	set current to 0;
 	while current is <= n,
-		^ print(current);
+		show current;
 		set current to (current + 1);
 		.
 	.
 
 to compareUsing a, b, and c:
 	if a is == true,
-		^ print("a was true.");
+		show "a was true.";
 		.
 	otherwise,
-		^ print("a was not true");
+		show "a was not true";
 		.
 
 	if b is == (5 - c),
-		^ print("b was == (5 - c).");
+		show "b was == (5 - c).";
 		.
 	otherwise,
-		^ print("b was not == (5 - c)");
+		show "b was not == (5 - c)";
 		.
 
 	if c is == "some string",
-		^ print("c was == some string.");
+		show "c was == some string.";
 		.
 	otherwise,
-		^ print("c was not == some string");
+		show "c was not == some string";
 		.
 	.
 

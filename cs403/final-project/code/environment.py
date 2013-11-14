@@ -15,12 +15,11 @@ class Environment:
 		var = head.left
 		val = head.right
 		while var != None:
-			if var.value == variable:
+			if var.value == variable.value:
 				return val.value
 			var = var.right
 			val = val.right
 
-		raise UndefinedException(variable)
 		return None
 
 	def update(self, variable, new_value, env_list):
@@ -49,27 +48,11 @@ class Environment:
 
 		return env
 
-	def __str__(self):
-		root = []
-		head = self.env_list.left
-		while head:
-			local = []
-			var = head.left
-			val = head.right
-			while var:
-				local.append([var.value, val.value])
-				var = var.right
-				val = val.right
-			root.append(local)
-			head = head.right
-
-		return str(root)
-
 
 if __name__ == '__main__':
 
 	e = Environment()
-	# tv = TreeViz("env", e.env_list)
+	# tv = TreeViz("env_pre", e.env_list)
 	# tv.viz()
 	# tv.create_image()
 	# tv.open_image()
@@ -78,7 +61,7 @@ if __name__ == '__main__':
 	var = Lexeme(token_type="VARIABLE", value="x")
 	val = Lexeme(token_type="NUMBER", value=5)
 	e.insert(var, val, e.env_list)
-	# tv = TreeViz("env", e.env_list)
+	# tv = TreeViz("env_post", e.env_list)
 	# tv.viz()
 	# tv.create_image()
 	# tv.open_image()

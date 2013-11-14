@@ -134,6 +134,8 @@ class Lexer:
 			return Lexeme(token_type="OTHERWISE", value="KEYWORD")
 		elif var == "nothing":
 			return Lexeme(token_type="NOTHING", value=None)
+		elif var == "show":
+			return Lexeme(token_type="SHOW", value=None)
 		else:
 			return Lexeme(token_type="VARIABLE", value=var)
 

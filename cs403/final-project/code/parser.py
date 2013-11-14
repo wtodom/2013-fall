@@ -67,7 +67,8 @@ class Parser:
 		return (
 			self.primaryPending() or
 			self.functionCallPending() or
-			self.check("OPEN_PARENTHESIS")
+			self.check("OPEN_PARENTHESIS") or
+			self.check("SHOW")
 		)
 
 	def statementsPending(self):
@@ -299,6 +300,14 @@ class Parser:
 			tree = self.primary()
 		elif self.functionCallPending():
 			tree = self.functionCall()
+		else:  # show is pending
+			tree = self.show()
+
+		return tree
+
+	def show(self):
+		tree = self.match("SHOW")
+		tree.left = self.expression()
 
 		return tree
 

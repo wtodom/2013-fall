@@ -13,9 +13,9 @@ class Evaluator:
 
 	def eval(self, tree, env):
 		t = tree.token_type
-		if t == "NUMBER":
-			# print("In eval('NUMBER')")
-			# print(tree.value)
+		if t == "SHOW":
+			return self.eval_show(tree, env)
+		elif t == "NUMBER":
 			return tree.value
 		elif t == "STRING":
 			return tree.value
@@ -30,7 +30,6 @@ class Evaluator:
 		elif t == "MULTIPLY":
 			return self.eval_divide(tree, env)
 		elif t == "STATEMENTS":
-			# print("In eval('STATEMENTS')")
 			return self.eval_statements(tree, env)
 		elif t == "BOOLEAN_EXPRESSION":
 			return self.eval_boolean_expression(tree, env)
@@ -47,9 +46,10 @@ class Evaluator:
 		else:
 			raise EvaluationException(t)
 
+	def eval_show(self, tree, env):
+		print(self.eval(tree.left, env))
+
 	def eval_plus(self, tree, env):
-		# print(tree)
-		print(self.eval(tree.left, env) + self.eval(tree.right, env))
 		return self.eval(tree.left, env) + self.eval(tree.right, env)
 
 	def eval_minus(self, tree, env):
@@ -133,14 +133,13 @@ class Evaluator:
 	def eval_args(self, args, env):
 		pass
 
-
 if __name__ == '__main__':
 
 	if len(sys.argv) != 2:
 		sys.exit("Usage: python3 evaluator.py sourceFile")
 
 	e = Evaluator()
-	env = Environment().env_list
+	env = e.base_env.env_list
 	p = Parser()
 	p.l = Lexer(sys.argv[1])
 	t = p.parse().right.left

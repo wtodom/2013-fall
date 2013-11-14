@@ -42,6 +42,7 @@ assignment: SET variable TO expr
 expr: OPEN_PARENTHESIS expr operator expr CLOSE_PARENTHESIS
 	| primary
 	| functionCall
+	| SHOW expr
 
 primary: VARIABLE
 	   | NUMBER

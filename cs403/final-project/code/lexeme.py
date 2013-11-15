@@ -12,3 +12,11 @@ class Lexeme:
 			return str(self.token_type) + ": " + str(self.value)
 		else:
 			return str(self.token_type)
+
+	def __eq__(self, other):
+		return (
+			self.token_type == other.token_type and
+			self.value == other.value and
+			self.left == other.left and
+			self.right == other.right
+		)

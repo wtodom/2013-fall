@@ -14,6 +14,9 @@ class Lexeme:
 			return str(self.token_type)
 
 	def __eq__(self, other):
+		"""
+		Returns True if all properties are equal, False otherwise.
+		"""
 		return (
 			self.token_type == other.token_type and
 			self.value == other.value and

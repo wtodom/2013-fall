@@ -1,6 +1,6 @@
 (include "assign3.scm")
 
-(println "Test Script: VERSION 1\n")
+(println "Test Script: VERSION 2\n")
 
 (define (scadr s) (stream-car (stream-cdr s)))
 (define (scaddr s) (stream-car (stream-cdr (stream-cdr s))))
@@ -85,8 +85,8 @@
         (define output-xor (make-wire))
         (define output-xnor (make-wire))
         
-        (xor input-1 input-2 output-xor)
-        (xnor input-1 input-2 output-xnor)
+        (xor-gate input-1 input-2 output-xor)
+        (xnor-gate input-1 input-2 output-xnor)
 
         (print "xor:  0 0 -> ")
         (set-signal! input-1 0)

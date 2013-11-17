@@ -22,13 +22,25 @@ class Evaluator:
 		elif t == "VARIABLE":
 			return self.base_env.lookup(tree, env)
 		elif t == "PLUS":
-			return self.eval_plus(tree, env)
+			return Lexeme(
+				token_type="NUMBER",
+				value=self.eval_plus(tree, env)
+			)
 		elif t == "MINUS":
-			return self.eval_minus(tree, env)
+			return Lexeme(
+				token_type="NUMBER",
+				value=self.eval_minus(tree, env)
+			)
 		elif t == "DIVIDE":
-			return self.eval_multiply(tree, env)
+			return Lexeme(
+				token_type="NUMBER",
+				value=self.eval_multiply(tree, env)
+			)
 		elif t == "MULTIPLY":
-			return self.eval_divide(tree, env)
+			return Lexeme(
+				token_type="NUMBER",
+				value=self.eval_divide(tree, env)
+			)
 		elif t == "STATEMENTS":
 			return self.eval_statements(tree, env)
 		elif t == "BOOLEAN_EXPRESSION":
@@ -44,22 +56,46 @@ class Evaluator:
 		elif t == "FUNCTION_CALL":
 			return self.eval_function_call(tree, env)
 		else:
-			raise EvaluationException(t)
+			raise EvaluationException(tree)
 
 	def eval_show(self, tree, env):
 		print(self.eval(tree.left, env))
 
 	def eval_plus(self, tree, env):
-		return self.eval(tree.left, env) + self.eval(tree.right, env)
+		left = tree.left
+		right = tree.right
+		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+			left = self.eval(left, env)
+		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+			right = self.eval(right, env)
+		return self.eval(left, env) + self.eval(right, env)
 
 	def eval_minus(self, tree, env):
-		return self.eval(tree.left, env) - self.eval(tree.right, env)
+		left = tree.left
+		right = tree.right
+		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+			left = self.eval(left, env)
+		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+			right = self.eval(right, env)
+		return self.eval(left, env) - self.eval(right, env)
 
 	def eval_multiply(self, tree, env):
-		return int(self.eval(tree.left, env) / self.eval(tree.right, env))
+		left = tree.left
+		right = tree.right
+		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+			left = self.eval(left, env)
+		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+			right = self.eval(right, env)
+		return self.eval(left, env) * self.eval(right, env)
 
 	def eval_divide(self, tree, env):
-		return self.eval(tree.left, env) * self.eval(tree.right, env)
+		left = tree.left
+		right = tree.right
+		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+			left = self.eval(left, env)
+		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+			right = self.eval(right, env)
+		return int(self.eval(left, env) / self.eval(right, env))
 
 	def eval_statements(self, tree, env):
 		while tree:
@@ -84,11 +120,17 @@ class Evaluator:
 	def eval_assignment(self, tree, env):
 		var = tree.left
 		val = tree.right
-		# value = self.eval(tree.right, env)
-		if self.base_env.lookup(val, env):
+		if (val.token_type != "NUMBER" and
+			val.token_type != "BOOLEAN" and
+			val.token_type != "STRING"
+			):
+			val = self.eval(tree.right, env)
+		if self.base_env.lookup(var, env) is not None:
+			print("Updating " + str(var) + " to " + str(val))
 			self.base_env.update(var, val, env)
 		else:
-			self.base_env.insert(tree.left, tree.right, env)
+			print("Inserting " + str(var) + " with value " + str(val))
+			self.base_env.insert(var, val, env)
 
 	def eval_if_statement(self, tree, env):
 		if self.eval(tree.left, env):
@@ -102,7 +144,7 @@ class Evaluator:
 		self.base_env.insert(self.get_function_def_name(tree), closure, env)
 
 	def eval_function_call(self, tree, env):
-		closure = eval(self.get_function_call_name(tree), env)
+		closure = self.eval(self.get_function_call_name(tree), env)
 		args = self.get_func_call_args(tree)
 		params = self.get_closure_params(closure)
 		body = self.get_closure_body(closure)
@@ -113,7 +155,7 @@ class Evaluator:
 		return eval(body, xenv)
 
 	def get_function_def_name(self, tree):
-		return tree.left.value
+		return tree.left
 
 	def get_function_call_name(self, tree):
 		return tree.value
@@ -142,9 +184,9 @@ if __name__ == '__main__':
 	env = e.base_env.env_list
 	p = Parser()
 	p.l = Lexer(sys.argv[1])
-	t = p.parse().right.left
+	t = p.parse().right
 	# tv = TreeViz("test", t)
 	# tv.viz()
 	# tv.create_image()
 	# tv.open_image()
-	e.eval(t, env)
+	e.eval(t.left, env)

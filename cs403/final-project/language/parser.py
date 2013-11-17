@@ -27,10 +27,10 @@ class Parser:
 		if self._debug: print("###############################")
 		if self._debug: print("### Parsing was successful. ###")
 		if self._debug: print("###############################")
-		v = tv.TreeViz(sys.argv[-1][3:-5], tree)
-		v.viz()
-		v.create_image()
-		v.open_image()
+		# v = tv.TreeViz(sys.argv[-1][3:-5], tree)
+		# v.viz()
+		# v.create_image()
+		# v.open_image()
 
 		return tree
 

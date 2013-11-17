@@ -30,3 +30,14 @@ class UndefinedException(Error):
 
 	def __init__(self, variable):
 		self.variable = variable
+
+class EvaluationException(Error):
+	"""
+	~Todo~
+
+	Attributes:
+		node_type -- the type of the referenced node
+	"""
+
+	def __init__(self, node_type):
+		self.node_type = node_type

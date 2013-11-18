@@ -1,6 +1,9 @@
 add:
 	python3 -B evaluator.py ../add.para
 
+cond2:
+	python3 -B evaluator.py ../paragraph-code/cond2.para
+
 hello:
 	python3 -B evaluator.py ../printHello.para
 

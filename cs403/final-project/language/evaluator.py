@@ -1,5 +1,5 @@
 from environment import Environment
-from exceptions import EvaluationException, UndefinedException
+from exceptions import EvaluationException, TypeException, UndefinedException
 from parser import Parser
 from lexer import Lexer, Lexeme
 from treeviz import TreeViz
@@ -50,6 +50,17 @@ class Evaluator:
 			raise EvaluationException(tree)
 
 	def eval_show(self, tree, env):
+		### This doesn't work, but it's kind what I'm thinking.
+		### I only want to print literal values, not Lexemes.
+		### Will figure it out later.
+		# var = tree.left
+		# while (
+		# 	type(var) is Lexeme and
+		# 	var.token_type != "NUMBER" and
+		# 	var.token_type != "STRING" and
+		# 	var.token_type != "BOOLEAN"
+		# 	):
+		# 	var = self.eval(var, env)
 		print(self.eval(tree.left, env))
 
 	def eval_plus(self, tree, env):
@@ -152,18 +163,58 @@ class Evaluator:
 
 	def eval_boolean_expression(self, tree, env):
 		op = tree.left.token_type
+		left = tree.right.left
+		right = tree.right.right
+
+		# make sure they're either number or variable Lexemes
+		if (left.token_type != "NUMBER" and
+			left.token_type != "VARIABLE" and
+			right.token_type != "NUMBER" and
+			right.token_type != "VARIABLE"
+			):
+			raise TypeException(
+				[left.token_type, right.token_type],
+				["Lexeme: NUMBER", "Lexeme: NUMBER"]
+				)
+
+		# reduce them down to literals
+		while not self.is_literal(left):
+			left = self.eval(left, env)
+		while not self.is_literal(right):
+			right = self.eval(right, env)
+
+		# make sure those literals are ints
+		if not isinstance(left, int) or not isinstance(right, int):
+			raise TypeException(
+				[type(left), type(right)],
+				["Lexeme: NUMBER", "Lexeme: NUMBER"]
+				)
+
+		# compare
 		if op == "LESS_THAN":
-			return self.eval(tree.right.left) < self.eval(tree.right.right)
+			return left < right
+
 		elif op == "GREATER_THAN":
-			return self.eval(tree.right.left) > self.eval(tree.right.right)
+			return left > right
+
 		elif op == "LESS_THAN_EQUAL":
-			return self.eval(tree.right.left) <= self.eval(tree.right.right)
+			return left <= right
+
 		elif op == "GREATER_THAN_EQUAL":
-			return self.eval(tree.right.left) >= self.eval(tree.right.right)
+			return left >= right
+
 		elif op == "NOT_EQUAL":
-			return self.eval(tree.right.left) != self.eval(tree.right.right)
+			return left != right
+
 		elif op == "DOUBLE_EQUALS":
-			return self.eval(tree.right.left) == self.eval(tree.right.right)
+			return left == right
+
+	def is_literal(self, thing):
+		return (
+			isinstance(thing, int) or
+			isinstance(thing, str) or
+			isinstance(thing, bool)
+			)
 
 	def eval_assignment(self, tree, env):
 		var = tree.left
@@ -180,9 +231,6 @@ class Evaluator:
 		except UndefinedException:
 			if self._debug: print("Inserting " + str(var) + " with value " + str(val))
 			self.base_env.insert(var, val, env)
-		# if self.base_env.lookup(var, env) is not None:
-		# else:
-
 
 	def eval_if_statement(self, tree, env):
 		# print(tree)

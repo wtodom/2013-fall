@@ -41,3 +41,22 @@ class EvaluationException(Error):
 
 	def __init__(self, node_type):
 		self.node_type = node_type
+
+class TypeException(Error):
+	"""
+	~Todo~
+
+	Attributes:
+		node_type -- the type of the referenced node
+	"""
+
+	def __init__(self, types_received, types_expected):
+		self.received = types_received
+		self.expected = types_expected
+
+	def __str__(self):
+		msg = "Received type(s) {1} but expected {2}.".format(
+			self.received,
+			self.expected
+			)
+		return msg

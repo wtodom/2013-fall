@@ -46,6 +46,8 @@ class Evaluator:
 			return self.eval_while_statement(tree, env)
 		elif t == "FUNCTION_CALL":
 			return self.eval_function_call(tree, env)
+		elif t == "PROGRAM":
+			return self.eval(tree.right.left, env)
 		else:
 			raise EvaluationException(tree)
 
@@ -287,9 +289,9 @@ if __name__ == '__main__':
 	env = e.base_env.env_list
 	p = Parser()
 	p.l = Lexer(sys.argv[1])
-	t = p.parse().right
+	t = p.parse()
 	# tv = TreeViz("test", t)
 	# tv.viz()
 	# tv.create_image()
 	# tv.open_image()
-	e.eval(t.left, env)
+	e.eval(t, env)

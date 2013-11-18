@@ -24,9 +24,10 @@ class EnvironmentTest(unittest.TestCase):
 		env = e.env_list
 		var = Lexeme(token_type="VARIABLE", value="x")
 		val = Lexeme(token_type="NUMBER", value=5)
+		new_val = Lexeme(token_type="NUMBER", value=10)
 		e.insert(var, val, env)
 		self.assertEqual(e.lookup(var, env), 5)
-		e.update(var, 10, env)
+		e.update(var, new_val, env)
 		self.assertEqual(e.lookup(var, env), 10)
 
 	def test_extend(self):

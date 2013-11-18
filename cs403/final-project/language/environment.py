@@ -5,6 +5,7 @@ from treeviz import TreeViz
 class Environment:
 
 	def __init__(self):
+		self._debug = False
 		self.env_list = self.create()
 
 	def create(self):
@@ -20,6 +21,7 @@ class Environment:
 			env_list -- The Environment list into which to begin the
 						the variable.
 		"""
+		if self._debug: print("Looking up -> " + str(variable))
 		head = env_list.left
 		while head is not None:
 			var = head.left
@@ -30,7 +32,6 @@ class Environment:
 				var = var.right
 				val = val.right
 			head = head.right
-
 
 		return None
 
@@ -43,23 +44,25 @@ class Environment:
 			variable -- A VARIABLE type Lexeme object with the variable's
 						name as its value.
 
-			new_val  -- A literal value that will be assigned
-						to the Lexeme associated with variable.
+			new_val  -- A NUMBER, BOOLEAN, or STRING type Lexeme object
+						with the variable's value as its value.
 
 			env_list -- The Environment list in which to update
 						the variable.
 		"""
+		if self._debug: print(str(variable))
+		if self._debug: print(str(new_val))
 		head = env_list.left
 		var = head.left
 		val = head.right
 		while var:
 			if var.value == variable.value:
-				val.value = new_val
+				val.value = new_val.value
 				return
 			var = var.right
 			val = val.right
 
-		raise UndefinedException(variable)
+		raise UndefinedException(str(variable) + " is undefined.")
 		return None
 
 	def insert(self, variable, value, env_list):
@@ -77,6 +80,10 @@ class Environment:
 			env_list -- The Environment list into which to insert
 						the variable.
 		"""
+		if self._debug: print(
+			"Inserting variable [" + str(variable) + "]")
+		if self._debug: print(
+			"        with value [" + str(value) + "].")
 		head = env_list.left
 		variable.right = head.left
 		value.right = head.right
@@ -100,6 +107,7 @@ class Environment:
 			parent_env 	-- The Environment list that the new environment
 						   should be attached to.
 		"""
+		if self._debug: print("In extend().")
 		glue = Lexeme(token_type="GLUE", left=variables, right=values)
 		env = Lexeme(token_type="ENVIRONMENT", left=glue, right=parent_env)
 

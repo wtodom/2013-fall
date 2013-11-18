@@ -1,17 +1,17 @@
-eval:
+add:
 	python3 -B evaluator.py ../add.para
 
 hello:
-	python3 -B parser.py ../printHello.para
+	python3 -B evaluator.py ../printHello.para
 
 cond:
-	python3 -B parser.py ../conditional.para
+	python3 -B evaluator.py ../conditional.para
 
 sort:
-	python3 -B parser.py ../bubblesort.para
+	python3 -B evaluator.py ../bubblesort.para
 
 loops:
-	python3 -B parser.py ../loops.para
+	python3 -B evaluator.py ../loops.para
 
 test:
 	python3 -B tests.py -v

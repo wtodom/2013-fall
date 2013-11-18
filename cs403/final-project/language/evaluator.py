@@ -19,28 +19,18 @@ class Evaluator:
 			return tree.value
 		elif t == "STRING":
 			return tree.value
+		elif t == "BOOLEAN":
+			return tree.value
 		elif t == "VARIABLE":
 			return self.base_env.lookup(tree, env)
 		elif t == "PLUS":
-			return Lexeme(
-				token_type="NUMBER",
-				value=self.eval_plus(tree, env)
-			)
+			return self.eval_plus(tree, env)
 		elif t == "MINUS":
-			return Lexeme(
-				token_type="NUMBER",
-				value=self.eval_minus(tree, env)
-			)
+			return self.eval_minus(tree, env)
 		elif t == "DIVIDE":
-			return Lexeme(
-				token_type="NUMBER",
-				value=self.eval_multiply(tree, env)
-			)
+			return self.eval_divide(tree, env)
 		elif t == "MULTIPLY":
-			return Lexeme(
-				token_type="NUMBER",
-				value=self.eval_divide(tree, env)
-			)
+			return self.eval_multiply(tree, env)
 		elif t == "STATEMENTS":
 			return self.eval_statements(tree, env)
 		elif t == "BOOLEAN_EXPRESSION":
@@ -59,43 +49,140 @@ class Evaluator:
 			raise EvaluationException(tree)
 
 	def eval_show(self, tree, env):
+		# tv = TreeViz("show", tree)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		print(self.eval(tree.left, env))
 
 	def eval_plus(self, tree, env):
 		left = tree.left
 		right = tree.right
-		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# print("Left,  pre eval:  " + str(left))
+		# print("Right, pre eval:  " + str(right))
+
+		lt = left.token_type
+		rt = right.token_type
+		if lt == "VARIABLE":
+			left = self.base_env.lookup(left, env)
+		else:
 			left = self.eval(left, env)
-		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		if rt == "VARIABLE":
+			right = self.base_env.lookup(right, env)
+		else:
 			right = self.eval(right, env)
-		return self.eval(left, env) + self.eval(right, env)
+
+		# # Get them down to primary lexemes
+		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# 	left = self.eval(left, env)
+		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		# 	right = self.eval(right, env)
+
+		# # eval once more to make the literal numbers
+		# left = self.eval(left, env)
+		# right = self.eval(right, env)
+		# print("Left,  post eval: " + str(left))
+		# print("Right, post eval: " + str(right))
+
+		added = left + right
+		return Lexeme(token_type="NUMBER", value=added)
 
 	def eval_minus(self, tree, env):
 		left = tree.left
 		right = tree.right
-		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# print("Left,  pre eval:  " + str(left))
+		# print("Right, pre eval:  " + str(right))
+
+		lt = left.token_type
+		rt = right.token_type
+		if lt == "VARIABLE":
+			left = self.base_env.lookup(left, env)
+		else:
 			left = self.eval(left, env)
-		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		if rt == "VARIABLE":
+			right = self.base_env.lookup(right, env)
+		else:
 			right = self.eval(right, env)
-		return self.eval(left, env) - self.eval(right, env)
+
+		# # Get them down to primary lexemes
+		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# 	left = self.eval(left, env)
+		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		# 	right = self.eval(right, env)
+
+		# # eval once more to make the literal numbers
+		# left = self.eval(left, env)
+		# right = self.eval(right, env)
+		# print("Left,  post eval: " + str(left))
+		# print("Right, post eval: " + str(right))
+
+		difference = left - right
+		return Lexeme(token_type="NUMBER", value=difference)
 
 	def eval_multiply(self, tree, env):
 		left = tree.left
 		right = tree.right
-		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# print("Left,  pre eval:  " + str(left))
+		# print("Right, pre eval:  " + str(right))
+
+		lt = left.token_type
+		rt = right.token_type
+		if lt == "VARIABLE":
+			left = self.base_env.lookup(left, env)
+		else:
 			left = self.eval(left, env)
-		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		if rt == "VARIABLE":
+			right = self.base_env.lookup(right, env)
+		else:
 			right = self.eval(right, env)
-		return self.eval(left, env) * self.eval(right, env)
+
+		# # Get them down to primary lexemes
+		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# 	left = self.eval(left, env)
+		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		# 	right = self.eval(right, env)
+
+		# # eval once more to make the literal numbers
+		# left = self.eval(left, env)
+		# right = self.eval(right, env)
+		# print("Left,  post eval: " + str(left))
+		# print("Right, post eval: " + str(right))
+
+		product = left * right
+		return Lexeme(token_type="NUMBER", value=product)
 
 	def eval_divide(self, tree, env):
 		left = tree.left
 		right = tree.right
-		if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# print("Left,  pre eval:  " + str(left))
+		# print("Right, pre eval:  " + str(right))
+
+		lt = left.token_type
+		rt = right.token_type
+		if lt == "VARIABLE":
+			left = self.base_env.lookup(left, env)
+		else:
 			left = self.eval(left, env)
-		if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		if rt == "VARIABLE":
+			right = self.base_env.lookup(right, env)
+		else:
 			right = self.eval(right, env)
-		return int(self.eval(left, env) / self.eval(right, env))
+
+		# # Get them down to primary lexemes
+		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
+		# 	left = self.eval(left, env)
+		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
+		# 	right = self.eval(right, env)
+
+		# # eval once more to make the literal numbers
+		# left = self.eval(left, env)
+		# right = self.eval(right, env)
+		# print("Left,  post eval: " + str(left))
+		# print("Right, post eval: " + str(right))
+
+		# integer division since i'm not implementing reals
+		quotient = left // right
+		return Lexeme(token_type="NUMBER", value=quotient)
 
 	def eval_statements(self, tree, env):
 		while tree:
@@ -124,7 +211,9 @@ class Evaluator:
 			val.token_type != "BOOLEAN" and
 			val.token_type != "STRING"
 			):
+			print("pre eval: " + str(val))
 			val = self.eval(tree.right, env)
+			print("post eval: " + str(val))
 		if self.base_env.lookup(var, env) is not None:
 			print("Updating " + str(var) + " to " + str(val))
 			self.base_env.update(var, val, env)

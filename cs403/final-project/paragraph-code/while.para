@@ -1,0 +1,17 @@
+show "";
+show "Setting a to 1 to start.";
+set a to 1;
+
+show "";
+
+show "a is:";
+show a;
+
+show "";
+
+show "Counting to 10:";
+while a is <= 10,
+	show "a is:";
+	show a;
+	set a to (a + 1);
+	.

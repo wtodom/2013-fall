@@ -1,4 +1,0 @@
-to testAssignment:
-	Set x to 5;
-	show x;
-	.

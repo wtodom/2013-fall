@@ -1,0 +1,7 @@
+to test_assignment_with x:
+	show x;
+	Set x to (x + 1);
+	show x;
+	.
+
+^ test_assignment_with(5);

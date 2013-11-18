@@ -1,5 +1,8 @@
 add:
-	python3 -B evaluator.py ../add.para
+	python3 -B evaluator.py ../paragraph-code/add.para
+
+func:
+	python3 -B evaluator.py ../paragraph-code/function.para
 
 cond2:
 	python3 -B evaluator.py ../paragraph-code/cond2.para
@@ -8,16 +11,16 @@ while:
 	python3 -B evaluator.py ../paragraph-code/while.para
 
 hello:
-	python3 -B evaluator.py ../printHello.para
+	python3 -B evaluator.py ../paragraph-code/printHello.para
 
 cond:
-	python3 -B evaluator.py ../conditional.para
+	python3 -B evaluator.py ../paragraph-code/conditional.para
 
 sort:
-	python3 -B evaluator.py ../bubblesort.para
+	python3 -B evaluator.py ../paragraph-code/bubblesort.para
 
 loops:
-	python3 -B evaluator.py ../loops.para
+	python3 -B evaluator.py ../paragraph-code/loops.para
 
 test:
 	python3 -B tests.py -v

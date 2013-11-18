@@ -245,7 +245,7 @@ class Parser:
 	def whileStatement(self):
 		if self._debug: print(" in whileStatement")
 		self.match("WHILE")
-		tree = Lexeme(token_type="IF_STATEMENT")
+		tree = Lexeme(token_type="WHILE_STATEMENT")
 		tree.left = self.booleanExpression()
 		self.match("COMMA")
 		tree.right = self.block()

@@ -233,16 +233,14 @@ class Evaluator:
 			self.base_env.insert(var, val, env)
 
 	def eval_if_statement(self, tree, env):
-		# print(tree)
-		# print(tree.left)
-		# print(tree.right)
 		if self.eval(tree.left, env):
 			self.eval(tree.right.left, env)
 		elif tree.right.right:
 			self.eval(tree.right.right, env)
 
 	def eval_while_statement(self, tree, env):
-		pass
+		while self.eval(tree.left, env):
+			self.eval(tree.right, env)
 
 	def eval_function_def(self, tree, env):
 		closure = Lexeme(token_type="CLOSURE", left=env, right=tree)

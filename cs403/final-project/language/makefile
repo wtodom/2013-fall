@@ -4,6 +4,9 @@ add:
 cond2:
 	python3 -B evaluator.py ../paragraph-code/cond2.para
 
+while:
+	python3 -B evaluator.py ../paragraph-code/while.para
+
 hello:
 	python3 -B evaluator.py ../printHello.para
 

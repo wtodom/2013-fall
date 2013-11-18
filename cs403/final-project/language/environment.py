@@ -33,7 +33,7 @@ class Environment:
 				val = val.right
 			head = head.right
 
-		return None
+		raise UndefinedException(variable)
 
 	def update(self, variable, new_val, env_list):
 		"""

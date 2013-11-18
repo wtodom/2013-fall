@@ -1,5 +1,5 @@
 from environment import Environment
-from exceptions import EvaluationException
+from exceptions import EvaluationException, UndefinedException
 from parser import Parser
 from lexer import Lexer, Lexeme
 from treeviz import TreeViz
@@ -173,16 +173,25 @@ class Evaluator:
 			val.token_type != "STRING"
 			):
 			val = self.eval(tree.right, env)
-		if self.base_env.lookup(var, env) is not None:
+		try:
+			self.base_env.lookup(var, env)
 			if self._debug: print("Updating " + str(var) + " to " + str(val))
 			self.base_env.update(var, val, env)
-		else:
+		except UndefinedException:
 			if self._debug: print("Inserting " + str(var) + " with value " + str(val))
 			self.base_env.insert(var, val, env)
+		# if self.base_env.lookup(var, env) is not None:
+		# else:
+
 
 	def eval_if_statement(self, tree, env):
+		# print(tree)
+		# print(tree.left)
+		# print(tree.right)
 		if self.eval(tree.left, env):
-			self.eval(tree.right, env)
+			self.eval(tree.right.left, env)
+		elif tree.right.right:
+			self.eval(tree.right.right, env)
 
 	def eval_while_statement(self, tree, env):
 		pass

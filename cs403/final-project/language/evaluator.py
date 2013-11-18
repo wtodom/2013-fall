@@ -9,6 +9,7 @@ import sys
 class Evaluator:
 
 	def __init__(self):
+		self._debug = False
 		self.base_env = Environment()
 
 	def eval(self, tree, env):
@@ -49,17 +50,13 @@ class Evaluator:
 			raise EvaluationException(tree)
 
 	def eval_show(self, tree, env):
-		# tv = TreeViz("show", tree)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		print(self.eval(tree.left, env))
 
 	def eval_plus(self, tree, env):
 		left = tree.left
 		right = tree.right
-		# print("Left,  pre eval:  " + str(left))
-		# print("Right, pre eval:  " + str(right))
+		if self._debug: print("Left,  pre eval:  " + str(left))
+		if self._debug: print("Right, pre eval:  " + str(right))
 
 		lt = left.token_type
 		rt = right.token_type
@@ -72,17 +69,8 @@ class Evaluator:
 		else:
 			right = self.eval(right, env)
 
-		# # Get them down to primary lexemes
-		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
-		# 	left = self.eval(left, env)
-		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
-		# 	right = self.eval(right, env)
-
-		# # eval once more to make the literal numbers
-		# left = self.eval(left, env)
-		# right = self.eval(right, env)
-		# print("Left,  post eval: " + str(left))
-		# print("Right, post eval: " + str(right))
+		if self._debug: print("Left,  post eval: " + str(left))
+		if self._debug: print("Right, post eval: " + str(right))
 
 		added = left + right
 		return Lexeme(token_type="NUMBER", value=added)
@@ -90,8 +78,8 @@ class Evaluator:
 	def eval_minus(self, tree, env):
 		left = tree.left
 		right = tree.right
-		# print("Left,  pre eval:  " + str(left))
-		# print("Right, pre eval:  " + str(right))
+		if self._debug: print("Left,  pre eval:  " + str(left))
+		if self._debug: print("Right, pre eval:  " + str(right))
 
 		lt = left.token_type
 		rt = right.token_type
@@ -104,17 +92,8 @@ class Evaluator:
 		else:
 			right = self.eval(right, env)
 
-		# # Get them down to primary lexemes
-		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
-		# 	left = self.eval(left, env)
-		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
-		# 	right = self.eval(right, env)
-
-		# # eval once more to make the literal numbers
-		# left = self.eval(left, env)
-		# right = self.eval(right, env)
-		# print("Left,  post eval: " + str(left))
-		# print("Right, post eval: " + str(right))
+		if self._debug: print("Left,  post eval: " + str(left))
+		if self._debug: print("Right, post eval: " + str(right))
 
 		difference = left - right
 		return Lexeme(token_type="NUMBER", value=difference)
@@ -122,8 +101,8 @@ class Evaluator:
 	def eval_multiply(self, tree, env):
 		left = tree.left
 		right = tree.right
-		# print("Left,  pre eval:  " + str(left))
-		# print("Right, pre eval:  " + str(right))
+		if self._debug: print("Left,  pre eval:  " + str(left))
+		if self._debug: print("Right, pre eval:  " + str(right))
 
 		lt = left.token_type
 		rt = right.token_type
@@ -136,17 +115,8 @@ class Evaluator:
 		else:
 			right = self.eval(right, env)
 
-		# # Get them down to primary lexemes
-		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
-		# 	left = self.eval(left, env)
-		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
-		# 	right = self.eval(right, env)
-
-		# # eval once more to make the literal numbers
-		# left = self.eval(left, env)
-		# right = self.eval(right, env)
-		# print("Left,  post eval: " + str(left))
-		# print("Right, post eval: " + str(right))
+		if self._debug: print("Left,  post eval: " + str(left))
+		if self._debug: print("Right, post eval: " + str(right))
 
 		product = left * right
 		return Lexeme(token_type="NUMBER", value=product)
@@ -154,8 +124,8 @@ class Evaluator:
 	def eval_divide(self, tree, env):
 		left = tree.left
 		right = tree.right
-		# print("Left,  pre eval:  " + str(left))
-		# print("Right, pre eval:  " + str(right))
+		if self._debug: print("Left,  pre eval:  " + str(left))
+		if self._debug: print("Right, pre eval:  " + str(right))
 
 		lt = left.token_type
 		rt = right.token_type
@@ -168,17 +138,8 @@ class Evaluator:
 		else:
 			right = self.eval(right, env)
 
-		# # Get them down to primary lexemes
-		# if left.token_type != "NUMBER" and left.token_type != "VARIABLE":
-		# 	left = self.eval(left, env)
-		# if right.token_type != "NUMBER" and right.token_type != "VARIABLE":
-		# 	right = self.eval(right, env)
-
-		# # eval once more to make the literal numbers
-		# left = self.eval(left, env)
-		# right = self.eval(right, env)
-		# print("Left,  post eval: " + str(left))
-		# print("Right, post eval: " + str(right))
+		if self._debug: print("Left,  post eval: " + str(left))
+		if self._debug: print("Right, post eval: " + str(right))
 
 		# integer division since i'm not implementing reals
 		quotient = left // right
@@ -211,14 +172,12 @@ class Evaluator:
 			val.token_type != "BOOLEAN" and
 			val.token_type != "STRING"
 			):
-			print("pre eval: " + str(val))
 			val = self.eval(tree.right, env)
-			print("post eval: " + str(val))
 		if self.base_env.lookup(var, env) is not None:
-			print("Updating " + str(var) + " to " + str(val))
+			if self._debug: print("Updating " + str(var) + " to " + str(val))
 			self.base_env.update(var, val, env)
 		else:
-			print("Inserting " + str(var) + " with value " + str(val))
+			if self._debug: print("Inserting " + str(var) + " with value " + str(val))
 			self.base_env.insert(var, val, env)
 
 	def eval_if_statement(self, tree, env):

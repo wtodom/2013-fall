@@ -1,3 +1,6 @@
+all:
+	echo "My language doesn't require compilation/building."
+
 add:
 	python3 -B evaluator.py ../paragraph-code/add.para
 
@@ -22,7 +25,7 @@ sort:
 loops:
 	python3 -B evaluator.py ../paragraph-code/loops.para
 
-test:
+tests:
 	python3 -B tests.py -v
 
 clean:

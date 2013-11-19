@@ -1,0 +1,221 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~ loops ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+show "";
+show "Feature: Loops";
+
+set code to "while a is <= 10,
+	show 'a is:';
+	show a;
+	set a to (a + 1);
+	.";
+
+show "~ code for this section ~";
+show "";
+show code;
+show "";
+
+show "~ demo ~";
+show "Setting a to 1 to start.";
+set a to 1;
+
+show "";
+
+show "a is:";
+show a;
+
+show "";
+show "Counting to 10:";
+
+while a is <= 10,
+	show "a is:";
+	show a;
+	set a to (a + 1);
+	.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~ conditionals ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+show "";
+show "Feature: Conditionals";
+show "";
+
+set code to "if a is > 0,
+	show 'a was > 0.';
+	.
+otherwise, if a is >= 0,
+	show 'a was >= 0.';
+	.
+otherwise,
+	show 'a was < 0.';
+	.
+
+if b is == (5 - c),
+	show 'b was == (5 - c).';
+	.
+
+if c is < 100,
+	show 'c was < 100.';
+	.
+otherwise,
+	show 'c was not < 100';
+	.";
+
+show "~ code for this section ~";
+show code;
+
+show "";
+show "";
+show "Initial variable values:";
+show "";
+
+set a to 0;
+set b to (0 - 5);
+set c to 10;
+
+show "a:";
+show a;
+show "b:";
+show b;
+show "c:";
+show c;
+
+~ Now run the code. ~
+
+show "";
+show "Output: ";
+show "";
+if a is > 0,
+	show "a was > 0.";
+	.
+otherwise, if a is >= 0,
+	show "a was >= 0.";
+	.
+otherwise,
+	show "a was < 0.";
+	.
+
+if b is == (5 - c),
+	show "b was == (5 - c).";
+	.
+
+if c is < 100,
+	show "c was < 100.";
+	.
+otherwise,
+	show "c was not < 100";
+	.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~ arithmetic and variables ~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+show "";
+show "Feature: Arithmetic and Variables";
+show "";
+
+set code to "set x to 2;
+set y to 3;
+
+show 'x is:';
+show x;
+
+show 'y is:';
+show y;
+
+show 'x + y:';
+show (x + y);
+
+show 'x:';
+show x;
+show 'y:';
+show y;
+
+show 'x * y:';
+show (x * y);
+
+show 'setting x to x * y...';
+set x to (x * y);
+
+show 'x is now: ';
+show x;
+
+show 'x + y:';
+show (x + y);
+
+show 'setting y to y - x';
+set y to (y - x);
+
+show 'y:';
+show y;
+
+show 'declaring z with value: (x / y):';
+set z to (x / y);
+show 'z:';
+show z;
+
+show 'setting x to 4';
+set x to 4;
+
+show 'x:';
+show x;
+
+show '100 + x:';
+show (100 + x);";
+
+show "~ code for this section ~";
+show "";
+show code;
+show "";
+
+show "~ demo ~";
+
+set x to 2;
+set y to 3;
+
+show "x is:";
+show x;
+
+show "y is:";
+show y;
+
+show "x + y:";
+show (x + y);
+
+show "x:";
+show x;
+show "y:";
+show y;
+
+show "x * y:";
+show (x * y);
+
+show "setting x to x * y...";
+set x to (x * y);
+
+show "x is now: ";
+show x;
+
+show "x + y:";
+show (x + y);
+
+show "setting y to y - x";
+set y to (y - x);
+
+show "y:";
+show y;
+
+show "declaring z with value: (x / y):";
+set z to (x / y);
+show "z:";
+show z;
+
+show "setting x to 4";
+set x to 4;
+
+show "x:";
+show x;
+
+show "100 + x:";
+show (100 + x);

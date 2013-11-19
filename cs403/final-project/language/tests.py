@@ -1,6 +1,8 @@
 import unittest
 from environment import Environment
+from exceptions import UndefinedException
 from lexeme import Lexeme
+from treeviz import TreeViz
 
 
 class EnvironmentTest(unittest.TestCase):
@@ -9,7 +11,7 @@ class EnvironmentTest(unittest.TestCase):
 		e = Environment()
 		env = e.env_list
 		var = Lexeme(token_type="VARIABLE", value="x")
-		self.assertIsNone(e.lookup(var, env))
+		self.assertRaises(UndefinedException, e.lookup, var, env)
 
 	def test_insert(self):
 		e = Environment()
@@ -37,10 +39,18 @@ class EnvironmentTest(unittest.TestCase):
 		val = Lexeme(token_type="NUMBER", value=7)
 		var2 = Lexeme(token_type="VARIABLE", value="x", right=var)
 		val2 = Lexeme(token_type="NUMBER", value=5, right=val)
-		self.assertIsNone(e.lookup(var, env))
+
+		self.assertRaises(UndefinedException, e.lookup, var, env)
+
 		xenv = e.extend(var2, val2, env)
+
 		self.assertEqual(e.lookup(var, xenv), 7)
 		self.assertEqual(e.lookup(var2, xenv), 5)
+
+		tv = TreeViz("xenv", xenv)
+		tv.viz()
+		tv.create_image()
+		tv.open_image()
 
 if __name__ == '__main__':
 	unittest.main()

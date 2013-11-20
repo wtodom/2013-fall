@@ -149,7 +149,7 @@ class Parser:
 
 	def sequence(self):
 		if self._debug: print(" in sequence")
-		tree = Lexeme(token_type="LIST")
+		tree = Lexeme(token_type="GLUE")  # this will be attached to the "head" in my environment
 		tree.left = self.expression()
 		if self.check("AND"):
 			self.match("AND")
@@ -162,9 +162,7 @@ class Parser:
 			tracer = tmp
 			while tracer.right:
 				tracer = tracer.right
-			tmp2 = Lexeme(token_type="GLUE")
-			tmp2.left = self.expression()
-			tracer.right = tmp2
+			tracer.left = self.expression()
 			tree.right = tmp
 
 		return tree

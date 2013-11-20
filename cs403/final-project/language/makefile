@@ -29,5 +29,7 @@ tests:
 	python3 -B tests.py -v
 
 clean:
-	rm *.dot
-	rm *.png
+	rm -f *.dot
+	rm -f *.png
+	rm -f .DS_Store
+	rm -rf __pycache__

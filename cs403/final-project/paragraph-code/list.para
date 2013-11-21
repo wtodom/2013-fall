@@ -1,0 +1,19 @@
+to create_node_with value and next_pointer:
+	TODO;
+	.
+
+to get_value_of node:
+	TODO;
+	.
+
+to get_next node:
+	TODO;
+	.
+
+to set_value node and new_value:
+	TODO;
+	.
+
+to set_next_node_with node and new_next_node:
+	TODO;
+	.

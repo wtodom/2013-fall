@@ -70,7 +70,11 @@ class Evaluator:
 		### This version gives rudimentary printing.
 		print(self.eval(tree.left, env))
 
-	def eval_plus(self, tree, env):
+	def reduce_to_literals(self, tree, env):
+		"""
+		Returns a tuple containing the literals represented
+		by the parse tree.
+		"""
 		left = tree.left
 		right = tree.right
 		if self._debug: print("Left,  pre eval:  " + str(left))
@@ -85,60 +89,26 @@ class Evaluator:
 		if self._debug: print("Left,  post eval: " + str(left))
 		if self._debug: print("Right, post eval: " + str(right))
 
+		return (left, right)
+
+
+	def eval_plus(self, tree, env):
+		(left, right) = self.reduce_to_literals(tree, env)
 		added = left + right
 		return Lexeme(token_type="NUMBER", value=added)
 
 	def eval_minus(self, tree, env):
-		left = tree.left
-		right = tree.right
-		if self._debug: print("Left,  pre eval:  " + str(left))
-		if self._debug: print("Right, pre eval:  " + str(right))
-
-		# assumes integers.
-		while not isinstance(left, int):
-			left = self.eval(left, env)
-		while not isinstance(right, int):
-			right = self.eval(right, env)
-
-		if self._debug: print("Left,  post eval: " + str(left))
-		if self._debug: print("Right, post eval: " + str(right))
-
+		(left, right) = self.reduce_to_literals(tree, env)
 		difference = left - right
 		return Lexeme(token_type="NUMBER", value=difference)
 
 	def eval_multiply(self, tree, env):
-		left = tree.left
-		right = tree.right
-		if self._debug: print("Left,  pre eval:  " + str(left))
-		if self._debug: print("Right, pre eval:  " + str(right))
-
-		# assumes integers.
-		while not isinstance(left, int):
-			left = self.eval(left, env)
-		while not isinstance(right, int):
-			right = self.eval(right, env)
-
-		if self._debug: print("Left,  post eval: " + str(left))
-		if self._debug: print("Right, post eval: " + str(right))
-
+		(left, right) = self.reduce_to_literals(tree, env)
 		product = left * right
 		return Lexeme(token_type="NUMBER", value=product)
 
 	def eval_divide(self, tree, env):
-		left = tree.left
-		right = tree.right
-		if self._debug: print("Left,  pre eval:  " + str(left))
-		if self._debug: print("Right, pre eval:  " + str(right))
-
-		# assumes integers.
-		while not isinstance(left, int):
-			left = self.eval(left, env)
-		while not isinstance(right, int):
-			right = self.eval(right, env)
-
-		if self._debug: print("Left,  post eval: " + str(left))
-		if self._debug: print("Right, post eval: " + str(right))
-
+		(left, right) = self.reduce_to_literals(tree, env)
 		# integer division since i'm not implementing reals
 		quotient = left // right
 		return Lexeme(token_type="NUMBER", value=quotient)

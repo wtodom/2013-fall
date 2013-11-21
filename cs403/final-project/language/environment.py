@@ -27,13 +27,16 @@ class Environment:
 			var = head.left
 			val = head.right
 			while var is not None:
-				if var.value == variable.value:
-					return val.value
+				# var will point to a glue node. do .left to get the real node
+				if var.left.value == variable.value:
+					return val.left
 				var = var.right
 				val = val.right
-			head = head.right
+			if env_list.right is not None:
+				head = env_list.right.left
+			raise UndefinedException(str(variable))
 
-		raise UndefinedException(variable)
+		raise UndefinedException(str(variable))
 
 	def update(self, variable, new_val, env_list):
 		"""
@@ -56,8 +59,9 @@ class Environment:
 		var = head.left
 		val = head.right
 		while var:
-			if var.value == variable.value:
-				val.value = new_val.value
+			# var and val will point to glue nodes. do .left to get the real nodes
+			if var.left.value == variable.value:
+				val.left.value = new_val.value
 				return
 			var = var.right
 			val = val.right
@@ -84,11 +88,21 @@ class Environment:
 			"Inserting variable [" + str(variable) + "]")
 		if self._debug: print(
 			"        with value [" + str(value) + "].")
+
+		var_glue = Lexeme(token_type="GLUE", left=variable)
+		val_glue = Lexeme(token_type="GLUE", left=value)
+
 		head = env_list.left
-		variable.right = head.left
-		value.right = head.right
-		head.left = variable
-		head.right = value
+		var_glue.right = head.left
+		val_glue.right = head.right
+		head.left = var_glue
+		head.right = val_glue
+
+		# head = env_list.left
+		# variable.right = head.left
+		# value.right = head.right
+		# head.left = variable
+		# head.right = value
 
 	def extend(self, variables, values, parent_env):
 		"""
@@ -107,37 +121,7 @@ class Environment:
 			parent_env 	-- The Environment list that the new environment
 						   should be attached to.
 		"""
-		if self._debug: print("In extend().")
-		glue = Lexeme(token_type="GLUE", left=variables, right=values)
-		env = Lexeme(token_type="ENVIRONMENT", left=glue, right=parent_env)
+		head = Lexeme(token_type="GLUE", left=variables, right = values)
+		env = Lexeme(token_type="ENVIRONMENT", left=head, right=parent_env)
 
 		return env
-
-
-if __name__ == '__main__':
-
-	e = Environment()
-	env = e.env_list
-	# tv = TreeViz("env_pre", env)
-	# tv.viz()
-	# tv.create_image()
-	# tv.open_image()
-
-	print("Inserting variable x with value 5...")
-	var = Lexeme(token_type="VARIABLE", value="x")
-	val = Lexeme(token_type="NUMBER", value=5)
-	e.insert(var, val, env)
-	# tv = TreeViz("env_post", env)
-	# tv.viz()
-	# tv.create_image()
-	# tv.open_image()
-
-	print("Attempting to lookup the variable 'x'...")
-	print("x = " + str(e.lookup(var, env)))
-
-
-	print("Updating x to value: 999...")
-	e.update(var, 999, env)
-
-	print("Attempting to lookup the variable 'x' after update...")
-	print("x = " + str(e.lookup(var, env)))

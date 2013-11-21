@@ -47,7 +47,10 @@ class Evaluator:
 		elif t == "FUNCTION_CALL":
 			return self.eval_function_call(tree, env)
 		elif t == "PROGRAM":
-			return self.eval(tree.right.left, env)
+			# this may need adjustment depending on how various trees look.
+			self.eval(tree.right.left, env)
+			if tree.right.right.left:
+				self.eval(tree.right.right.left, env)
 		else:
 			raise EvaluationException(tree)
 
@@ -63,6 +66,8 @@ class Evaluator:
 		# 	var.token_type != "BOOLEAN"
 		# 	):
 		# 	var = self.eval(var, env)
+
+		### This version gives rudimentary printing.
 		print(self.eval(tree.left, env))
 
 	def eval_plus(self, tree, env):
@@ -71,15 +76,10 @@ class Evaluator:
 		if self._debug: print("Left,  pre eval:  " + str(left))
 		if self._debug: print("Right, pre eval:  " + str(right))
 
-		lt = left.token_type
-		rt = right.token_type
-		if lt == "VARIABLE":
-			left = self.base_env.lookup(left, env)
-		else:
+		# assumes integers.
+		while not isinstance(left, int):
 			left = self.eval(left, env)
-		if rt == "VARIABLE":
-			right = self.base_env.lookup(right, env)
-		else:
+		while not isinstance(right, int):
 			right = self.eval(right, env)
 
 		if self._debug: print("Left,  post eval: " + str(left))
@@ -94,15 +94,10 @@ class Evaluator:
 		if self._debug: print("Left,  pre eval:  " + str(left))
 		if self._debug: print("Right, pre eval:  " + str(right))
 
-		lt = left.token_type
-		rt = right.token_type
-		if lt == "VARIABLE":
-			left = self.base_env.lookup(left, env)
-		else:
+		# assumes integers.
+		while not isinstance(left, int):
 			left = self.eval(left, env)
-		if rt == "VARIABLE":
-			right = self.base_env.lookup(right, env)
-		else:
+		while not isinstance(right, int):
 			right = self.eval(right, env)
 
 		if self._debug: print("Left,  post eval: " + str(left))
@@ -117,15 +112,10 @@ class Evaluator:
 		if self._debug: print("Left,  pre eval:  " + str(left))
 		if self._debug: print("Right, pre eval:  " + str(right))
 
-		lt = left.token_type
-		rt = right.token_type
-		if lt == "VARIABLE":
-			left = self.base_env.lookup(left, env)
-		else:
+		# assumes integers.
+		while not isinstance(left, int):
 			left = self.eval(left, env)
-		if rt == "VARIABLE":
-			right = self.base_env.lookup(right, env)
-		else:
+		while not isinstance(right, int):
 			right = self.eval(right, env)
 
 		if self._debug: print("Left,  post eval: " + str(left))
@@ -140,15 +130,10 @@ class Evaluator:
 		if self._debug: print("Left,  pre eval:  " + str(left))
 		if self._debug: print("Right, pre eval:  " + str(right))
 
-		lt = left.token_type
-		rt = right.token_type
-		if lt == "VARIABLE":
-			left = self.base_env.lookup(left, env)
-		else:
+		# assumes integers.
+		while not isinstance(left, int):
 			left = self.eval(left, env)
-		if rt == "VARIABLE":
-			right = self.base_env.lookup(right, env)
-		else:
+		while not isinstance(right, int):
 			right = self.eval(right, env)
 
 		if self._debug: print("Left,  post eval: " + str(left))
@@ -246,39 +231,86 @@ class Evaluator:
 
 	def eval_function_def(self, tree, env):
 		closure = Lexeme(token_type="CLOSURE", left=env, right=tree)
+		### closure exists here
+		# tv = TreeViz("closure", closure)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		self.base_env.insert(self.get_function_def_name(tree), closure, env)
+		### closure definitely exists here. uncomment viz code to see it.
+		# tv = TreeViz("def", self.base_env.env_list)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 
 	def eval_function_call(self, tree, env):
+		# print("Function being called: " + str(self.get_function_call_name(tree)))
+		# tv = TreeViz("call_env", env)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		### closure is in the environment at this point. uncomment viz above to see it.
 		closure = self.eval(self.get_function_call_name(tree), env)
+		# tv = TreeViz("pre_closure", closure)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		args = self.get_func_call_args(tree)
+		# print("Args, pre-eval: " + str(args))
+		# tv = TreeViz("args", args)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		params = self.get_closure_params(closure)
 		body = self.get_closure_body(closure)
 		senv = self.get_closure_environment(closure)
 		eargs = self.eval_args(args, env)
-		xenv = self.base_env.extend(senv, params, eargs)
-
-		return eval(body, xenv)
+		# print("Args, post-eval: " + str(eargs))
+		# tv = TreeViz("eargs", eargs)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		xenv = self.base_env.extend(params, eargs, senv)
+		# tv = TreeViz("xenv", xenv)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		return self.eval(body, xenv)
 
 	def get_function_def_name(self, tree):
+		# tv = TreeViz("tree", tree)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		return tree.left
 
 	def get_function_call_name(self, tree):
-		return tree.value
+		return Lexeme(token_type="VARIABLE", value=tree.value)
 
 	def get_func_call_args(self, tree):
 		return tree.left
 
 	def get_closure_params(self, closure):
-		pass
+		return closure.right.right.left
 
 	def get_closure_body(self, closure):
-		pass
+		return closure.right.right.right
 
 	def get_closure_environment(self, closure):
-		pass
+		# tv = TreeViz("closure", closure)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		return closure.left
 
 	def eval_args(self, args, env):
-		pass
+		head = args
+		while head is not None:
+			if head.left.token_type != "NUMBER" and head.left.token_type != "BOOLEAN":
+				head.left = self.eval(head.left, env)
+			head = head.right
+
+		return args
 
 if __name__ == '__main__':
 

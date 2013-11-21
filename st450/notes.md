@@ -523,7 +523,7 @@ prior to this will not be tested, but will have homework
 
 	- example: notebook-115
 
-#### Ingerence for paired samples - Wilcoxon Signed Rank Test
+#### Inference for paired samples - Wilcoxon Signed Rank Test
 
 	- We calculate differences and obtain W - the sum of positive ranks
 	- First, we rank absolute values and then assign "+" or "-" to the obtained ranks
@@ -536,3 +536,15 @@ prior to this will not be tested, but will have homework
 	- pval: 2(p(Z > |Zobs|)) or p(Z < Zobs) or p(Z > Zobs) (same order as HAs above)
 
 	- example: notebook-116
+
+## 19 Novembet 2013 One-way ANOVA
+
+- Assume indepenedent random samplesfrom r (some integer) populations.
+- It can be a randomized experiment with r treatments or observational
+study with r different groups.
+- There are two sources of variation in measurements.
+	- variation within groups
+	- variation between groups
+- ANOVA allows answering questions like:
+	- Do all groups have the same population mean?
+	-

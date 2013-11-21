@@ -33,24 +33,32 @@ class EnvironmentTest(unittest.TestCase):
 		self.assertEqual(e.lookup(var, env), 10)
 
 	def test_extend(self):
+		# todo: edit to test the new environment structure
 		e = Environment()
 		env = e.env_list
-		var = Lexeme(token_type="VARIABLE", value="y")
-		val = Lexeme(token_type="NUMBER", value=7)
-		var2 = Lexeme(token_type="VARIABLE", value="x", right=var)
-		val2 = Lexeme(token_type="NUMBER", value=5, right=val)
 
-		self.assertRaises(UndefinedException, e.lookup, var, env)
+		var1 = Lexeme(token_type="VARIABLE", value="y")
+		var2 = Lexeme(token_type="VARIABLE", value="x")
+		gvar2 = Lexeme(token_type="GLUE", left=var2)
+		gvar1 = Lexeme(token_type="GLUE", left=var1, right=gvar2)
 
-		xenv = e.extend(var2, val2, env)
+		val1 = Lexeme(token_type="NUMBER", value=7)
+		val2 = Lexeme(token_type="NUMBER", value=5)
+		gval2 = Lexeme(token_type="GLUE", left=val2)
+		gval1 = Lexeme(token_type="GLUE", left=val1, right=gval2)
 
-		self.assertEqual(e.lookup(var, xenv), 7)
+		self.assertRaises(UndefinedException, e.lookup, var1, env)
+		self.assertRaises(UndefinedException, e.lookup, var2, env)
+
+		xenv = e.extend(gvar1, gval1, env)
+
+		self.assertEqual(e.lookup(var1, xenv), 7)
 		self.assertEqual(e.lookup(var2, xenv), 5)
 
-		tv = TreeViz("xenv", xenv)
-		tv.viz()
-		tv.create_image()
-		tv.open_image()
+		# tv = TreeViz("xenv", xenv)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 
 if __name__ == '__main__':
 	unittest.main()

@@ -553,3 +553,117 @@ def R(<p>):
 		- If A says it halts, it goes into an infinite loop.
 		- If A says it infinite loops, then it halts.
 		- DOUBLE-CONTRADICTION
+
+## 18 November 2013
+
+- Decidable -> accepted by an algorithm (a TM that always halts)
+- Recognizable -> accepted by an program (a TM that may not always halt)
+
+- Some thing:
+	- Let X and Y denote problems.
+	- Suppose X mapping reduces to Y.
+	- Then:
+		- If Y is decidable, X is also decidable.
+		- If X is not decidable, Y is also undecidable.
+		- If Y is recognizable, X is also recognizable.
+		- If X is not recognizable, Y is also unrecognizable.
+
+- From last time:
+	- discussed problem "accept_tm".
+		- Input: <M>, w
+		- Question: Does M accept w?
+		- this problem is undecidable
+
+- Now we'll reduce the above problem to another one to show that the new one is also undecidable.
+	- problem: all_tm
+	- input: <M>
+	- question: does M accept every string over its input alphabet (SIGMA*)?
+	- To show that all_tm is undecidable, we'll reduce accept_tm to all_tm.
+		- notation: "accept_tm <= all_tm" = "accept_tm reduces to all_tm".
+			- in simple terms, x <= y means y is equal to or harder than x.
+		- define a turing machine, m_w, notebook-118
+		- accept_tm <= all_tm:
+			- given <M>, w
+			- construct Mw as in notebook-118.
+			- accept_tm answers "yes" for <M>, w iff all_tm anwers "yes" for Mw.
+
+- new problem: empty_tm ("the empty problem")
+	- input: <M>
+	- question: does M accept no strings?
+
+
+- new problem: compliment_empty_tm ("the compliment of the empty problem")
+	- input: <M>
+	- question: does M accept at least one string?
+
+- accept_tm <= compliment_empty_tm
+
+- ##### Problem X is decidable iff compliment(X) is decidable. In other words, decidability is closed over compliment.
+
+- problem: halt_tm
+	- imput: <M>, w
+	- question: Does M halt on input w?
+	- show halt_tm is undecidable:
+		- reduce accept_tm to halt_tm.
+		- To solve the accept_tm problem for <M>, w:
+			- if (halt_tm(<M>, w) == "yes"): return M(w)
+			- else: return "no"
+
+## 20 November 2013
+
+- accept_tm, ~empty_tm, and halt_tm are recognizable.
+- ~accept_tm, empty_tm, ~halt_tm, all_tm, and ~all_tm are unrecognizable.
+
+- Program for accept_tm:
+	- Input: <M>, w
+	state = start;
+	k = l;
+	loop:
+		loopup in <M> the transition (state, w[k]);
+		state = ?
+		w[k] = ?
+		k = ?
+		programming details to include Blanks before/after w;
+
+- Program for halt_tm:
+	- nearly identical to above.
+
+- Program for ~empty_tm:
+	- Input <M>
+	- Question: Does M accept at least one string?
+	- program:
+		for k = 1, 2, 3, ..., INF:
+			for each string w such that len(w) is at most k:
+				run M on input w for k steps
+				if m accepts w then return "yes"
+
+- Theorem: Z is decidable iff both Z and compliment(z) are recognizable.
+	- Why?
+		- If Z is decidable then Z is recognizable.
+		- If Z is decidable then compliment(Z) is decidable, and thus also recognizable.
+		- Suppose Z and comp(Z) are both recognizable.
+			- construct an algorithm like notebook-119
+
+	- Let Z = accept_tm
+	- show comp(Z) is unrecognizable.
+		- suppose comp(Z) were recognizable.
+		- Both Z and comp(Z) are recognizable, so Z is decidable.
+		- Contradiction.
+	- The above argument holds for any language that is recognizable but undecidable.
+
+- Recognizable languages are not closed over compliment.
+
+- For any language Z nad it's compliment there are only 3 possible cases:
+	1. Both Z and comp(Z) are decidable.
+	2. Either Z or comp(Z) is recognizable is recognizable but not decidable, and the other is unrecognizable.
+	3. Both Z and comp(Z) are unrecognizable.
+
+- Two more languages, equiv_tm and ~equiv_tm.
+	- Both are unrecognizable.
+	- equiv_tm
+		- Input: <M1>, <M2>
+		- Question: Do M1 and M2 accept the same language?
+
+- If X <= Y, then ~X <= ~Y (and vice versa)
+	- Why?
+		-

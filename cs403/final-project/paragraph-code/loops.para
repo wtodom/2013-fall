@@ -5,3 +5,5 @@ to print_zero_to n:
 		set current to (current + 1);
 		.
 	.
+
+^ print_zero_to(100);

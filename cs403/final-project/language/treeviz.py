@@ -4,6 +4,7 @@ class TreeViz:
 
 	def __init__(self, filename, parse_tree):
 		self.tree = parse_tree
+		self.nodes_visited = []
 		self.dotfile = filename + ".dot"
 		self.image_file = filename + ".png"
 
@@ -22,25 +23,27 @@ class TreeViz:
 		f.close()
 
 	def viz_helper(self, stream, node):
-		stream.write(
-			'\t{0} [label="<f0> left| <f1> token_type = {1} | <f2> value = {2} | <f3> right"];\n'.format(
-				id(node),
-				node.token_type,
-				node.value
+		if id(node) not in self.nodes_visited:
+			self.nodes_visited.append(id(node))
+			stream.write(
+				'\t{0} [label="<f0> left| <f1> token_type = {1} | <f2> value = {2} | <f3> right"];\n'.format(
+					id(node),
+					node.token_type,
+					node.value
+					)
 				)
-			)
-		if node.left:
-			stream.write('\t{0}:f0 -> {1};\n'.format(id(node), id(node.left)))
-			self.viz_helper(stream, node.left)
-		else:
-			stream.write('\t{0}:f0 -> {1};\n'.format(id(node), str(node.left) + str(self.i)))
-			self.i += 1
-		if node.right:
-			stream.write('\t{0}:f3 -> {1};\n'.format(id(node), id(node.right)))
-			self.viz_helper(stream, node.right)
-		else:
-			stream.write('\t{0}:f3 -> {1};\n'.format(id(node), str(node.right) + str(self.i)))
-			self.i += 1
+			if node.left:
+				stream.write('\t{0}:f0 -> {1};\n'.format(id(node), id(node.left)))
+				self.viz_helper(stream, node.left)
+			else:
+				stream.write('\t{0}:f0 -> {1};\n'.format(id(node), str(node.left) + str(self.i)))
+				self.i += 1
+			if node.right:
+				stream.write('\t{0}:f3 -> {1};\n'.format(id(node), id(node.right)))
+				self.viz_helper(stream, node.right)
+			else:
+				stream.write('\t{0}:f3 -> {1};\n'.format(id(node), str(node.right) + str(self.i)))
+				self.i += 1
 
 
 	def create_image(self):

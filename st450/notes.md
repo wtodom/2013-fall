@@ -482,62 +482,62 @@ prior to this will not be tested, but will have homework
 
 ## 7 November 2013 - Non-parametric Statistics Methods (NPSM)
 
-	- Distrobution-free tests - That is, we don't have to assume that our data are normally disctributed.
-	- Often, we have relatively low sample sizes and normality cannot be assumed.
-	- Then we cannot use the T distrobution or Central Limit Theorem.
-	- NPST deals with ranks of observations instead of actual measurments.
-	- The inference is about the median, not about the mean (like it was before).
+- Distrobution-free tests - That is, we don't have to assume that our data are normally disctributed.
+- Often, we have relatively low sample sizes and normality cannot be assumed.
+- Then we cannot use the T distrobution or Central Limit Theorem.
+- NPST deals with ranks of observations instead of actual measurments.
+- The inference is about the median, not about the mean (like it was before).
 
 #### Inference based on one sample - The Sign Test
 
-	- ###### One-tailed test:
-		- H0: m = m0 (m0 is the median)
-		- HA: m > m0 (or m < m0)
-		- Test Statistic: S, the number of measurements greater than m0
-		- pval = p(y >= S) (or p(y <= S) if using second HA)
-			- y~Binomial(n, p=0.5)
+- ###### One-tailed test:
+	- H0: m = m0 (m0 is the median)
+	- HA: m > m0 (or m < m0)
+	- Test Statistic: S, the number of measurements greater than m0
+	- pval = p(y >= S) (or p(y <= S) if using second HA)
+		- y~Binomial(n, p=0.5)
 
-	- ###### Two-tailed test:
-		- H0: m = m0
-		- HA: m != m0
-		- Test Statistic: S, larger of S1 and S2, where S1 is the number of measurements < m0, and S2 is the number of measurements > m0.
-		- pval = 2(p(y >= S))
-			- y~Binomial(n, p=0.5)
+- ###### Two-tailed test:
+	- H0: m = m0
+	- HA: m != m0
+	- Test Statistic: S, larger of S1 and S2, where S1 is the number of measurements < m0, and S2 is the number of measurements > m0.
+	- pval = 2(p(y >= S))
+		- y~Binomial(n, p=0.5)
 
-	- ##### Both:
-		- If we have any observations exactly equal to m0, drop them before beginning analysis.
+- ##### Both:
+	- If we have any observations exactly equal to m0, drop them before beginning analysis.
 
-	- Example: notebook-114
+- Example: notebook-114
 
 #### Inference based on two samples - Wilcoxon Rank Sum Test
 
-	- Check the difference in medians
-	- replace observations with their combined ranks
-	- n1 >= 10, n2 >= 10
-	- n1 <= n2 in this test
+- Check the difference in medians
+- replace observations with their combined ranks
+- n1 >= 10, n2 >= 10
+- n1 <= n2 in this test
 
-	- H0: m1 = m2
-	- HA: m1 != m2 or m1 > m2 or m1 < m2
-	- Zobs = (T1 - (n1(n1+n2+1))/2)/sqrt((n1*n2(n1+n2+1))12)
-	- pval: 2(p(Z > |Zobs|)) or p(Z > Zobs) or p(Z < Zobs) (same order as HAs above)
+- H0: m1 = m2
+- HA: m1 != m2 or m1 > m2 or m1 < m2
+- Zobs = (T1 - (n1(n1+n2+1))/2)/sqrt((n1*n2(n1+n2+1))12)
+- pval: 2(p(Z > |Zobs|)) or p(Z > Zobs) or p(Z < Zobs) (same order as HAs above)
 
-	- example: notebook-115
+- example: notebook-115
 
 #### Inference for paired samples - Wilcoxon Signed Rank Test
 
-	- We calculate differences and obtain W - the sum of positive ranks
-	- First, we rank absolute values and then assign "+" or "-" to the obtained ranks
-	- We require n >= 20.
-	- If there are any differences of 0 (same value in both sides), exclude them from the sample.
+- We calculate differences and obtain W - the sum of positive ranks
+- First, we rank absolute values and then assign "+" or "-" to the obtained ranks
+- We require n >= 20.
+- If there are any differences of 0 (same value in both sides), exclude them from the sample.
 
-	- H0: md = 0
-	- HA: md != 0 or HA: md < 0 or HA: md > 0
-	- Zobs = (W-(n(n+1)))/sqrt((n(n+1)(2n+1))/24)
-	- pval: 2(p(Z > |Zobs|)) or p(Z < Zobs) or p(Z > Zobs) (same order as HAs above)
+- H0: md = 0
+- HA: md != 0 or HA: md < 0 or HA: md > 0
+- Zobs = (W-(n(n+1)))/sqrt((n(n+1)(2n+1))/24)
+- pval: 2(p(Z > |Zobs|)) or p(Z < Zobs) or p(Z > Zobs) (same order as HAs above)
 
-	- example: notebook-116
+- example: notebook-116
 
-## 19 Novembet 2013 One-way ANOVA
+## 19 November 2013 One-way ANOVA
 
 - Assume indepenedent random samplesfrom r (some integer) populations.
 - It can be a randomized experiment with r treatments or observational
@@ -547,4 +547,10 @@ study with r different groups.
 	- variation between groups
 - ANOVA allows answering questions like:
 	- Do all groups have the same population mean?
-	-
+- hypothesis testing:
+	- H0: mu1 = mu2 = mu3 = ... = muR
+	- Ha: at least one mean is different
+
+## 21 November 2013 - ANOVA cont.
+
+- all written - just listened. PRINT STUFF FROM ONLINE!

@@ -24,6 +24,9 @@ return:
 list:
 	python3 -B evaluator.py ../paragraph-code/list.para
 
+array:
+	python3 -B evaluator.py ../paragraph-code/array.para
+
 cond2:
 	python3 -B evaluator.py ../paragraph-code/cond2.para
 

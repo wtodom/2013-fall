@@ -98,12 +98,6 @@ class Environment:
 		head.left = var_glue
 		head.right = val_glue
 
-		# head = env_list.left
-		# variable.right = head.left
-		# value.right = head.right
-		# head.left = variable
-		# head.right = value
-
 	def extend(self, variables, values, parent_env):
 		"""
 		Inserts a new variable with the specified value

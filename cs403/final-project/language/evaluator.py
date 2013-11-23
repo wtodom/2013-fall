@@ -211,57 +211,24 @@ class Evaluator:
 
 	def eval_function_def(self, tree, env):
 		closure = Lexeme(token_type="CLOSURE", left=env, right=tree)
-		### closure exists here
-		# tv = TreeViz("closure", closure)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		self.base_env.insert(self.get_function_def_name(tree), closure, env)
 		### closure definitely exists here. uncomment viz code to see it.
-		# tv = TreeViz("def", self.base_env.env_list)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 
 	def eval_function_call(self, tree, env):
-		# print("Function being called: " + str(self.get_function_call_name(tree)))
-		# tv = TreeViz("call_env", env)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
-		### closure is in the environment at this point. uncomment viz above to see it.
+		### check tree.token_type here to catch built-ins first.
+		if tree.value == "new_array":
+			return self.eval_builtin(tree, env)
+
 		closure = self.eval(self.get_function_call_name(tree), env)
-		# tv = TreeViz("pre_closure", closure)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		args = self.get_func_call_args(tree)
-		# print("Args, pre-eval: " + str(args))
-		# tv = TreeViz("args", args)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		params = self.get_closure_params(closure)
 		body = self.get_closure_body(closure)
 		senv = self.get_closure_environment(closure)
 		eargs = self.eval_args(args, env)
-		# print("Args, post-eval: " + str(eargs))
-		# tv = TreeViz("eargs", eargs)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		xenv = self.base_env.extend(params, eargs, senv)
-		# tv = TreeViz("xenv", xenv)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		return self.eval(body, xenv)
 
 	def get_function_def_name(self, tree):
-		# tv = TreeViz("tree", tree)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		return tree.left
 
 	def get_function_call_name(self, tree):
@@ -277,10 +244,6 @@ class Evaluator:
 		return closure.right.right.right
 
 	def get_closure_environment(self, closure):
-		# tv = TreeViz("closure", closure)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		return closure.left
 
 	def eval_args(self, args, env):
@@ -292,6 +255,25 @@ class Evaluator:
 
 		return args
 
+	def add_builtins(self, env):
+		self.add_array_constructor(env)
+
+	def add_array_constructor(self, env):
+		arg = Lexeme(token_type="VARIABLE", value="size")
+		params = Lexeme(token_type="GLUE", left=arg)
+		name = Lexeme(token_type="VARIABLE", value="new_array")
+		tmp = Lexeme(token_type="GLUE", left=params)
+		tree = Lexeme(token_type="BUILT-IN", value="new_array", left=name, right=tmp)
+
+		### this probably won't work
+		self.base_env.insert(tree, tree, env)
+
+	def eval_builtin(self, closure, env):
+		if closure.value == "new_array":
+			array = [None] * closure.left.left.value
+			return Lexeme(token_type="ARRAY", value=array)
+
+
 if __name__ == '__main__':
 
 	if len(sys.argv) != 2:
@@ -299,6 +281,7 @@ if __name__ == '__main__':
 
 	e = Evaluator()
 	env = e.base_env.env_list
+	e.add_builtins(env)
 	p = Parser()
 	p.l = Lexer(sys.argv[1])
 	t = p.parse()

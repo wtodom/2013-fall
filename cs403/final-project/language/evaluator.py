@@ -81,9 +81,9 @@ class Evaluator:
 		if self._debug: print("Right, pre eval:  " + str(right))
 
 		# assumes integers.
-		while not isinstance(left, int):
+		while not (isinstance(left, int) or isinstance(left, str)):
 			left = self.eval(left, env)
-		while not isinstance(right, int):
+		while not (isinstance(right, int) or isinstance(right, str)):
 			right = self.eval(right, env)
 
 		if self._debug: print("Left,  post eval: " + str(left))
@@ -91,7 +91,7 @@ class Evaluator:
 
 		return (left, right)
 
-
+	### todo: Add type checks, Lexeme type setting, and throw appropriate exceptions
 	def eval_plus(self, tree, env):
 		(left, right) = self.reduce_to_literals(tree, env)
 		added = left + right
@@ -114,9 +114,19 @@ class Evaluator:
 		return Lexeme(token_type="NUMBER", value=quotient)
 
 	def eval_statements(self, tree, env):
+		### original, working, non-return version:
+		# while tree:
+		# 	self.eval(tree.left, env)
+		# 	tree = tree.right
+		return_statment = tree.left.left
 		while tree:
-			self.eval(tree.left, env)
+			self.eval(tree.left.right, env)
 			tree = tree.right
+		if return_statment is not None:
+			return self.eval_return_statement(return_statment, env)
+
+	def eval_return_statement(self, tree, env):
+		return self.eval(tree, env)
 
 	def eval_boolean_expression(self, tree, env):
 		op = tree.left.token_type

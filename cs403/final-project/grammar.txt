@@ -14,7 +14,7 @@ commaChain: COMMA expr optCommaChain
 optCommaChain: COMMA expr optCommaChain
 			 | *empty*
 
-block: optStatements PERIOD
+block: optStatements optReturn PERIOD
 
 optStatements: statements
 			 | *empty*
@@ -66,3 +66,8 @@ boolOp: DOUBLE_EQUALS
 	  | GREATER_THAN
 	  | LESS_THAN_EQUAL
 	  | GREATER_THAN_EQUAL
+
+==========================
+
+optReturn: RETURN expr SEMICOLON
+		 | *empty*

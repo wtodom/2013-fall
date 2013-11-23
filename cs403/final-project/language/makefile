@@ -7,6 +7,23 @@ add:
 func:
 	python3 -B evaluator.py ../paragraph-code/function.para
 
+return:
+	echo
+	echo "The code file being run:"
+	echo "|-------------------------------------------------------------------"
+	cat ../paragraph-code/return.para
+	echo
+	echo "-------------------------------------------------------------------|"
+	echo
+	echo "output:"
+	echo "|-------------------------------------------------------------------"
+	python3 -B evaluator.py ../paragraph-code/return.para
+	echo
+	echo "-------------------------------------------------------------------|"
+
+list:
+	python3 -B evaluator.py ../paragraph-code/list.para
+
 cond2:
 	python3 -B evaluator.py ../paragraph-code/cond2.para
 

@@ -103,6 +103,10 @@ class Parser:
 		if self._debug: print(" in assignmentPending")
 		return self.check("SET")
 
+	def returnPending(self):
+		if self._debug: print(" in returnPending")
+		return self.check("RETURN")
+
 	def program(self):
 		if self._debug: print(" in program")
 		tree = Lexeme(token_type="PROGRAM")
@@ -191,9 +195,19 @@ class Parser:
 	def block(self):
 		if self._debug: print(" in block")
 		tree = self.optStatements()
+		tree.left.left = self.optReturn()
 		self.match("PERIOD")
 
 		return tree
+
+	def optReturn(self):
+		if self._debug: print(" in optReturn")
+		if self.returnPending():
+			self.match("RETURN")
+			tree = self.expression()
+			self.match("SEMICOLON")
+			return tree
+		return None
 
 	def optStatements(self):
 		if self._debug: print(" in optStatements")
@@ -206,7 +220,8 @@ class Parser:
 	def statements(self):
 		if self._debug: print(" in statements")
 		tree = Lexeme(token_type="STATEMENTS")
-		tree.left = self.statement()
+		tree.left = Lexeme(token_type="GLUE")
+		tree.left.right = self.statement()
 		tree.right = self.optStatements()
 
 		return tree

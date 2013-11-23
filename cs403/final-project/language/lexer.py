@@ -116,6 +116,8 @@ class Lexer:
 			return Lexeme(token_type="TO", value="KEYWORD")
 		elif var == "set":
 			return Lexeme(token_type="SET", value="KEYWORD")
+		elif var == "return":
+			return Lexeme(token_type="RETURN", value="KEYWORD")
 		elif var == "is":
 			return Lexeme(token_type="IS", value="KEYWORD")
 		elif var == "while":

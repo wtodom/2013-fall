@@ -11,16 +11,13 @@ class Evaluator:
 	def __init__(self):
 		self._debug = False
 		self.base_env = Environment()
+		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY"]
 
 	def eval(self, tree, env):
 		t = tree.token_type
 		if t == "SHOW":
 			return self.eval_show(tree, env)
-		elif t == "NUMBER":
-			return tree.value
-		elif t == "STRING":
-			return tree.value
-		elif t == "BOOLEAN":
+		elif t in self.literals:
 			return tree.value
 		elif t == "VARIABLE":
 			return self.base_env.lookup(tree, env)
@@ -55,20 +52,13 @@ class Evaluator:
 			raise EvaluationException(tree)
 
 	def eval_show(self, tree, env):
-		### This doesn't work, but it's kind what I'm thinking.
-		### I only want to print literal values, not Lexemes.
-		### Will figure it out later.
-		# var = tree.left
-		# while (
-		# 	type(var) is Lexeme and
-		# 	var.token_type != "NUMBER" and
-		# 	var.token_type != "STRING" and
-		# 	var.token_type != "BOOLEAN"
-		# 	):
-		# 	var = self.eval(var, env)
+		var = tree.left
+		while type(var) is Lexeme and var.token_type not in self.literals:
+			var = self.eval(var, env)
+
 
 		### This version gives rudimentary printing.
-		print(self.eval(tree.left, env))
+		print(self.eval(var, env))
 
 	def reduce_to_literals(self, tree, env):
 		"""
@@ -180,7 +170,8 @@ class Evaluator:
 		return (
 			isinstance(thing, int) or
 			isinstance(thing, str) or
-			isinstance(thing, bool)
+			isinstance(thing, bool) or
+			isinstance(thing, list)
 			)
 
 	def eval_assignment(self, tree, env):

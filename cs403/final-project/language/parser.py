@@ -1,7 +1,7 @@
 from exceptions import ParseError
 from lexeme import Lexeme
 from lexer import Lexer
-import treeviz as tv
+from treeviz import TreeViz
 import sys
 
 
@@ -195,7 +195,11 @@ class Parser:
 	def block(self):
 		if self._debug: print(" in block")
 		tree = self.optStatements()
-		tree.left.left = self.optReturn()
+		### todo: this may be wrong
+		if tree is not None:
+			tree.left.left = self.optReturn()
+		else:
+			tree = self.optReturn()
 		self.match("PERIOD")
 
 		return tree

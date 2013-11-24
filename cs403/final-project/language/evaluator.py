@@ -12,6 +12,7 @@ class Evaluator:
 		self._debug = False
 		self.base_env = Environment()
 		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY"]
+		self.builtins = ["new_array", "set_array_value", "get_array_value"]
 
 	def eval(self, tree, env):
 		t = tree.token_type
@@ -44,10 +45,10 @@ class Evaluator:
 		elif t == "FUNCTION_CALL":
 			return self.eval_function_call(tree, env)
 		elif t == "PROGRAM":
-			# this may need adjustment depending on how various trees look.
-			self.eval(tree.right.left, env)
-			if tree.right.right.left:
-				self.eval(tree.right.right.left, env)
+			while tree.right and tree.right.left is not None:
+				tree = tree.right
+				self.eval(tree.left, env)
+
 		else:
 			raise EvaluationException(tree)
 
@@ -56,8 +57,6 @@ class Evaluator:
 		while type(var) is Lexeme and var.token_type not in self.literals:
 			var = self.eval(var, env)
 
-
-		### This version gives rudimentary printing.
 		print(self.eval(var, env))
 
 	def reduce_to_literals(self, tree, env):
@@ -207,7 +206,7 @@ class Evaluator:
 
 	def eval_function_call(self, tree, env):
 		### check tree.token_type here to catch built-ins first.
-		if tree.value == "new_array":
+		if tree.value in self.builtins:
 			return self.eval_builtin(tree, env)
 
 		closure = self.eval(self.get_function_call_name(tree), env)
@@ -248,22 +247,56 @@ class Evaluator:
 
 	def add_builtins(self, env):
 		self.add_array_constructor(env)
+		self.add_array_get_element(env)
+		self.add_array_set_element(env)
 
 	def add_array_constructor(self, env):
-		arg = Lexeme(token_type="VARIABLE", value="size")
-		params = Lexeme(token_type="GLUE", left=arg)
+		### May be able to remove the commented pieces
+		# arg = Lexeme(token_type="VARIABLE", value="size")
+		# params = Lexeme(token_type="GLUE", left=arg)
 		name = Lexeme(token_type="VARIABLE", value="new_array")
-		tmp = Lexeme(token_type="GLUE", left=params)
-		tree = Lexeme(token_type="BUILT-IN", value="new_array", left=name, right=tmp)
+		# tmp = Lexeme(token_type="GLUE", left=params)
+		tree = Lexeme(token_type="BUILT-IN", value="new_array", left=name)#, right=tmp)
 
-		### this probably won't work
+		self.base_env.insert(tree, tree, env)
+
+	def add_array_get_element(self, env):
+		name = Lexeme(token_type="VARIABLE", value="set_array_value")
+		tree = Lexeme(token_type="BUILT-IN", value="set_array_value", left=name)
+		self.base_env.insert(tree, tree, env)
+
+	def add_array_set_element(self, env):
+		name = Lexeme(token_type="VARIABLE", value="get_array_value")
+		tree = Lexeme(token_type="BUILT-IN", value="get_array_value", left=name)
 		self.base_env.insert(tree, tree, env)
 
 	def eval_builtin(self, closure, env):
-		if closure.value == "new_array":
+		cv = closure.value
+		if cv == "new_array":
 			array = [None] * closure.left.left.value
 			return Lexeme(token_type="ARRAY", value=array)
+		elif cv == "get_array_value":
+			array = closure.left.left
+			index = closure.left.right.left.value
+			array = self.base_env.lookup(array, env)
+			array = self.eval(array, env)
+			return array[index]
+		elif cv == "set_array_value":
+			array = closure.left.left
+			index = closure.left.right.left.value
+			new_val = closure.left.right.right.left
+			array = self.base_env.lookup(array, env)
+			new_val = self.base_env.lookup(new_val, env)
+			array = self.eval(array, env)
+			new_val = self.eval(new_val, env)
+			array[index] = new_val
 
+	def get_literal(self, tree):
+		while not self.is_literal(tree):
+			print(tree)
+			tree = self.eval(tree)
+
+		return tree
 
 if __name__ == '__main__':
 

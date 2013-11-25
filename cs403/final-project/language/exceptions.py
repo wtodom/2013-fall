@@ -55,7 +55,7 @@ class TypeException(Error):
 		self.expected = types_expected
 
 	def __str__(self):
-		msg = "Received type(s) {1} but expected {2}.".format(
+		msg = "Received type(s) {0} but expected {1}.".format(
 			self.received,
 			self.expected
 			)

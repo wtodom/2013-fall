@@ -71,7 +71,7 @@ class Lexer:
 			return self.lex_variable()
 
 	def lex_variable(self):
-		if self.currentChar.isalpha():
+		if self.currentChar.isalpha() or self.currentChar in self.connectors:
 			return self.get_variable()
 		elif self.currentChar.isdigit():
 			return self.get_number()

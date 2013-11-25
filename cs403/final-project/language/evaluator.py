@@ -11,7 +11,7 @@ class Evaluator:
 	def __init__(self):
 		self._debug = False
 		self.base_env = Environment()
-		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY"]
+		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY", "NOTHING"]
 		self.builtins = ["new_array", "set_array_value", "get_array_value"]
 
 	def eval(self, tree, env):
@@ -57,7 +57,17 @@ class Evaluator:
 		while type(var) is Lexeme and var.token_type not in self.literals:
 			var = self.eval(var, env)
 
-		print(self.eval(var, env))
+		if var is None:
+			print(var)
+		else:
+			var = self.eval(var, env)
+			if type(var) is list:
+				for x in var:
+					while not self.is_literal(x):
+						x = self.eval(x, env)
+				print(var)
+			else:
+				print(var)
 
 	def reduce_to_literals(self, tree, env):
 		"""
@@ -115,6 +125,7 @@ class Evaluator:
 			return self.eval_return_statement(return_statment, env)
 
 	def eval_return_statement(self, tree, env):
+		print("Return tree: " + str(tree))
 		return self.eval(tree, env)
 
 	def eval_boolean_expression(self, tree, env):
@@ -139,8 +150,11 @@ class Evaluator:
 		while not self.is_literal(right):
 			right = self.eval(right, env)
 
-		# make sure those literals are ints
-		if not isinstance(left, int) or not isinstance(right, int):
+		# make sure those literals are ints or None
+		if ((not isinstance(left, int) or
+			not isinstance(right, int)) and
+			(left is not None and
+			right is not None)):
 			raise TypeException(
 				[type(left), type(right)],
 				["Lexeme: NUMBER", "Lexeme: NUMBER"]
@@ -166,28 +180,38 @@ class Evaluator:
 			return left == right
 
 	def is_literal(self, thing):
+		# print("Thing: " + str(thing))
 		return (
 			isinstance(thing, int) or
 			isinstance(thing, str) or
 			isinstance(thing, bool) or
-			isinstance(thing, list)
+			isinstance(thing, list) or
+			thing is None
 			)
 
 	def eval_assignment(self, tree, env):
 		var = tree.left
 		val = tree.right
+		# print(val)
 		if (val.token_type != "NUMBER" and
 			val.token_type != "BOOLEAN" and
-			val.token_type != "STRING"
+			val.token_type != "STRING" and
+			val.token_type != "ARRAY" and
+			val.token_type != "NOTHING"
 			):
 			val = self.eval(tree.right, env)
+			# print(val)
 		try:
+			# print("!!! IN TRY !!!")
 			self.base_env.lookup(var, env)
-			if self._debug: print("Updating " + str(var) + " to " + str(val))
-			self.base_env.update(var, val, env)
 		except UndefinedException:
+			# print("!!! IN EXCEPT !!!")
 			if self._debug: print("Inserting " + str(var) + " with value " + str(val))
 			self.base_env.insert(var, val, env)
+		else:
+			# print("!!! IN ELSE !!!")
+			if self._debug: print("Updating " + str(var) + " to " + str(val))
+			self.base_env.update(var, val, env)
 
 	def eval_if_statement(self, tree, env):
 		if self.eval(tree.left, env):
@@ -213,9 +237,13 @@ class Evaluator:
 		args = self.get_func_call_args(tree)
 		params = self.get_closure_params(closure)
 		body = self.get_closure_body(closure)
-		senv = self.get_closure_environment(closure)
+		closure_env = self.get_closure_environment(closure)
 		eargs = self.eval_args(args, env)
-		xenv = self.base_env.extend(params, eargs, senv)
+		xenv = self.base_env.extend(params, eargs, closure_env)
+		# tv = TreeViz("xenv", xenv)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		return self.eval(body, xenv)
 
 	def get_function_def_name(self, tree):
@@ -228,6 +256,10 @@ class Evaluator:
 		return tree.left
 
 	def get_closure_params(self, closure):
+		# tv = TreeViz("closure", closure)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		return closure.right.right.left
 
 	def get_closure_body(self, closure):
@@ -237,9 +269,13 @@ class Evaluator:
 		return closure.left
 
 	def eval_args(self, args, env):
+		# tv = TreeViz("args", args)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		head = args
 		while head is not None:
-			if head.left.token_type != "NUMBER" and head.left.token_type != "BOOLEAN":
+			if head.left.token_type not in self.literals:
 				head.left = self.eval(head.left, env)
 			head = head.right
 
@@ -280,16 +316,37 @@ class Evaluator:
 			index = closure.left.right.left.value
 			array = self.base_env.lookup(array, env)
 			array = self.eval(array, env)
-			return array[index]
+			result = array[index]
+			tt = None
+			if type(result) is str:
+				tt = "STRING"
+			if type(result) is int:
+				tt = "NUMBER"
+			if type(result) is bool:
+				tt = "BOOLEAN"
+			if type(result) is list:
+				tt = "ARRAY"
+			return Lexeme(token_type=tt, value=result)
 		elif cv == "set_array_value":
-			array = closure.left.left
+			# tv = TreeViz("closure", closure)
+			# tv.viz()
+			# tv.create_image()
+			# tv.open_image()
+			array = self.eval(closure.left.left, env)
 			index = closure.left.right.left.value
-			new_val = closure.left.right.right.left
-			array = self.base_env.lookup(array, env)
-			new_val = self.base_env.lookup(new_val, env)
+			new_val = self.eval(closure.left.right.right.left, env)
 			array = self.eval(array, env)
-			new_val = self.eval(new_val, env)
+			# new_val = self.eval(new_val, env)
 			array[index] = new_val
+			l = Lexeme(token_type="ARRAY", value=array)
+			self.base_env.update(closure.left.left, l, env)
+		elif cv == "new_dict":
+			pass
+		elif cv == "dict_insert":
+			pass
+		elif cv == "dict_get":
+			pass
+
 
 	def get_literal(self, tree):
 		while not self.is_literal(tree):

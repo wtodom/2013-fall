@@ -22,20 +22,36 @@ class Environment:
 						the variable.
 		"""
 		if self._debug: print("Looking up -> " + str(variable))
-		head = env_list.left
-		while head is not None:
+		# print("In Lookup...")
+		# tv = TreeViz("update", env_list)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		tracer = env_list
+		while tracer is not None:
+			head = tracer.left
 			var = head.left
 			val = head.right
 			while var is not None:
+				# print("var:            " + str(var.left))
+				# print("var.value:      " + str(var.left.value))
+				# print("val:            " + str(val.left))
+				# print("val.value:      " + str(val.left.value))
+				# print("variable:       " + str(variable))
+				# print("variable.value: " + str(variable.value))
+				# print()
 				# var will point to a glue node. do .left to get the real node
 				if var.left.value == variable.value:
+					# print(var.left)
+					# print(val.left)
+					# print(variable)
+					# print(var.left.value == variable.value)
+					# print("Leaving Lookup...")
+					# print()
 					return val.left
 				var = var.right
 				val = val.right
-			if env_list.right is not None:
-				head = env_list.right.left
-			raise UndefinedException(str(variable))
-
+			tracer = tracer.right
 		raise UndefinedException(str(variable))
 
 	def update(self, variable, new_val, env_list):
@@ -55,19 +71,30 @@ class Environment:
 		"""
 		if self._debug: print(str(variable))
 		if self._debug: print(str(new_val))
-		head = env_list.left
-		var = head.left
-		val = head.right
-		while var:
-			# var and val will point to glue nodes. do .left to get the real nodes
-			if var.left.value == variable.value:
-				val.left.value = new_val.value
-				return
-			var = var.right
-			val = val.right
+		# tv = TreeViz("update", env_list)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		tracer = env_list
+		while tracer is not None:
+			# print("tracer change")
+			head = tracer.left
+			var = head.left
+			val = head.right
+			while var:
+				# print("var (inner while):      " + str(var.left))
+				# print("val (inner while):      " + str(val.left))
+				# print("variable (inner while): " + str(variable))
+				# var and val will point to glue nodes. do .left to get the real nodes
+				if var.left.value == variable.value:
+					val.left.value = new_val.value
+					return
+				var = var.right
+				val = val.right
+			tracer = tracer.right
 
 		raise UndefinedException(str(variable) + " is undefined.")
-		return None
+		# return None
 
 	def insert(self, variable, value, env_list):
 		"""
@@ -117,5 +144,12 @@ class Environment:
 		"""
 		head = Lexeme(token_type="GLUE", left=variables, right = values)
 		env = Lexeme(token_type="ENVIRONMENT", left=head, right=parent_env)
-
+		# tv = TreeViz("env", parent_env)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
+		# tv = TreeViz("xenv", env)
+		# tv.viz()
+		# tv.create_image()
+		# tv.open_image()
 		return env

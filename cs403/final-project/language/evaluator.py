@@ -12,7 +12,8 @@ class Evaluator:
 		self._debug = False
 		self.base_env = Environment()
 		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY", "NOTHING"]
-		self.builtins = ["new_array", "set_array_value", "get_array_value"]
+		self.builtins = ["new_array", "set_array_value", "get_array_value",
+						 "new_dict", "dict_insert", "dict_get", "dict_update", "dict_remove"]
 
 	def eval(self, tree, env):
 		t = tree.token_type
@@ -60,14 +61,7 @@ class Evaluator:
 		if var is None:
 			print(var)
 		else:
-			var = self.eval(var, env)
-			if type(var) is list:
-				for x in var:
-					while not self.is_literal(x):
-						x = self.eval(x, env)
-				print(var)
-			else:
-				print(var)
+			print(self.eval(var, env))
 
 	def reduce_to_literals(self, tree, env):
 		"""
@@ -282,29 +276,10 @@ class Evaluator:
 		return args
 
 	def add_builtins(self, env):
-		self.add_array_constructor(env)
-		self.add_array_get_element(env)
-		self.add_array_set_element(env)
-
-	def add_array_constructor(self, env):
-		### May be able to remove the commented pieces
-		# arg = Lexeme(token_type="VARIABLE", value="size")
-		# params = Lexeme(token_type="GLUE", left=arg)
-		name = Lexeme(token_type="VARIABLE", value="new_array")
-		# tmp = Lexeme(token_type="GLUE", left=params)
-		tree = Lexeme(token_type="BUILT-IN", value="new_array", left=name)#, right=tmp)
-
-		self.base_env.insert(tree, tree, env)
-
-	def add_array_get_element(self, env):
-		name = Lexeme(token_type="VARIABLE", value="set_array_value")
-		tree = Lexeme(token_type="BUILT-IN", value="set_array_value", left=name)
-		self.base_env.insert(tree, tree, env)
-
-	def add_array_set_element(self, env):
-		name = Lexeme(token_type="VARIABLE", value="get_array_value")
-		tree = Lexeme(token_type="BUILT-IN", value="get_array_value", left=name)
-		self.base_env.insert(tree, tree, env)
+		for func in self.builtins:
+			name = Lexeme(token_type="VARIABLE", value=func)
+			tree = Lexeme(token_type="BUILT-IN", value=func, left=name)
+			self.base_env.insert(tree, tree, env)
 
 	def eval_builtin(self, closure, env):
 		cv = closure.value
@@ -345,6 +320,10 @@ class Evaluator:
 		elif cv == "dict_insert":
 			pass
 		elif cv == "dict_get":
+			pass
+		elif cv == "dict_update":
+			pass
+		elif cv == "dict_remove":
 			pass
 
 

@@ -83,7 +83,7 @@ class Parser:
 
 	def sequencePending(self):
 		if self._debug: print(" in sequencePending")
-		return self.primaryPending()
+		return self.expressionPending()
 
 	def primaryPending(self):
 		if self._debug: print(" in primaryPending")

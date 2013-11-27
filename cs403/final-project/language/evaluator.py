@@ -11,9 +11,8 @@ class Evaluator:
 	def __init__(self):
 		self._debug = False
 		self.base_env = Environment()
-		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY", "NOTHING"]
-		self.builtins = ["new_array", "set_array_value", "get_array_value",
-						 "new_dict", "dict_insert", "dict_get", "dict_update", "dict_remove"]
+		self.literals = ["NUMBER", "STRING", "BOOLEAN", "ARRAY", "DICTIONARY", "NOTHING"]
+		self.builtins = ["new_array", "new_dict", "get_item", "set_item", "remove_item"]
 
 	def eval(self, tree, env):
 		t = tree.token_type
@@ -55,13 +54,15 @@ class Evaluator:
 
 	def eval_show(self, tree, env):
 		var = tree.left
-		while type(var) is Lexeme and var.token_type not in self.literals:
+		while type(var) is Lexeme:
+			# print(var.token_type)
 			var = self.eval(var, env)
 
-		if var is None:
-			print(var)
-		else:
-			print(self.eval(var, env))
+		print(var)
+		# if var is None:
+		# 	print(var)
+		# else:
+		# 	print(self.eval(var, env))
 
 	def reduce_to_literals(self, tree, env):
 		"""
@@ -119,7 +120,6 @@ class Evaluator:
 			return self.eval_return_statement(return_statment, env)
 
 	def eval_return_statement(self, tree, env):
-		print("Return tree: " + str(tree))
 		return self.eval(tree, env)
 
 	def eval_boolean_expression(self, tree, env):
@@ -174,19 +174,18 @@ class Evaluator:
 			return left == right
 
 	def is_literal(self, thing):
-		# print("Thing: " + str(thing))
 		return (
 			isinstance(thing, int) or
 			isinstance(thing, str) or
 			isinstance(thing, bool) or
 			isinstance(thing, list) or
+			isinstance(thing, dict) or
 			thing is None
 			)
 
 	def eval_assignment(self, tree, env):
 		var = tree.left
 		val = tree.right
-		# print(val)
 		if (val.token_type != "NUMBER" and
 			val.token_type != "BOOLEAN" and
 			val.token_type != "STRING" and
@@ -194,7 +193,6 @@ class Evaluator:
 			val.token_type != "NOTHING"
 			):
 			val = self.eval(tree.right, env)
-			# print(val)
 		try:
 			# print("!!! IN TRY !!!")
 			self.base_env.lookup(var, env)
@@ -234,11 +232,15 @@ class Evaluator:
 		closure_env = self.get_closure_environment(closure)
 		eargs = self.eval_args(args, env)
 		xenv = self.base_env.extend(params, eargs, closure_env)
-		# tv = TreeViz("xenv", xenv)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
-		return self.eval(body, xenv)
+
+		### DANGEROUS!!!
+		### TODO: MAKE SURE THIS WORKS
+		### I ADDED THE TOP HALF OF THE IF WHILE WORKING
+		### 	ON THE LIST.
+		if body.token_type == "NOTHING":
+			return body
+		else:
+			return self.eval(body, xenv)
 
 	def get_function_def_name(self, tree):
 		return tree.left
@@ -250,10 +252,6 @@ class Evaluator:
 		return tree.left
 
 	def get_closure_params(self, closure):
-		# tv = TreeViz("closure", closure)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		return closure.right.right.left
 
 	def get_closure_body(self, closure):
@@ -263,10 +261,6 @@ class Evaluator:
 		return closure.left
 
 	def eval_args(self, args, env):
-		# tv = TreeViz("args", args)
-		# tv.viz()
-		# tv.create_image()
-		# tv.open_image()
 		head = args
 		while head is not None:
 			if head.left.token_type not in self.literals:
@@ -286,51 +280,58 @@ class Evaluator:
 		if cv == "new_array":
 			array = [None] * closure.left.left.value
 			return Lexeme(token_type="ARRAY", value=array)
-		elif cv == "get_array_value":
-			array = closure.left.left
-			index = closure.left.right.left.value
-			array = self.base_env.lookup(array, env)
-			array = self.eval(array, env)
-			result = array[index]
-			tt = None
-			if type(result) is str:
-				tt = "STRING"
-			if type(result) is int:
-				tt = "NUMBER"
-			if type(result) is bool:
-				tt = "BOOLEAN"
-			if type(result) is list:
-				tt = "ARRAY"
-			return Lexeme(token_type=tt, value=result)
-		elif cv == "set_array_value":
-			# tv = TreeViz("closure", closure)
-			# tv.viz()
-			# tv.create_image()
-			# tv.open_image()
-			array = self.eval(closure.left.left, env)
-			index = closure.left.right.left.value
-			new_val = self.eval(closure.left.right.right.left, env)
-			array = self.eval(array, env)
-			# new_val = self.eval(new_val, env)
-			array[index] = new_val
-			l = Lexeme(token_type="ARRAY", value=array)
-			self.base_env.update(closure.left.left, l, env)
+
 		elif cv == "new_dict":
-			pass
-		elif cv == "dict_insert":
-			pass
-		elif cv == "dict_get":
-			pass
-		elif cv == "dict_update":
-			pass
-		elif cv == "dict_remove":
-			pass
+			d = {}
+			return Lexeme(token_type="DICTIONARY", value=d)
 
+		elif cv == "get_item":
+			collection = self.eval(self.eval(closure.left.left, env), env)
+			key = closure.left.right.left.value
 
-	def get_literal(self, tree):
+			res = collection[key]
+
+			return Lexeme(token_type=self.type_to_str(res), value=res)
+
+		elif cv == "set_item":
+			collection = self.eval(self.eval(closure.left.left, env), env)
+			key = closure.left.right.left.value
+			new_val = self.get_literal(closure.left.right.right.left, env)
+
+			collection[key] = new_val
+
+			l = Lexeme(token_type=self.type_to_str(collection), value=collection)
+			self.base_env.update(closure.left.left, l, env)
+
+		elif cv == "remove_item":
+			collection = self.eval(self.eval(closure.left.left, env), env)
+			key = closure.left.right.left.value
+
+			if type(collection) == dict:
+				del collection[key]
+			else:
+				collection.remove(key)
+
+			l = Lexeme(token_type=self.type_to_str(collection), value=collection)
+			self.base_env.update(closure.left.left, l, env)
+
+	def type_to_str(self, var):
+		if var is None:
+			return "NOTHING"
+		elif type(var) is str:
+			return "STRING"
+		elif type(var) is int:
+			return "NUMBER"
+		elif type(var) is bool:
+			return "BOOLEAN"
+		elif type(var) is list:
+			return "ARRAY"
+		elif type(var) is dict:
+			return "DICTIONARY"
+
+	def get_literal(self, tree, env):
 		while not self.is_literal(tree):
-			print(tree)
-			tree = self.eval(tree)
+			tree = self.eval(tree, env)
 
 		return tree
 
@@ -350,3 +351,7 @@ if __name__ == '__main__':
 	# tv.create_image()
 	# tv.open_image()
 	e.eval(t, env)
+	# tv = TreeViz("env_post", env)
+	# tv.viz()
+	# tv.create_image()
+	# tv.open_image()

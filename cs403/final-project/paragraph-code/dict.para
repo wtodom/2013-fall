@@ -1,0 +1,14 @@
+show "Create...".
+set d to ^ new_dict().
+show d.
+
+show "Set...".
+^ set_item(d, "nine-3", and 6).
+show d.
+
+show "Get...".
+show ^ get_item(d and "nine-3").
+
+show "Remove...".
+^ remove_item(d and "nine-3").
+show d.

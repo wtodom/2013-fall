@@ -1,32 +1,32 @@
-set a to 0;
-set b to (0 - 5);
-set c to 10;
+set a to 0.
+set b to (0 - 5).
+set c to 10.
 
-show "a:";
-show a;
-show "b:";
-show b;
-show "c:";
-show c;
+show "a:".
+show a.
+show "b:".
+show b.
+show "c:".
+show c.
 
 if a is > 0,
-	show "a was > 0.";
-	.
+	show "a was > 0.".
+	#
 otherwise, if a is >= 0,
-	show "a was >= 0.";
-	.
+	show "a was >= 0.".
+	#
 otherwise,
-	show "a was < 0.";
-	.
+	show "a was < 0.".
+	#
 
 
 if b is == (5 - c),
-	show "b was == (5 - c).";
-	.
+	show "b was == (5 - c).".
+	#
 
 if c is < 100,
-	show "c was < 100.";
-	.
+	show "c was < 100.".
+	#
 otherwise,
-	show "c was not < 100";
-	.
+	show "c was not < 100".
+	#

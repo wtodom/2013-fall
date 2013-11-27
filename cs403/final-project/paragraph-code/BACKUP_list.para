@@ -1,0 +1,253 @@
+~
+Node Class
+==========
+
+Nodes are represented by 2-element arrays.
+The first element is the value of the node,
+	and the second element is the
+	the next node in the list.
+~
+
+
+to create_empty_node:
+	return ^ new_array(2).
+	#
+
+~ PROBLEM: val NEVER CHANGES AFTER THIS IS CALLED ONCE
+			IN MY LIST TESTING BELOW ~
+to create_node_with val and next_pointer:
+	show "Parameters received by create_node_with:".
+	show "val:".
+	show val.
+	show "next_pointer:".
+	show next_pointer.
+
+	set a to ^ new_array(2).
+	^ set_value(a and val).
+	^ set_next(a and next_pointer).
+	return a.
+	#
+
+to get_value node:
+	return ^get_item(node and 0).
+	#
+
+to get_next node:
+	return ^get_item(node and 1).
+	#
+
+to set_value node and new_value:
+	^ set_item(node, 0, and new_value).
+	#
+
+to set_next node and new_next_node:
+	^ set_item(node, 1, and new_next_node).
+	#
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ NODE TESTS ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~
+
+set a to ^ create_empty_node().
+show "a, should be [None, None]:".
+show a.
+
+set b to ^ create_empty_node().
+show "b, should be [None, None]:".
+show b.
+
+^ set_value(a and 0).
+show "a, should be [0, None]:".
+show a.
+
+^ set_value(b and 9).
+show "b, should be [9, None]:".
+show b.
+
+
+^ set_next(a and 3).
+show "a, should be [0, 3]:".
+show a.
+
+^ set_next(b and 22).
+show "b, should be [9, 22]:".
+show b.
+
+^ set_next(b and a).
+show "b, should be [9, [0, 3]]:".
+show b.
+
+set c to ^ create_node_with(100 and nothing).
+show "c, should be [100, none]:".
+show c.
+
+^ set_next(^ get_next(b) and c).
+show "b, should be [9, [0, [100, None]]]".
+show b.
+
+show "getting value of 'b#next#next', should be 100:".
+show ^ get_value(^ get_next(^ get_next(b))).
+
+~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~ END NODE TESTS ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~
+Linked List Class
+=================
+
+A chain of Node "objects"
+~
+
+~~~
+Setup some variables#
+~~~
+
+set _items to nothing.
+set _head to nothing.
+set _tail to nothing.
+set _length to 0.
+
+
+to create_list:
+	return nothing.
+	#
+
+to get_length:
+	return _length.
+	#
+
+to get_head items:
+	if _head is == nothing,
+		set res to  nothing.
+		#
+	otherwise,
+		set res to  ^ get_value(_head and 0).
+		#
+	return res.
+	#
+
+to set_head val:
+	set _head to val.
+	#
+
+to get_tail items:
+	if _tail is == nothing,
+		set res to nothing.
+		#
+	otherwise,
+		set res to ^ get_value(_tail and 0).
+		#
+	return res.
+	#
+
+to set_tail val:
+	set _tail to val.
+	#
+
+to add_to_front val and rest:
+	show "parameters passed into add_to_front:".
+	show "val:".
+	show val.
+	show "rest:".
+	show rest.
+	show "(passing the above values to create_node_with)".
+
+	set n to ^ create_node_with(val and rest).
+
+	show "n:".
+	show n.
+
+	^ set_head(n).
+	if ^ get_length() is == 0,
+		^ set_tail(n).
+		#
+	^ inc_length().
+	set _items to n.
+	#
+
+
+to add_to_back items and value:
+	TODO.
+	#
+
+to insert_at_index items, index, and value:
+	TODO.
+	#
+
+to remove_from_front_of items:
+	TODO.
+	#
+
+to remove_from_back_of items:
+	TODO.
+	#
+
+to remove_at_index items and index:
+	TODO.
+	#
+
+to visualize_the items:
+	TODO.
+	#
+
+~~~~~~~~~~~~~~
+~~~ helpers ~~~
+~~~~~~~~~~~~~~
+
+to inc_length:
+	set _length to (_length + 1).
+	#
+
+
+
+show "".
+show "creating empty list".
+show "".
+
+set _items to ^ create_list().
+show "_items:".
+show _items.
+show "Length:".
+show ^ get_length().
+show "head:".
+show ^ get_head(_items).
+show "Tail:".
+show ^ get_tail(_items).
+
+show "".
+show "adding 3 to front".
+show "".
+
+^ add_to_front(3 and _items).
+show "_items:".
+show _items.
+show "Length:".
+show ^ get_length().
+show "head:".
+show ^ get_head(_items).
+show "Tail:".
+show ^ get_tail(_items).
+
+show "".
+show "adding 5 to front".
+show "".
+
+^ add_to_front(5 and _items).
+show "_items:".
+show _items.
+show "Length:".
+show ^ get_length().
+show "head:".
+show ^ get_head(_items).
+show "Tail:".
+show ^ get_tail(_items).

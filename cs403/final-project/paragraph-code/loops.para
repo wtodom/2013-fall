@@ -1,9 +1,9 @@
 to print_zero_to n:
-	set current to 0;
+	set current to 0.
 	while current is <= n,
-		show current;
-		set current to (current + 1);
-		.
-	.
+		show current.
+		set current to (current + 1).
+		#
+	#
 
-^ print_zero_to(100);
+^ print_zero_to(100).

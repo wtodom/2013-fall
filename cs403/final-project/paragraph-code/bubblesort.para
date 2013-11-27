@@ -1,16 +1,16 @@
 to bubbleSort numbers:
-    set changed to true;
+    set changed to true.
     while changed is == true,
-        set changed to false;
-        set loopindex to 0;
+        set changed to false.
+        set loopindex to 0.
         while loopindex is >= (^ length(numbers) - 1),
             if numbers[loopindex] > numbers[loopindex + 1],
-                set tempval to numbers[loopindex];
-                set numbers[loopindex] to numbers[loopindex + 1];
-                set numbers[loopindex + 1] to numbers[loopindex];
-                set changed to true;
-                set loopindex to loopindex - 1;
-                .
-            .
-    return Nothing;
-    .
+                set tempval to numbers[loopindex].
+                set numbers[loopindex] to numbers[loopindex + 1].
+                set numbers[loopindex + 1] to numbers[loopindex].
+                set changed to true.
+                set loopindex to loopindex - 1.
+                #
+            #
+    return Nothing.
+    #

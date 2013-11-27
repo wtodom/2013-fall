@@ -1,0 +1,9 @@
+to inc n:
+	show (n + 1).
+	#
+
+to call_passed_func_with_arg f and n:
+	^ f(n).
+	#
+
+^ call_passed_func_with_arg(inc and 3).

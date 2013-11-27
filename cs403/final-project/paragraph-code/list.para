@@ -1,141 +1,44 @@
-~
-Node Class
-==========
-
-Nodes are represented by 2-element arrays.
-The first element is the value of the node,
-	and the second element is the pointer to
-	the next node in the list.
-~
-
-
 to create_empty_node:
-	return ^ new_array(2);
-	.
+	return ^ new_array(2).
+	#
 
-to create_node_with value and next_pointer:
-	set a to ^ new_array(2);
-	^ set_value(a and value);
-	^ set_next_node(a and next_pointer);
-	return a;
-	.
+~ ### When this is called the second time via
+		calls to add_to_front the val parameter
+		is still 3 (rather than 5).
 
-to get_value_of node:
-	return ^get_array_value(node and 0);
-	.
+  ### Also, it returns [None, None] rather
+  		than [5, [3, None]]
+~
 
-to get_next node:
-	return ^get_array_value(node and 1);
-	.
+to create_node_with val and next_node:
+	set a to ^ new_array(2).
+	^ set_value(a and val).
+	^ set_next(a and next_node).
+	return a.
+	#
 
 to set_value node and new_value:
-	^ set_array_value(node, 0, and new_value);
-	.
+	^ set_item(node, 0, and new_value).
+	#
 
-to set_next_node node and new_next_node:
-	^ set_array_value(node, 1, and new_next_node);
-	.
+to set_next node and new_next_node:
+	^ set_item(node, 1, and new_next_node).
+	#
 
-~
-Linked List Class
-=================
-
-A chain of Node "objects"
-~
-
-~~~
-Setup some variables.
-~~~
-
-set _head to nothing;
-set _tail to nothing;
-set _length to 0;
+set _items to nothing.
 
 
 to create_list:
-~~~ Should run in O(1) time. ~~~
-	set n to ^ create_empty_node();
-	set _head to n;
-	set _tail to n;
-	return n;
-~
-	return nothing;~
-	.
+	return nothing.
+	#
 
-to get_head items:
-	return _head;
-	.
+to add_to_front val and rest:
+	set n to ^ create_node_with(val and rest).
+	set _items to n.
+	#
 
-to get_tail items:
-	return _tail;
-	.
+set _items to ^ create_list().
 
-to add_to_front items and value:
-~~~ Should run in O(1) time. ~~~
-	set n to ^ create_node_with(value and items);
-	show "head inside pre:";
-	show _head;
-	set _head to n;
-	show "head inside post:";
-	show _head;
-	if items is == nothing,
-		set _tail to n;
-		.
-	^ inc_length();
-	~return n;~
-	.
+^ add_to_front(3 and _items).
 
-
-to add_to_back items and value:
-~~~ Should run in O(1) time. ~~~
-	TODO;
-	.
-
-to insert_at_index items, index, and value:
-~~~ Should run in O(n) time. ~~~
-	TODO;
-	.
-
-to remove_from_front_of items:
-~~~ Should run in O(1) time. ~~~
-	TODO;
-	.
-
-to remove_from_back_of items:
-~~~ Should run in O(n) time. ~~~
-	TODO;
-	.
-
-to remove_at_index items and index:
-~~~ Should run in O(n) time. ~~~
-	TODO;
-	.
-
-to visualize_the items:
-~~~ Should run in O(n) time. ~~~
-	TODO;
-	.
-
-~~~~~~~~~~~~~~
-~~~ helpers ~~~
-~~~~~~~~~~~~~~
-
-to inc_length:
-	set _length to (_length + 1);
-	.
-
-
-set items to ^ create_list();
-show "items pre:";
-show items;
-show "head pre:";
-show _head;
-show "tail pre:";
-show _tail;
-^ add_to_front(items and 3);
-show "items post:";
-show items;
-show "head post:";
-show _head;
-show "tail post:";
-show _tail;
+^ add_to_front(5 and _items).

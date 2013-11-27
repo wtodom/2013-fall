@@ -1,0 +1,14 @@
+to quit_on_ten n:
+	if n is >= 10,
+		show "done. n was:".
+		show n.
+		#
+	otherwise,
+		show "recurring. n was:".
+		show n.
+		set n to (n + 1).
+		^ quit_on_ten(n).
+		#
+	#
+
+^ quit_on_ten(0).

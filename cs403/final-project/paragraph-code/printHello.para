@@ -1,5 +1,11 @@
 to printHello:
-	show "hello";
-	.
+	show "hello".
+	#
 
-^ printHello();
+^ printHello().
+
+
+~
+set a to ^ new_array(100).
+show a.
+~

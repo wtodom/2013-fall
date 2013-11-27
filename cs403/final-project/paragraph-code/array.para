@@ -1,0 +1,14 @@
+show "Create...".
+set a to ^ new_array(1).
+show a.
+
+show "Set...".
+^ set_item(a, 0, and 6).
+show a.
+
+show "Get...".
+show ^ get_item(a and 0).
+
+show "Remove...".
+^ remove_item(a and 6).
+show a.

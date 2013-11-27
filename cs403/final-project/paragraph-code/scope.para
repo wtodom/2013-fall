@@ -1,0 +1,40 @@
+set _head to nothing.
+
+show "head (pre-helper), should be none:".
+show _head.
+show "".
+
+to set_head val:
+	set _head to val.
+	#
+
+to get_head:
+	if _head is == nothing,
+		set res to nothing.
+		#
+	otherwise,
+		set res to _head.
+		#
+
+	return res.
+	#
+
+to f n:
+	^ set_head(n).
+	#
+
+
+show "head, should be none:".
+show ^ get_head().
+show "".
+
+^ set_head(5).
+
+show "head, should be 5:".
+show ^ get_head().
+
+^ f(10).
+
+show "head, should be 10:".
+show ^ get_head().
+

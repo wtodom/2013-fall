@@ -1,46 +1,46 @@
-set x to 2;
-set y to 3;
+set x to 2.
+set y to 3.
 
-show "x is:";
-show x;
+show "x is:".
+show x.
 
-show "y is:";
-show y;
+show "y is:".
+show y.
 
-show "x + y:";
-show (x + y);
+show "x + y:".
+show (x + y).
 
-show "x:";
-show x;
-show "y:";
-show y;
+show "x:".
+show x.
+show "y:".
+show y.
 
-show "x * y:";
-show (x * y);
+show "x * y:".
+show (x * y).
 
-show "setting x to x * y...";
-set x to (x * y);
+show "setting x to x * y...".
+set x to (x * y).
 
-show "x is now: ";
-show x;
+show "x is now: ".
+show x.
 
-show "x + y:";
-show (x + y);
+show "x + y:".
+show (x + y).
 
-show "setting y to y - x";
-set y to (y - x);
+show "setting y to y - x".
+set y to (y - x).
 
-show "y:";
-show y;
+show "y:".
+show y.
 
-show "x + y:";
-show (x + y);
+show "x + y:".
+show (x + y).
 
-show "setting x to 4";
-set x to 4;
+show "setting x to 4".
+set x to 4.
 
-show "x:";
-show x;
+show "x:".
+show x.
 
-show "100 + x:";
-show (100 + x);
+show "100 + x:".
+show (100 + x).

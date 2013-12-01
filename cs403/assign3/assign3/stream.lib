@@ -1,0 +1,207 @@
+;   /$$$$$$   /$$                                                        /$$$$$$
+;  /$$__  $$ | $$                                                       /$$__  $$
+; | $$  \__//$$$$$$    /$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$/$$$$       | $$  \ $$  /$$$$$$   /$$$$$$$
+; |  $$$$$$|_  $$_/   /$$__  $$ /$$__  $$ |____  $$| $$_  $$_  $$      | $$  | $$ /$$__  $$ /$$_____/
+;  \____  $$ | $$    | $$  \__/| $$$$$$$$  /$$$$$$$| $$ \ $$ \ $$      | $$  | $$| $$  \ $$|  $$$$$$
+;  /$$  \ $$ | $$ /$$| $$      | $$_____/ /$$__  $$| $$ | $$ | $$      | $$  | $$| $$  | $$ \____  $$
+; |  $$$$$$/ |  $$$$/| $$      |  $$$$$$$|  $$$$$$$| $$ | $$ | $$      |  $$$$$$/| $$$$$$$/ /$$$$$$$/
+;  \______/   \___/  |__/       \_______/ \_______/|__/ |__/ |__/       \______/ | $$____/ |_______/
+;                                                                                | $$
+;                                                                                | $$
+;                                                                                |__/
+
+(define (stream-add s1 s2)
+    (cons-stream
+        (+ (stream-car s1) (stream-car s2))
+        (stream-add (stream-cdr s1) (stream-cdr s2))
+        )
+    )
+
+(define (stream-mult s1 s2)
+    (cons-stream
+        (* (stream-car s1) (stream-car s2))
+        (stream-mult (stream-cdr s1) (stream-cdr s2))
+        )
+    )
+
+(define (stream-div s1 s2)
+    (cons-stream
+        (/ (stream-car s1) (stream-car s2))
+        (stream-div (stream-cdr s1) (stream-cdr s2))
+        )
+    )
+
+(define (stream-div-real s1 s2)
+    (cons-stream
+        (/ (real (stream-car s1)) (real (stream-car s2)))
+        (stream-div-real (stream-cdr s1) (stream-cdr s2))
+        )
+    )
+
+(define (stream-sub s1 s2)
+    (cons-stream
+        (- (stream-car s1) (stream-car s2))
+        (stream-sub (stream-cdr s1) (stream-cdr s2))
+        )
+    )
+
+(define (sieve s)
+    (cons-stream
+        (stream-car s)
+        (sieve
+            (stream-remove
+                (lambda (x) (integer? (/ x (stream-car s))))
+                (stream-cdr s))
+            )
+        )
+    )
+
+(define (interleave s1 s2)
+    (cons-stream
+        (stream-car s1)
+        (interleave s2 (stream-cdr s1))
+        )
+    )
+
+(define (interleave s1 s2 order)
+    (if (order (stream-car s1) (stream-car s2))
+        (cons-stream
+            (stream-car s1)
+            (interleave (stream-cdr s1) s2)
+            )
+        (cons-stream
+            (stream-car s2)
+            (interleave s1 (stream-cdr s2))
+            )
+        )
+    )
+
+(define (partial-sum s)
+    (cons-stream
+        (stream-car s)
+        (stream-add (partial-sum s) (stream-cdr s))
+        )
+    )
+
+(define (scale-stream s x)
+    (cons-stream
+        (* (stream-car s) x)
+        (scale-stream (stream-cdr s) x)
+        )
+    )
+
+(define (square x)
+    (* x x)
+    )
+
+(define (accelerate s)
+    (define Sn-1 (stream-ref s 0))
+    (define Sn (stream-ref s 1))
+    (define Sn+1 (stream-ref s 2))
+    (cons-stream
+        (cond
+            ((= Sn+1 Sn Sn-1)
+                Sn-1)
+            (else
+                (- Sn+1 (/ (square (- Sn+1 Sn)) (+ Sn-1 (* -2 Sn) Sn+1))))
+            )
+        (accelerate (stream-cdr s))
+        )
+    )
+
+(define (tableau s xcl)
+    (cons-stream
+        s
+        (tableau (xcl s) xcl)
+        )
+    )
+
+(define the-empty-stream '())
+
+(define stream-null? null?)
+
+(define (stream-ref s n)
+    (if (= n 0)
+        (stream-car s)
+    ; else
+        (stream-ref (stream-cdr s) (- n 1))
+        )
+    )
+
+(define (stream-map proc s)
+    (if (stream-null? s)
+        the-empty-stream
+    ; else
+        (cons-stream
+            (proc (stream-car s))
+            (stream-map proc (stream-cdr s))
+            )
+        )
+    )
+
+(define (merge s1 s2)
+  (cond ((stream-null? s1) s2)
+        ((stream-null? s2) s1)
+        (else
+            (let
+                ((s1car (stream-car s1))
+                (s2car (stream-car s2)))
+            (cond
+                ((< s1car s2car)
+                    (cons-stream
+                        s1car
+                        (merge
+                            (stream-cdr s1)
+                            s2
+                            )
+                        )
+                    )
+                ((> s1car s2car)
+                    (cons-stream
+                        s2car
+                        (merge
+                            s1
+                            (stream-cdr s2)
+                            )
+                        )
+                    )
+                (else
+                    (cons-stream
+                        s1car
+                        (merge
+                            (stream-cdr s1)
+                            (stream-cdr s2))
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+
+
+
+;   /$$$$$$  /$$                         /$$                  /$$$$$$   /$$
+;  /$$__  $$|__/                        | $$                 /$$__  $$ | $$
+; | $$  \__/ /$$ /$$$$$$/$$$$   /$$$$$$ | $$  /$$$$$$       | $$  \__//$$$$$$    /$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$/$$$$   /$$$$$$$
+; |  $$$$$$ | $$| $$_  $$_  $$ /$$__  $$| $$ /$$__  $$      |  $$$$$$|_  $$_/   /$$__  $$ /$$__  $$ |____  $$| $$_  $$_  $$ /$$_____/
+;  \____  $$| $$| $$ \ $$ \ $$| $$  \ $$| $$| $$$$$$$$       \____  $$ | $$    | $$  \__/| $$$$$$$$  /$$$$$$$| $$ \ $$ \ $$|  $$$$$$
+;  /$$  \ $$| $$| $$ | $$ | $$| $$  | $$| $$| $$_____/       /$$  \ $$ | $$ /$$| $$      | $$_____/ /$$__  $$| $$ | $$ | $$ \____  $$
+; |  $$$$$$/| $$| $$ | $$ | $$| $$$$$$$/| $$|  $$$$$$$      |  $$$$$$/ |  $$$$/| $$      |  $$$$$$$|  $$$$$$$| $$ | $$ | $$ /$$$$$$$/
+;  \______/ |__/|__/ |__/ |__/| $$____/ |__/ \_______/       \______/   \___/  |__/       \_______/ \_______/|__/ |__/ |__/|_______/
+;                             | $$
+;                             | $$
+;                             |__/
+
+
+(define fibs
+	(cons-stream 0
+		(cons-stream 1
+			(stream-add
+				fibs
+				(stream-cdr fibs)
+				)
+			)
+		)
+	)
+

@@ -1,6 +1,6 @@
 (include "assign3.scm")
 
-(println "Test Script: VERSION 2\n")
+(println "Test Script: VERSION 3\n")
 
 (define (scadr s) (stream-car (stream-cdr s)))
 (define (scaddr s) (stream-car (stream-cdr (stream-cdr s))))
@@ -84,7 +84,7 @@
         (define input-2 (make-wire))
         (define output-xor (make-wire))
         (define output-xnor (make-wire))
-        
+
         (xor-gate input-1 input-2 output-xor)
         (xnor-gate input-1 input-2 output-xnor)
 
@@ -196,14 +196,14 @@
         (run10)
         (println "\n-------my tests---------------------\n")
         (define r
-            (rand
+            (rgen
                 (fakestream '(
-                    reset 2500 
-                    generate 
-                    generate 
-                    reset 5542 
-                    generate 
-                    generate 
+                    reset 2500
+                    generate
+                    generate
+                    reset 5542
+                    generate
+                    generate
                     generate
                     ))
                 )

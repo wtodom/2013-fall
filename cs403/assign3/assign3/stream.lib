@@ -100,10 +100,12 @@
     (define Sn+1 (stream-ref s 2))
     (cons-stream
         (cond
-            ((= Sn+1 Sn Sn-1)
-                Sn-1)
+            ((= (int (* 1000000 Sn+1)) (int (* 1000000 Sn)) (int (* 1000000 Sn-1)))
+                Sn-1
+                )
             (else
-                (- Sn+1 (/ (square (- Sn+1 Sn)) (+ Sn-1 (* -2 Sn) Sn+1))))
+                (- Sn+1 (/ (square (- Sn+1 Sn)) (+ Sn-1 (* -2 Sn) Sn+1)))
+                )
             )
         (accelerate (stream-cdr s))
         )
@@ -179,6 +181,18 @@
         )
     )
 
+(define (stream-print s start stop)
+    (define (streamIter curr)
+        (cond
+            ((= curr stop) nil)
+            (else
+                (println (stream-ref s curr))
+                (streamIter (+ curr 1))
+                )
+            )
+        )
+    (streamIter start)
+    )
 
 
 ;   /$$$$$$  /$$                         /$$                  /$$$$$$   /$$
@@ -193,6 +207,23 @@
 ;                             | $$
 ;                             |__/
 
+
+(define ones
+    (cons-stream
+        1
+        ones
+        )
+    )
+
+(define integers
+    (cons-stream
+        1
+        (stream-add
+            ones
+            integers
+            )
+        )
+    )
 
 (define fibs
 	(cons-stream 0

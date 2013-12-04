@@ -554,3 +554,38 @@ study with r different groups.
 ## 21 November 2013 - ANOVA cont.
 
 - all written - just listened. PRINT STUFF FROM ONLINE!
+
+## 26 November 2013
+
+- What should we do when we reject the null hypothesis that all MU are equal?
+
+#### Inference for a linear combination of group means
+
+- Contrasts:
+	- linear combination such that the sum of the coefficients is equal to 0.
+
+#### Multiple Comparison adjustment
+
+- we're covering "bonferroni adjustment"
+	- do this adjustment when there are many (~!0 or more)
+	- also do it when the groups look different.
+	- only don't do it when you only have a small number of prespecified contrasts
+
+- in exam alpha will be 0.1, number of contrasts will be 2.
+
+#### Factorial Design:
+
+- Example:
+	- factor A: school (A, B, C)
+	- factor B: instructor (I, II)
+	- treatments: AI, BI, CI, AII, BII, CII
+	- four typical questions to ask:
+		1. Are all MUij's equal?
+		2. Are schools different (averaging over instructors)?
+		3. Are instructors different (averaging ovr schools)?
+		4. Is the difference between instructors the same in all schools? (or vice-versa, swapping instructors and schools)
+	- (1) can be answered with a one-way ANOVA
+	- (2-4) use a two-way ANOVA
+
+- Two-Way ANOVA: https://people.richland.edu/james/lecture/m170/ch13-2wy.html
+

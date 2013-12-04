@@ -58,3 +58,5 @@
 ; (inspect (stream-car (stream-cdr ari-super)))
 ; (inspect (stream-car (stream-cdr (stream-cdr ari-super))))
 ; (inspect (stream-car (stream-cdr (stream-cdr (stream-cdr ari-super)))))
+
+(stream-print ari-super 0 8)

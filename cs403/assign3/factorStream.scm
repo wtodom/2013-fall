@@ -44,17 +44,4 @@
 ; (inspect (stream-car (stream-cdr (stream-cdr pf-3-11-17))))
 ; (inspect (stream-car (stream-cdr (stream-cdr (stream-cdr pf-3-11-17)))))
 
-(define (stream-print s start stop)
-    (define (streamIter curr)
-        (cond
-            ((= curr stop) nil)
-            (else
-                (println (stream-ref s curr))
-                (streamIter (+ curr 1))
-                )
-            )
-        )
-    (streamIter start)
-    )
-
-(stream-print pf-3-11-17 0 331)
+(stream-print pf-3-11-17 0 25)

@@ -1,0 +1,1 @@
+10.20, 10.24, 10.25, 10.26 [also find unadjusted and Bonferroni-adjusted CI's representing the following comparisons: 1) Mu1 vs Mu2; 2) (Mu1 & Mu2) vs Mu3. Assume alpha = 0.10.], 10.82, 10.83 (a-e)

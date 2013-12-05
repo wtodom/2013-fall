@@ -118,23 +118,51 @@ to add_to_back val and items: ~ DONE ~
 		^ set_head(n).
 		#
 	^ inc_length().
-	set items to n.
 	#
 
-to insert_at_index value, index, and items: ~ DONE ~
+to insert_at_index index, value, and items: ~ 1, 66, and items ~
 	if index is == 0,
 		^ add_to_front(value and items).
 		#
+	otherwise, if index is == ^ get_length(),
+		^ add_to_back(value and items).
+		#
 	otherwise,
-		set tracer to items.
-		while index is > 0,
-			set tracer to ^ get_next(tracer).
+		set prev to items.
+		set curr to ^ get_next(prev).
+		while index is > 1,
+			set prev to ^ get_next(prev).
+			set curr to ^ get_next(curr).
 			set index to (index - 1).
 			#
-		set n to ^ create_node_with(value and ^ get_next(tracer)).
-		^ set_next(tracer and n).
+		set n to ^ create_node_with(value and curr).
+		^ set_next(prev and n).
+		set items to _head.
 		^ inc_length().
 		#
+	#
+
+to remove_from_index index and items: ~DONE~
+	if index is == 0,
+		set val to ^ remove_from_front_of(items).
+		#
+	otherwise, if index is == (^ get_length() - 1),
+		set val to ^ remove_from_back_of(items).
+		#
+	otherwise, ~ it's somewhere in the middle ~
+		set prev to items.
+		set curr to ^ get_next(prev).
+		while index is > 0,
+			set prev to ^ get_next(prev).
+			set curr to ^ get_next(curr).
+			set index to (index - 1).
+			#
+		set val to ^ get_value(curr).
+		^ set_next(prev and ^ get_next(curr)).
+		^ dec_length().
+		set _items to _head.
+		#
+	return val.
 	#
 
 to remove_from_front_of items: ~ DONE ~
@@ -177,28 +205,6 @@ to remove_from_back_of items: ~ DONE ~
 	return val.
 	#
 
-to remove_from_index index and items: ~DONE~
-	if index is == 0,
-		set val to ^ remove_from_front_of(items).
-		#
-	otherwise, if index is == (^ get_length() - 1),
-		set val to ^ remove_from_back_of(items).
-		#
-	otherwise, ~ it's somewhere in the middle ~
-		set prev to items.
-		set curr to ^ get_next(prev).
-		while index is > 0,
-			set prev to ^ get_next(prev).
-			set curr to ^ get_next(curr).
-			set index to (index - 1).
-			#
-		set val to ^ get_value(curr).
-		^ set_next(prev and ^ get_next(curr)).
-		^ dec_length().
-		#
-	return val.
-	#
-
 to visualize_the items: ~ DONE ~
 	if ^get_length() is != 0,
 		while ^ get_next(items) is != nothing,
@@ -235,13 +241,30 @@ to debug: ~ DONE ~
 
 set _items to ^ create_list().
 ^ add_to_front(3 and _items).
-^ add_to_front(5 and _items).
-^ insert_at_index(10, 0, and _items).
+^ add_to_back(11 and _items).
+^ add_to_front((0 - 2) and _items).
+^ add_to_back(6 and _items).
+^ insert_at_index(1, 66, and _items).
+^ remove_from_front_of(_items).
+^ insert_at_index(1, 33, and _items).
+^ remove_from_front_of(_items).
+^ add_to_front(1 and _items).
+^ add_to_back(100 and _items).
+^ debug().
+^ insert_at_index(4, 44, and _items).
+^ debug().
+^ add_to_front(59 and _items).
+^ debug().
+^ remove_from_front_of(_items).
+^ debug().
+^ remove_from_front_of(_items).
+^ debug().
+^ insert_at_index(0, 111, and _items).
+^ debug().
 ^ remove_from_index(2 and _items).
-
-
-
-
+^ debug().
+^ insert_at_index(3, 312, and _items).
+^ debug().
 
 
 

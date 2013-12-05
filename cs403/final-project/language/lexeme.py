@@ -8,10 +8,11 @@ class Lexeme:
 		self.right = right
 
 	def __str__(self):
-		if self.value is not None:
-			return str(self.token_type) + ": " + str(self.value)
-		else:
-			return str(self.token_type)
+		# if self.value is not None:
+		# 	return str(self.token_type) + ": " + str(self.value)
+		# else:
+		# 	return str(self.token_type)
+		return str(self.token_type) + ": " + str(self.value)
 
 	def __eq__(self, other):
 		"""

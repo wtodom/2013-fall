@@ -47,6 +47,8 @@ class Lexer:
 			return Lexeme(token_type="COLON")
 		elif self.currentChar == ";":
 			return Lexeme(token_type="SEMICOLON")
+		elif self.currentChar == "#":
+			return Lexeme(token_type="HASH")
 		elif self.currentChar == ".":
 			return Lexeme(token_type="PERIOD")
 		elif self.currentChar == "^":

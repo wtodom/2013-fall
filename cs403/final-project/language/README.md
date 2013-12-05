@@ -2,6 +2,6 @@
 
 ### Todo:
 
-- return statement
-- arrays
-- dictionaries
+- Finish Singly Linked List
+- Make good readme
+- Fill out feature examples

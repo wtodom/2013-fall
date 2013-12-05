@@ -113,7 +113,7 @@ class Evaluator:
 		# 	self.eval(tree.left, env)
 		# 	tree = tree.right
 		return_statment = tree.left.left
-		while tree:
+		while tree is not None:
 			self.eval(tree.left.right, env)
 			tree = tree.right
 		if return_statment is not None:
@@ -233,13 +233,17 @@ class Evaluator:
 		eargs = self.eval_args(args, env)
 		xenv = self.base_env.extend(params, eargs, closure_env)
 
+
+
 		### DANGEROUS!!!
 		### TODO: MAKE SURE THIS WORKS
 		### I ADDED THE TOP HALF OF THE IF WHILE WORKING
 		### 	ON THE LIST.
 		if body.token_type == "NOTHING":
+			# print("body.token_type was nothing. returning it.")
 			return body
 		else:
+			# print("body.token_type was NOT nothing. evaluating then returning.")
 			return self.eval(body, xenv)
 
 	def get_function_def_name(self, tree):
@@ -261,13 +265,24 @@ class Evaluator:
 		return closure.left
 
 	def eval_args(self, args, env):
-		head = args
-		while head is not None:
-			if head.left.token_type not in self.literals:
-				head.left = self.eval(head.left, env)
-			head = head.right
+		if args is None:
+			return None
 
-		return args
+		tracer = args
+		head = Lexeme(token_type="GLUE")
+		return_args = head
+		while tracer is not None:
+			arg = self.copy(tracer.left)
+			if arg.token_type not in self.literals:
+				arg = self.eval(arg, env)
+			head.left = arg
+
+			tracer = tracer.right
+			if tracer:
+				head.right = Lexeme(token_type="GLUE")
+				head = head.right
+
+		return return_args
 
 	def add_builtins(self, env):
 		for func in self.builtins:
@@ -278,7 +293,7 @@ class Evaluator:
 	def eval_builtin(self, closure, env):
 		cv = closure.value
 		if cv == "new_array":
-			array = [None] * closure.left.left.value
+			array = [None] * self.eval(closure.left.left, env)
 			return Lexeme(token_type="ARRAY", value=array)
 
 		elif cv == "new_dict":
@@ -295,10 +310,11 @@ class Evaluator:
 
 		elif cv == "set_item":
 			collection = self.eval(self.eval(closure.left.left, env), env)
-			key = closure.left.right.left.value
+			key = self.eval(closure.left.right.left, env)
 			new_val = self.get_literal(closure.left.right.right.left, env)
 
 			collection[key] = new_val
+
 
 			l = Lexeme(token_type=self.type_to_str(collection), value=collection)
 			self.base_env.update(closure.left.left, l, env)
@@ -334,6 +350,9 @@ class Evaluator:
 			tree = self.eval(tree, env)
 
 		return tree
+
+	def copy(self, l):
+		return Lexeme(token_type=l.token_type, value=l.value, left=l.left, right=l.right)
 
 if __name__ == '__main__':
 

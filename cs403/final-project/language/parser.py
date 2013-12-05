@@ -200,7 +200,7 @@ class Parser:
 			tree.left.left = self.optReturn()
 		else:
 			tree = self.optReturn()
-		self.match("PERIOD")
+		self.match("HASH")
 
 		return tree
 
@@ -209,7 +209,7 @@ class Parser:
 		if self.returnPending():
 			self.match("RETURN")
 			tree = self.expression()
-			self.match("SEMICOLON")
+			self.match("PERIOD")
 			return tree
 		return None
 
@@ -234,7 +234,7 @@ class Parser:
 		if self._debug: print(" in statement")
 		if self.expressionPending():
 			tree = self.expression()
-			self.match("SEMICOLON")
+			self.match("PERIOD")
 		elif self.ifStatementPending():
 			tree = self.ifStatement()
 		elif self.whileStatementPending():
@@ -300,7 +300,7 @@ class Parser:
 		tree.left = self.match("VARIABLE")
 		self.match("TO")
 		tree.right = self.expression()
-		self.match("SEMICOLON")
+		self.match("PERIOD")
 
 		return tree
 

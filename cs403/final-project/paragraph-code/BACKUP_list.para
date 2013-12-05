@@ -15,6 +15,7 @@ to create_empty_node:
 
 ~ PROBLEM: val NEVER CHANGES AFTER THIS IS CALLED ONCE
 			IN MY LIST TESTING BELOW ~
+
 to create_node_with val and next_pointer:
 	show "Parameters received by create_node_with:".
 	show "val:".
@@ -164,7 +165,8 @@ to add_to_front val and rest:
 
 	set n to ^ create_node_with(val and rest).
 
-	show "n:".
+	show "Back in add_to_front.".
+	show "node received from create_node_with:".
 	show n.
 
 	^ set_head(n).

@@ -1,20 +1,31 @@
+~
+Node Class
+==========
+
+Nodes are represented by 2-element arrays.
+The first element is the value of the node,
+	and the second element is the
+	the next node in the list.
+~
+
+
 to create_empty_node:
 	return ^ new_array(2).
 	#
 
-~ ### When this is called the second time via
-		calls to add_to_front the val parameter
-		is still 3 (rather than 5).
-
-  ### Also, it returns [None, None] rather
-  		than [5, [3, None]]
-~
-
-to create_node_with val and next_node:
+to create_node_with val and next_pointer:
 	set a to ^ new_array(2).
 	^ set_value(a and val).
-	^ set_next(a and next_node).
+	^ set_next(a and next_pointer).
 	return a.
+	#
+
+to get_value node:
+	return ^ get_item(node and 0).
+	#
+
+to get_next node:
+	return ^ get_item(node and 1).
 	#
 
 to set_value node and new_value:
@@ -25,20 +36,273 @@ to set_next node and new_next_node:
 	^ set_item(node, 1, and new_next_node).
 	#
 
+
+~
+Linked List Class
+=================
+
+A chain of Node "objects"
+~
+
+~~~
+Setup some variables
+~~~
+
 set _items to nothing.
+set _head to nothing.
+set _tail to nothing.
+set _length to 0.
 
 
-to create_list:
+to create_list: ~ DONE ~
 	return nothing.
 	#
 
-to add_to_front val and rest:
-	set n to ^ create_node_with(val and rest).
-	set _items to n.
+to reset_list: ~ DONE ~
+	set _items to nothing.
+	set _head to nothing.
+	set _tail to nothing.
+	set _length to 0.
+	#
+
+to get_length: ~ DONE ~
+	return _length.
+	#
+
+to get_head items: ~ DONE ~
+	if _head is == nothing,
+		set res to  nothing.
+		#
+	otherwise,
+		set res to  ^ get_value(_head and 0).
+		#
+	return res.
+	#
+
+to set_head val: ~ DONE ~
+	set _head to val.
+	#
+
+to get_tail items: ~ DONE ~
+	if _tail is == nothing,
+		set res to nothing.
+		#
+	otherwise,
+		set res to ^ get_value(_tail and 0).
+		#
+	return res.
+	#
+
+to set_tail val: ~ DONE ~
+	set _tail to val.
+	#
+
+to add_to_front val and items: ~ DONE ~
+	set n to ^ create_node_with(val and items).
+
+	^ set_head(n).
+	if ^ get_length() is == 0,
+		^ set_tail(n).
+		#
+	^ inc_length().
+	set items to n.
+	#
+
+to add_to_back val and items: ~ DONE ~
+	set n to ^ create_node_with(val and Nothing).
+
+	^ set_next(_tail and n).
+
+	^ set_tail(n).
+	if ^ get_length() is == 0,
+		^ set_head(n).
+		#
+	^ inc_length().
+	set items to n.
+	#
+
+to insert_at_index value, index, and items: ~ DONE ~
+	if index is == 0,
+		^ add_to_front(value and items).
+		#
+	otherwise,
+		set tracer to items.
+		while index is > 0,
+			set tracer to ^ get_next(tracer).
+			set index to (index - 1).
+			#
+		set n to ^ create_node_with(value and ^ get_next(tracer)).
+		^ set_next(tracer and n).
+		^ inc_length().
+		#
+	#
+
+to remove_from_front_of items: ~ DONE ~
+	if ^ get_length() is == 0,
+		set val to nothing.
+		#
+	otherwise, if ^ get_length() is == 1,
+		set val to ^ get_value(items).
+		^ reset_list().
+		#
+	otherwise,
+		set val to ^ get_value(items).
+		set _items to ^ get_next(items).
+		^set_head(_items).
+		^ dec_length().
+		#
+	return val.
+	#
+
+to remove_from_back_of items: ~ DONE ~
+	if ^ get_length() is == 0,
+		set val to nothing.
+		#
+	otherwise, if ^ get_length() is == 1,
+		set val to ^ get_value(items).
+		^ reset_list().
+		#
+	otherwise,
+		set prev to items.
+		set curr to ^ get_next(items).
+		while ^ get_next(curr) is != nothing,
+			set prev to curr.
+			set curr to ^ get_next(curr).
+			#
+		set val to ^ get_value(curr).
+		^ set_next(prev and nothing).
+		^set_tail(prev).
+		^ dec_length().
+		#
+	return val.
+	#
+
+to remove_from_index index and items: ~DONE~
+	if index is == 0,
+		set val to ^ remove_from_front_of(items).
+		#
+	otherwise, if index is == (^ get_length() - 1),
+		set val to ^ remove_from_back_of(items).
+		#
+	otherwise, ~ it's somewhere in the middle ~
+		set prev to items.
+		set curr to ^ get_next(prev).
+		while index is > 0,
+			set prev to ^ get_next(prev).
+			set curr to ^ get_next(curr).
+			set index to (index - 1).
+			#
+		set val to ^ get_value(curr).
+		^ set_next(prev and ^ get_next(curr)).
+		^ dec_length().
+		#
+	return val.
+	#
+
+to visualize_the items: ~ DONE ~
+	if ^get_length() is != 0,
+		while ^ get_next(items) is != nothing,
+			show ^ get_value(items).
+			set items to ^ get_next(items).
+			#
+		show ^ get_value(items).
+		#
+	#
+
+to inc_length: ~ DONE ~
+	set _length to (_length + 1).
+	#
+
+to dec_length: ~ DONE ~
+	set _length to (_length - 1).
+	#
+
+to debug: ~ DONE ~
+	show "".
+	show "_items:".
+	show _items.
+	show "Length:".
+	show ^ get_length().
+	show "head:".
+	show ^ get_head(_items).
+	show "Tail:".
+	show ^ get_tail(_items).
+	show "actual head:".
+	show _head.
+	show "actual tail:".
+	show _tail.
 	#
 
 set _items to ^ create_list().
-
 ^ add_to_front(3 and _items).
-
 ^ add_to_front(5 and _items).
+^ insert_at_index(10, 0, and _items).
+^ remove_from_index(2 and _items).
+
+
+
+
+
+
+
+
+
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ NODE TESTS ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~
+
+set a to ^ create_empty_node().
+show "a, should be [None, None]:".
+show a.
+
+set b to ^ create_empty_node().
+show "b, should be [None, None]:".
+show b.
+
+^ set_value(a and 0).
+show "a, should be [0, None]:".
+show a.
+
+^ set_value(b and 9).
+show "b, should be [9, None]:".
+show b.
+
+
+^ set_next(a and 3).
+show "a, should be [0, 3]:".
+show a.
+
+^ set_next(b and 22).
+show "b, should be [9, 22]:".
+show b.
+
+^ set_next(b and a).
+show "b, should be [9, [0, 3]]:".
+show b.
+
+set c to ^ create_node_with(100 and nothing).
+show "c, should be [100, none]:".
+show c.
+
+^ set_next(^ get_next(b) and c).
+show "b, should be [9, [0, [100, None]]]".
+show b.
+
+show "getting value of 'b.next.next', should be 100:".
+show ^ get_value(^ get_next(^ get_next(b))).
+
+~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~ END NODE TESTS ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -130,8 +130,10 @@ class Evaluator:
 		# make sure they're either number or variable Lexemes
 		if (left.token_type != "NUMBER" and
 			left.token_type != "VARIABLE" and
+			left.token_type != "NOTHING" and
 			right.token_type != "NUMBER" and
-			right.token_type != "VARIABLE"
+			right.token_type != "VARIABLE" and
+			right.token_type != "NOTHING"
 			):
 			raise TypeException(
 				[left.token_type, right.token_type],

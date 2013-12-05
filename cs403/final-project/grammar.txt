@@ -14,17 +14,17 @@ commaChain: COMMA expr optCommaChain
 optCommaChain: COMMA expr optCommaChain
 			 | *empty*
 
-block: optStatements optReturn PERIOD
+block: optStatements optReturn HASH
 
 optStatements: statements
 			 | *empty*
 
 statements: statement optStatements
 
-statement: expr SEMICOLON
+statement: expr PERIOD
 		 | ifStatement
 		 | whileStatement
-		 | assignment SEMICOLON
+		 | assignment PERIOD
 		 | TODO
 
 ifStatement: IF booleanExpr COMMA block optOtherwise
@@ -43,6 +43,7 @@ expr: OPEN_PARENTHESIS expr operator expr CLOSE_PARENTHESIS
 	| primary
 	| functionCall
 	| SHOW expr
+	| arrayGet
 
 primary: VARIABLE
 	   | NUMBER
@@ -69,5 +70,6 @@ boolOp: DOUBLE_EQUALS
 
 ==========================
 
-optReturn: RETURN expr SEMICOLON
+optReturn: RETURN expr PERIOD
 		 | *empty*
+
